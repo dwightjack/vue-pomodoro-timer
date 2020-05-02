@@ -6,6 +6,7 @@
       'bg-blue-800': props.pressed,
       'bg-blue-600': !props.pressed,
     }"
+    :aria-pressed="props.pressed"
     v-bind="data.attrs"
     v-on="listeners"
   >

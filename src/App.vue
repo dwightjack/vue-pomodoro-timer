@@ -1,7 +1,7 @@
 <template>
   <TheContainer>
     <LayoutStack centered>
-      <TheTimer :duration="cycle.remaining" />
+      <TheTimer :duration="cycle.remaining" :type="currentType" />
       <TheControls
         @start="start"
         @stop="stop"
@@ -18,42 +18,44 @@ import TheContainer from '@/components/TheContainer.vue';
 import TheTimer from '@/components/TheTimer.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import TheControls from '@/components/TheControls.vue';
-import { defineComponent, ref, watch, onMounted } from '@vue/composition-api';
+import { defineComponent, watch, onMounted } from '@vue/composition-api';
 import { Status, IntervalType, Interval } from '@/types';
 import { useStatus } from '@/use/status';
 import { useCycle } from '@/use/cycle';
+import { useTicker } from '@/use/ticker';
+
+const work: Interval = {
+  type: IntervalType.Work,
+  duration: 10 * 1000, // 10 secs
+};
+const shortBreak: Interval = {
+  type: IntervalType.ShortBreak,
+  duration: 20 * 1000, // 20 secs
+};
+const longBreak: Interval = {
+  type: IntervalType.LongBreak,
+  duration: 30 * 1000, // 20 secs
+};
 
 export default defineComponent({
   setup() {
     const { status, start, stop } = useStatus();
-    const ticker = ref<number>();
-    const interval: Interval = {
-      type: IntervalType.Work,
-      duration: 10 * 1000, // 10 secs
-    };
-    const interval2: Interval = {
-      type: IntervalType.Work,
-      duration: 20 * 1000, // 20 secs
-    };
 
-    const { cycle, resetCycle, nextInterval } = useCycle([interval, interval2]);
+    const {
+      cycle,
+      resetCycle,
+      nextInterval,
+      countDown,
+      currentType,
+    } = useCycle([work, shortBreak, work, longBreak]);
 
-    function startTicker() {
-      return setInterval(() => {
-        if (cycle.remaining <= 0) {
-          nextInterval();
-          return;
-        }
-        const ms = Math.max(0, cycle.remaining - 1000);
-        cycle.remaining = ms;
-      }, 1000);
-    }
+    const { startTicker, stopTicker } = useTicker(countDown);
 
     function skip() {
-      ticker.value && clearInterval(ticker.value);
+      stopTicker();
       nextInterval();
       if (status.value === Status.Play) {
-        ticker.value = startTicker();
+        startTicker();
       }
     }
 
@@ -63,15 +65,12 @@ export default defineComponent({
     }
 
     watch(status, (value, _, onInvalidate) => {
+      onInvalidate(stopTicker);
       if (value === Status.Play) {
-        ticker.value = startTicker();
+        startTicker();
         return;
       }
-      if (ticker.value) {
-        clearInterval(ticker.value);
-      }
-
-      onInvalidate(() => ticker.value && clearInterval(ticker.value));
+      stopTicker();
     });
 
     onMounted(nextInterval);
@@ -83,6 +82,7 @@ export default defineComponent({
       cycle,
       skip,
       reset,
+      currentType,
     };
   },
   components: { TheContainer, TheTimer, LayoutStack, TheControls },
