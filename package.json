@@ -7,11 +7,21 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "prettier": {
+    "trailingComma": "all",
+    "arrowParens": "always",
+    "semi": true,
+    "singleQuote": true
+  },
   "dependencies": {
+    "@vue/composition-api": "^0.5.0",
     "core-js": "^3.6.4",
-    "vue": "^2.6.11"
+    "tailwindcss": "^1.4.4",
+    "vue": "^2.6.11",
+    "vue-types": "^1.7.0"
   },
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.1.2",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
     "@vue/cli-plugin-babel": "~4.3.0",

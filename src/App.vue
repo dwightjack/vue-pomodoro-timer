@@ -1,29 +1,91 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  </div>
+  <TheContainer>
+    <LayoutStack centered>
+      <TheTimer :duration="cycle.remaining" />
+      <TheControls
+        @start="start"
+        @stop="stop"
+        @skip="skip"
+        @reset="reset"
+        :status="status"
+      />
+    </LayoutStack>
+  </TheContainer>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import TheContainer from '@/components/TheContainer.vue';
+import TheTimer from '@/components/TheTimer.vue';
+import LayoutStack from '@/components/LayoutStack.vue';
+import TheControls from '@/components/TheControls.vue';
+import { defineComponent, ref, watch, onMounted } from '@vue/composition-api';
+import { Status, IntervalType, Interval } from '@/types';
+import { useStatus } from '@/use/status';
+import { useCycle } from '@/use/cycle';
 
-export default Vue.extend({
-  name: "App",
-  components: {
-    HelloWorld
-  }
+export default defineComponent({
+  setup() {
+    const { status, start, stop } = useStatus();
+    const ticker = ref<number>();
+    const interval: Interval = {
+      type: IntervalType.Work,
+      duration: 10 * 1000, // 10 secs
+    };
+    const interval2: Interval = {
+      type: IntervalType.Work,
+      duration: 20 * 1000, // 20 secs
+    };
+
+    const { cycle, resetCycle, nextInterval } = useCycle([interval, interval2]);
+
+    function startTicker() {
+      return setInterval(() => {
+        if (cycle.remaining <= 0) {
+          nextInterval();
+          return;
+        }
+        const ms = Math.max(0, cycle.remaining - 1000);
+        cycle.remaining = ms;
+      }, 1000);
+    }
+
+    function skip() {
+      ticker.value && clearInterval(ticker.value);
+      nextInterval();
+      if (status.value === Status.Play) {
+        ticker.value = startTicker();
+      }
+    }
+
+    function reset() {
+      stop();
+      resetCycle();
+    }
+
+    watch(status, (value, _, onInvalidate) => {
+      if (value === Status.Play) {
+        ticker.value = startTicker();
+        return;
+      }
+      if (ticker.value) {
+        clearInterval(ticker.value);
+      }
+
+      onInvalidate(() => ticker.value && clearInterval(ticker.value));
+    });
+
+    onMounted(nextInterval);
+
+    return {
+      status,
+      start,
+      stop,
+      cycle,
+      skip,
+      reset,
+    };
+  },
+  components: { TheContainer, TheTimer, LayoutStack, TheControls },
+  name: 'App',
 });
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
