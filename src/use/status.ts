@@ -4,17 +4,17 @@ import { Status } from '@/types';
 export function useStatus() {
   const status = ref<Status>(Status.Pause);
 
-  function start() {
+  function play() {
     status.value = Status.Play;
   }
 
-  function stop() {
+  function pause() {
     status.value = Status.Pause;
   }
 
   return {
     status,
-    stop,
-    start,
+    pause,
+    play,
   };
 }

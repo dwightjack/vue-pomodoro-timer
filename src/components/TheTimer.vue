@@ -1,36 +1,33 @@
 <template>
-  <div class="py-4 px-8 rounded-lg text-gray-800" :class="classes">
-    <time class="c-the-timer__time text-4xl">{{ time }}</time>
+  <div
+    role="timer"
+    class="c-the-timer text-4xl py-4 px-8 rounded-lg border-current border-4 text-gray-800"
+    :class="classes"
+  >
+    {{ time }}
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api';
 import VueTypes from 'vue-types';
 import { IntervalType } from '@/types';
-
-const toString = (v: number) => String(v).padStart(2, '0');
-const getMinutes = (v: number) => Math.floor((v / 1000 / 60) % 60);
-const getSeconds = (v: number) => Math.floor((v / 1000) % 60);
+import { formatTime } from '@/utils';
 
 export default defineComponent({
   setup(props) {
-    const time = computed(() => {
-      const minutes = toString(getMinutes(props.duration));
-      const seconds = toString(getSeconds(props.duration));
-      return `${minutes}:${seconds}`;
-    });
+    const time = computed(() => formatTime(props.duration));
 
     const classes = computed(() => {
       if (props.type === IntervalType.Work) {
-        return 'bg-orange-300';
+        return 'text-orange-500';
       }
       if (props.type === IntervalType.ShortBreak) {
-        return 'bg-green-300';
+        return 'text-green-500';
       }
       if (props.type === IntervalType.LongBreak) {
-        return 'bg-green-500';
+        return 'text-green-700';
       }
-      return 'bg-blue-100';
+      return 'text-blue-300';
     });
 
     return { time, IntervalType, classes };
@@ -42,7 +39,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.c-the-timer__time {
+.c-the-timer {
   font-variant-numeric: tabular-nums;
 }
 </style>

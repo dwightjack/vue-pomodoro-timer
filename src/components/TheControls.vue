@@ -1,10 +1,14 @@
 <template>
-  <div class="p-4 bg-blue-100 rounded-lg grid grid-flow-col gap-2">
-    <BaseControl :pressed="isPlaying" @click="$emit('start')"
-      >Start</BaseControl
+  <div
+    class="grid grid-flow-col gap-2 items-center"
+    role="group"
+    aria-label="Timer controls"
+  >
+    <BaseControl :pressed="isPlaying" @click="$emit('play')">Play</BaseControl>
+    <BaseControl :pressed="!isPlaying" @click="$emit('pause')"
+      >Pause</BaseControl
     >
-    <BaseControl :pressed="!isPlaying" @click="$emit('stop')">Stop</BaseControl>
-    <span class="mx-1 border-l border-blue-600" />
+    <span class="mx-1 border-l border-blue-400 h-6" role="separator" />
     <BaseControl @click="$emit('skip')">Skip</BaseControl>
     <BaseControl @click="$emit('reset')">Reset</BaseControl>
   </div>

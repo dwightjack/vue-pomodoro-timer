@@ -2,9 +2,10 @@
   <TheContainer>
     <LayoutStack centered>
       <TheTimer :duration="cycle.remaining" :type="currentType" />
+      <TheCycle :cycle="cycle" />
       <TheControls
-        @start="start"
-        @stop="stop"
+        @play="play"
+        @pause="pause"
         @skip="skip"
         @reset="reset"
         :status="status"
@@ -18,6 +19,7 @@ import TheContainer from '@/components/TheContainer.vue';
 import TheTimer from '@/components/TheTimer.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import TheControls from '@/components/TheControls.vue';
+import TheCycle from '@/components/TheCycle.vue';
 import { defineComponent, watch, onMounted } from '@vue/composition-api';
 import { Status, IntervalType, Interval } from '@/types';
 import { useStatus } from '@/use/status';
@@ -39,7 +41,7 @@ const longBreak: Interval = {
 
 export default defineComponent({
   setup() {
-    const { status, start, stop } = useStatus();
+    const { status, play, pause } = useStatus();
 
     const {
       cycle,
@@ -60,7 +62,7 @@ export default defineComponent({
     }
 
     function reset() {
-      stop();
+      pause();
       resetCycle();
     }
 
@@ -77,15 +79,15 @@ export default defineComponent({
 
     return {
       status,
-      start,
-      stop,
+      play,
+      pause,
       cycle,
       skip,
       reset,
       currentType,
     };
   },
-  components: { TheContainer, TheTimer, LayoutStack, TheControls },
+  components: { TheContainer, TheTimer, LayoutStack, TheControls, TheCycle },
   name: 'App',
 });
 </script>
