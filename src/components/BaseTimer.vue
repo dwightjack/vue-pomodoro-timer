@@ -1,7 +1,7 @@
 <template>
   <div
     role="timer"
-    class="c-the-timer text-4xl py-4 px-8 rounded-lg border-current border-4 text-gray-800"
+    class="c-base-timer text-4xl py-4 px-8 rounded-lg border-current border-4 text-gray-800"
     :class="classes"
   >
     {{ time }}
@@ -39,7 +39,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.c-the-timer {
+.c-base-timer {
   font-variant-numeric: tabular-nums;
 }
 </style>

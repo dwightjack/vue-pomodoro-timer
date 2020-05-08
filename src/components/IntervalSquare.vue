@@ -1,6 +1,6 @@
 <template>
   <li
-    class="grid text-center px-2 py-1 rounded-md border border-current"
+    class="grid text-center px-2 py-1 rounded-md border border-current transition duration-150 ease-out"
     :class="[classes, { 'bg-current': current }]"
     :aria-current="current && 'time'"
   >

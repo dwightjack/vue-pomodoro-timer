@@ -5,12 +5,11 @@ export function useCycle(intervals: Interval[] = []) {
   const cycle: Cycle = reactive({
     intervals,
     current: -1,
-    remaining: 0,
   });
 
-  const currentType = computed(
-    () => cycle.intervals[cycle.current]?.type ?? 'none',
-  );
+  function getCurrent() {
+    return cycle.intervals[cycle.current];
+  }
 
   function toInterval(index: number) {
     let next = index;
@@ -18,7 +17,7 @@ export function useCycle(intervals: Interval[] = []) {
       next = 0;
     }
     cycle.current = next;
-    cycle.remaining = cycle.intervals[next].duration;
+    cycle.intervals[next].remaining = cycle.intervals[next].duration;
   }
 
   function nextInterval() {
@@ -30,11 +29,15 @@ export function useCycle(intervals: Interval[] = []) {
   }
 
   function countDown(ms = 1000) {
-    if (cycle.remaining <= 0) {
+    const current = getCurrent();
+    if (!current) {
+      return;
+    }
+    if (current.remaining <= 0) {
       nextInterval();
       return;
     }
-    cycle.remaining = Math.max(0, cycle.remaining - ms);
+    current.remaining = Math.max(0, current.remaining - ms);
   }
 
   return {
@@ -43,6 +46,5 @@ export function useCycle(intervals: Interval[] = []) {
     toInterval,
     resetCycle,
     countDown,
-    currentType,
   };
 }

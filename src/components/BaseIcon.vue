@@ -15,7 +15,6 @@ export default defineComponent({
         }
         try {
           icon.value = (await import(`@/assets/zondicons/${name}.svg`)).default;
-          console.log(icon.value);
         } catch (e) {
           console.error(e);
           icon.value = undefined;

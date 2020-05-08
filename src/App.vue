@@ -1,7 +1,8 @@
 <template>
   <TheContainer>
     <LayoutStack centered>
-      <TheTimer :duration="cycle.remaining" :type="currentType" />
+      <TheTimerList v-bind="cycle" />
+
       <TheCycle :cycle="cycle" />
       <TheControls
         @play="play"
@@ -16,7 +17,7 @@
 
 <script lang="ts">
 import TheContainer from '@/components/TheContainer.vue';
-import TheTimer from '@/components/TheTimer.vue';
+import TheTimerList from '@/components/TheTimerList.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import TheControls from '@/components/TheControls.vue';
 import TheCycle from '@/components/TheCycle.vue';
@@ -29,27 +30,29 @@ import { useTicker } from '@/use/ticker';
 const work: Interval = {
   type: IntervalType.Work,
   duration: 10 * 1000, // 10 secs
+  remaining: 0,
 };
 const shortBreak: Interval = {
   type: IntervalType.ShortBreak,
   duration: 20 * 1000, // 20 secs
+  remaining: 0,
 };
 const longBreak: Interval = {
   type: IntervalType.LongBreak,
   duration: 30 * 1000, // 20 secs
+  remaining: 0,
 };
 
 export default defineComponent({
   setup() {
     const { status, play, pause } = useStatus();
 
-    const {
-      cycle,
-      resetCycle,
-      nextInterval,
-      countDown,
-      currentType,
-    } = useCycle([work, shortBreak, work, longBreak]);
+    const { cycle, resetCycle, nextInterval, countDown } = useCycle([
+      work,
+      shortBreak,
+      work,
+      longBreak,
+    ]);
 
     const { startTicker, stopTicker } = useTicker(countDown);
 
@@ -84,10 +87,15 @@ export default defineComponent({
       cycle,
       skip,
       reset,
-      currentType,
     };
   },
-  components: { TheContainer, TheTimer, LayoutStack, TheControls, TheCycle },
+  components: {
+    TheContainer,
+    TheTimerList,
+    LayoutStack,
+    TheControls,
+    TheCycle,
+  },
   name: 'App',
 });
 </script>

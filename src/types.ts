@@ -12,10 +12,10 @@ export enum IntervalType {
 export interface Interval {
   type: IntervalType;
   duration: number;
+  remaining: number;
 }
 
 export interface Cycle {
   intervals: Interval[];
   current: number;
-  remaining: number;
 }
