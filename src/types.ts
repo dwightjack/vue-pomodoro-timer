@@ -12,7 +12,8 @@ export enum IntervalType {
 export interface Interval {
   type: IntervalType;
   duration: number;
-  remaining: number;
+  remaining?: number;
+  id: string;
 }
 
 export interface Cycle {

@@ -1,5 +1,5 @@
 import { Interval, Cycle } from '@/types';
-import { reactive, computed } from '@vue/composition-api';
+import { reactive } from '@vue/composition-api';
 
 export function useCycle(intervals: Interval[] = []) {
   const cycle: Cycle = reactive({
@@ -26,11 +26,14 @@ export function useCycle(intervals: Interval[] = []) {
 
   function resetCycle() {
     toInterval(0);
+    cycle.intervals.forEach((int) => {
+      int.remaining = int.duration;
+    });
   }
 
   function countDown(ms = 1000) {
     const current = getCurrent();
-    if (!current) {
+    if (current?.remaining === undefined) {
       return;
     }
     if (current.remaining <= 0) {
@@ -40,11 +43,18 @@ export function useCycle(intervals: Interval[] = []) {
     current.remaining = Math.max(0, current.remaining - ms);
   }
 
+  function updateCycle(intervals: Interval[]) {
+    // save intervals and reset everything
+    cycle.intervals = intervals;
+    resetCycle();
+  }
+
   return {
     cycle,
     nextInterval,
     toInterval,
     resetCycle,
+    updateCycle,
     countDown,
   };
 }

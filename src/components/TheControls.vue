@@ -1,8 +1,9 @@
 <template>
-  <div
-    class="grid grid-flow-col gap-2 items-center"
+  <LayoutInline
     role="group"
+    class="items-center"
     aria-label="Timer controls"
+    space="2"
   >
     <BaseControl :pressed="isPlaying" @click="$emit('play')">
       <BaseIcon name="play" />
@@ -21,11 +22,12 @@
       <BaseIcon name="reload" />
       <span class="sr-only">Reset</span>
     </BaseControl>
-  </div>
+  </LayoutInline>
 </template>
 <script lang="ts">
 import BaseControl from '@/components/BaseControl.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
+import LayoutInline from '@/components/LayoutInline.vue';
 import VueTypes from 'vue-types';
 import { defineComponent, computed } from '@vue/composition-api';
 import { Status } from '@/types';
@@ -39,6 +41,7 @@ export default defineComponent({
   components: {
     BaseControl,
     BaseIcon,
+    LayoutInline,
   },
   props: {
     status: VueTypes.oneOf(Object.values(Status)).def(Status.Pause),

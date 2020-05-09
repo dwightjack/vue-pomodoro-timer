@@ -11,6 +11,12 @@
         @reset="reset"
         :status="status"
       />
+      <TheCycleEdit
+        :intervals="cycle.intervals"
+        @save="saveChanges"
+        @toggle="onEditToggle"
+        :open="editOpen"
+      />
     </LayoutStack>
   </TheContainer>
 </template>
@@ -21,38 +27,31 @@ import TheTimerList from '@/components/TheTimerList.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import TheControls from '@/components/TheControls.vue';
 import TheCycle from '@/components/TheCycle.vue';
-import { defineComponent, watch, onMounted } from '@vue/composition-api';
+import TheCycleEdit from '@/components/TheCycleEdit.vue';
+import { defineComponent, watch, onMounted, ref } from '@vue/composition-api';
 import { Status, IntervalType, Interval } from '@/types';
 import { useStatus } from '@/use/status';
 import { useCycle } from '@/use/cycle';
 import { useTicker } from '@/use/ticker';
-
-const work: Interval = {
-  type: IntervalType.Work,
-  duration: 10 * 1000, // 10 secs
-  remaining: 0,
-};
-const shortBreak: Interval = {
-  type: IntervalType.ShortBreak,
-  duration: 20 * 1000, // 20 secs
-  remaining: 0,
-};
-const longBreak: Interval = {
-  type: IntervalType.LongBreak,
-  duration: 30 * 1000, // 20 secs
-  remaining: 0,
-};
+import { createInterval } from '@/utils';
 
 export default defineComponent({
   setup() {
+    const work = createInterval(IntervalType.Work, 10);
+    const shortBreak = createInterval(IntervalType.ShortBreak, 20);
+    const work2 = createInterval(IntervalType.Work, 10);
+    const longBreak = createInterval(IntervalType.LongBreak, 30);
+    const editOpen = ref(false);
+
     const { status, play, pause } = useStatus();
 
-    const { cycle, resetCycle, nextInterval, countDown } = useCycle([
-      work,
-      shortBreak,
-      work,
-      longBreak,
-    ]);
+    const {
+      cycle,
+      resetCycle,
+      nextInterval,
+      countDown,
+      updateCycle,
+    } = useCycle([work, shortBreak, work2, longBreak]);
 
     const { startTicker, stopTicker } = useTicker(countDown);
 
@@ -67,6 +66,16 @@ export default defineComponent({
     function reset() {
       pause();
       resetCycle();
+    }
+
+    function saveChanges(intervals: Interval[]) {
+      reset();
+      updateCycle(intervals);
+      editOpen.value = false;
+    }
+
+    function onEditToggle(open: boolean) {
+      editOpen.value = open;
     }
 
     watch(status, (value, _, onInvalidate) => {
@@ -87,6 +96,9 @@ export default defineComponent({
       cycle,
       skip,
       reset,
+      saveChanges,
+      editOpen,
+      onEditToggle,
     };
   },
   components: {
@@ -94,6 +106,7 @@ export default defineComponent({
     TheTimerList,
     LayoutStack,
     TheControls,
+    TheCycleEdit,
     TheCycle,
   },
   name: 'App',

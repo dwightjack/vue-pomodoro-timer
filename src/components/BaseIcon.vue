@@ -1,5 +1,9 @@
 <template>
-  <span class="c-base-icon" aria-hidden="true" :is="icon" />
+  <span
+    class="c-base-icon inline-flex items-center"
+    aria-hidden="true"
+    :is="icon"
+  />
 </template>
 <script lang="ts">
 import { defineComponent, watch, ref } from '@vue/composition-api';

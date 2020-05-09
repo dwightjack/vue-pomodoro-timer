@@ -11,14 +11,13 @@ export default Vue.extend({
   },
   render(h, { props, data, children }) {
     const classes = [
-      'grid grid-col-1',
+      'c-layout-inline',
       data.class,
       {
-        'c-layout-stack--centered': props.centered,
+        'justify-center': props.centered,
         [`gap-${props.space}`]: props.space,
       },
     ];
-
     return h(
       props.tag,
       {
@@ -31,7 +30,11 @@ export default Vue.extend({
 });
 </script>
 <style scoped>
-.c-layout-stack--centered {
-  justify-items: center;
+.c-layout-inline {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: auto;
+  grid-auto-rows: auto;
+  justify-items: start;
 }
 </style>

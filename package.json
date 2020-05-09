@@ -17,6 +17,7 @@
     "@vue/composition-api": "^0.5.0",
     "core-js": "^3.6.4",
     "tailwindcss": "^1.4.4",
+    "uid": "^1.0.0",
     "vue": "^2.6.11",
     "vue-types": "^1.7.0"
   },

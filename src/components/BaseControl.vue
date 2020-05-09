@@ -1,6 +1,6 @@
 <template functional>
   <button
-    type="button"
+    :type="props.type"
     class="rounded p-2 text border-2 border-transparent text-blue-500 transition-colors duration-150"
     :class="{
       'bg-blue-200 hover:border-blue-500': props.pressed,
@@ -20,6 +20,7 @@ import VueTypes from 'vue-types';
 export default Vue.extend({
   props: {
     pressed: VueTypes.bool.def(false),
+    type: VueTypes.string.def('button'),
   },
 });
 </script>
