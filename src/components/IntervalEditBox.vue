@@ -1,5 +1,6 @@
 <template>
   <LayoutInline tag="fieldset" class="items-center">
+    <legend class="sr-only">{{ IntervalType[type] }} interval settings</legend>
     <label class="grid grid-flow-col items-center">
       <select
         class="c-interval-edit-box__input pr-6 col-start-1 row-start-1"
