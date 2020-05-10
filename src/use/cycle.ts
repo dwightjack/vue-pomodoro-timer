@@ -1,5 +1,5 @@
 import { Interval, Cycle } from '@/types';
-import { reactive } from '@vue/composition-api';
+import { reactive, Ref } from '@vue/composition-api';
 
 export function useCycle(intervals: Interval[] = []) {
   const cycle: Cycle = reactive({
@@ -13,6 +13,9 @@ export function useCycle(intervals: Interval[] = []) {
 
   function toInterval(index: number) {
     let next = index;
+    if (!cycle.intervals.length) {
+      return;
+    }
     if (next >= cycle.intervals.length) {
       next = 0;
     }

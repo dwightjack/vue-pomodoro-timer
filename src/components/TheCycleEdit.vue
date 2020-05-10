@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api';
+import { defineComponent, ref, watch } from '@vue/composition-api';
 import VueTypes from 'vue-types';
 import IntervalEditBox from '@/components/IntervalEditBox.vue';
 import BaseControl from '@/components/BaseControl.vue';
@@ -72,6 +72,13 @@ export default defineComponent({
     function addInterval() {
       intervalsRef.value.push(createInterval());
     }
+
+    watch(
+      () => props.intervals,
+      (newIntervals) => {
+        intervalsRef.value = newIntervals;
+      },
+    );
 
     return { intervalsRef, update, deleteInterval, onSubmit, addInterval };
   },

@@ -28,22 +28,25 @@ import LayoutStack from '@/components/LayoutStack.vue';
 import TheControls from '@/components/TheControls.vue';
 import TheCycle from '@/components/TheCycle.vue';
 import TheCycleEdit from '@/components/TheCycleEdit.vue';
-import { defineComponent, watch, onMounted, ref } from '@vue/composition-api';
-import { Status, IntervalType, Interval } from '@/types';
+import {
+  defineComponent,
+  watch,
+  onMounted,
+  ref,
+  Ref,
+} from '@vue/composition-api';
+import { Status, Interval } from '@/types';
 import { useStatus } from '@/use/status';
 import { useCycle } from '@/use/cycle';
 import { useTicker } from '@/use/ticker';
-import { createInterval } from '@/utils';
+import { useStorage } from '@/use/storage';
 
 export default defineComponent({
   setup() {
-    const work = createInterval(IntervalType.Work, 10);
-    const shortBreak = createInterval(IntervalType.ShortBreak, 20);
-    const work2 = createInterval(IntervalType.Work, 10);
-    const longBreak = createInterval(IntervalType.LongBreak, 30);
     const editOpen = ref(false);
 
     const { status, play, pause } = useStatus();
+    let intervals: Ref<Interval[]>;
 
     const {
       cycle,
@@ -51,7 +54,7 @@ export default defineComponent({
       nextInterval,
       countDown,
       updateCycle,
-    } = useCycle([work, shortBreak, work2, longBreak]);
+    } = useCycle();
 
     const { startTicker, stopTicker } = useTicker(countDown);
 
@@ -68,9 +71,10 @@ export default defineComponent({
       resetCycle();
     }
 
-    function saveChanges(intervals: Interval[]) {
+    function saveChanges(newIntervals: Interval[]) {
       reset();
-      updateCycle(intervals);
+      updateCycle(newIntervals);
+      intervals.value = newIntervals;
       editOpen.value = false;
     }
 
@@ -85,6 +89,11 @@ export default defineComponent({
         return;
       }
       stopTicker();
+    });
+
+    onMounted(() => {
+      ({ value: intervals } = useStorage<Interval[]>('intervals', []));
+      updateCycle(intervals.value);
     });
 
     onMounted(nextInterval);
