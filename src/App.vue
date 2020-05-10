@@ -35,11 +35,13 @@ import {
   ref,
   Ref,
 } from '@vue/composition-api';
-import { Status, Interval } from '@/types';
+import { Status, Interval, IntervalType } from '@/types';
 import { useStatus } from '@/use/status';
 import { useCycle } from '@/use/cycle';
 import { useTicker } from '@/use/ticker';
 import { useStorage } from '@/use/storage';
+import { useNotification } from '@/use/notification';
+import { getMinutes, pluralize } from './utils';
 
 export default defineComponent({
   setup() {
@@ -50,6 +52,7 @@ export default defineComponent({
 
     const {
       cycle,
+      getCurrent: getCurrentInterval,
       resetCycle,
       nextInterval,
       countDown,
@@ -57,6 +60,8 @@ export default defineComponent({
     } = useCycle();
 
     const { startTicker, stopTicker } = useTicker(countDown);
+
+    const { notify, askPermission } = useNotification();
 
     function skip() {
       stopTicker();
@@ -82,6 +87,24 @@ export default defineComponent({
       editOpen.value = open;
     }
 
+    function notifyInterval(type: IntervalType, duration: number) {
+      const minutes = pluralize(getMinutes(duration), 'minute', 'minutes');
+
+      if (IntervalType.Work === type) {
+        notify('Time to work!', {
+          body: `\nLet's get some job done for the next ${minutes}!`,
+        });
+        return;
+      }
+
+      notify(
+        `Time for a ${
+          type === IntervalType.ShortBreak ? 'short' : 'long'
+        } break!`,
+        { body: `\nLet's rest for about ${minutes}!` },
+      );
+    }
+
     watch(status, (value, _, onInvalidate) => {
       onInvalidate(stopTicker);
       if (value === Status.Play) {
@@ -91,12 +114,24 @@ export default defineComponent({
       stopTicker();
     });
 
+    watch(
+      () => cycle.current,
+      (next, prev) => {
+        if (prev === -1 || status.value !== Status.Play) {
+          return;
+        }
+        const { type, duration } = getCurrentInterval();
+        notifyInterval(type, duration);
+      },
+    );
+
     onMounted(() => {
       ({ value: intervals } = useStorage<Interval[]>('intervals', []));
       updateCycle(intervals.value);
     });
 
     onMounted(nextInterval);
+    onMounted(askPermission);
 
     return {
       status,

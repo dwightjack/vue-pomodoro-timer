@@ -24,8 +24,9 @@
     <label>
       <input
         class="c-interval-edit-box__input"
-        type="text"
-        inputmode="decimal"
+        type="number"
+        min="1"
+        max="60"
         size="5"
         v-model="durationRef"
         @input="onInput"
@@ -79,5 +80,11 @@ export default defineComponent({
 <style lang="postcss" scoped>
 .c-interval-edit-box__input {
   @apply appearance-none bg-transparent border rounded-lg pl-2 py-1 text-gray-700;
+}
+.c-interval-edit-box__input[type='number'] {
+  -moz-appearance: textfield;
+}
+.c-interval-edit-box__input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 </style>

@@ -5,13 +5,9 @@ export function useStorage<T>(key: string, initial: T) {
 
   const value = ref<T>(item !== null ? JSON.parse(item) : initial);
 
-  const unwatch = watch(
-    value,
-    (to) => {
-      localStorage.setItem(key, JSON.stringify(to));
-    },
-    { deep: true },
-  );
+  const unwatch = watch(value, (to) => {
+    localStorage.setItem(key, JSON.stringify(to));
+  });
 
   function remove() {
     localStorage.removeItem(key);
