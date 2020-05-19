@@ -11,6 +11,7 @@ const purgecss = postcssPurgecss({
     /-(leave|enter|appear)(|-(to|from|active))$/,
     /^(?!(|.*?:)cursor-move).+-move$/,
     /^router-link(|-exact)-active$/,
+    /^gap-\d+$/,
   ],
 });
 

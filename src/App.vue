@@ -18,6 +18,7 @@
         :open="editOpen"
       />
     </LayoutStack>
+    <TheLoader :visible="loading" message="Loading..." />
   </TheContainer>
 </template>
 
@@ -28,6 +29,7 @@ import LayoutStack from '@/components/LayoutStack.vue';
 import TheControls from '@/components/TheControls.vue';
 import TheCycle from '@/components/TheCycle.vue';
 import TheCycleEdit from '@/components/TheCycleEdit.vue';
+import TheLoader from '@/components/TheLoader.vue';
 import {
   defineComponent,
   watch,
@@ -35,20 +37,26 @@ import {
   ref,
   Ref,
 } from '@vue/composition-api';
-import { Status, Interval, IntervalType } from '@/types';
+import { Status, Interval } from '@/types';
 import { useStatus } from '@/use/status';
 import { useCycle } from '@/use/cycle';
 import { useTicker } from '@/use/ticker';
 import { useStorage } from '@/use/storage';
 import { useNotification } from '@/use/notification';
-import { getMinutes, pluralize } from './utils';
+import { useLoader } from '@/use/loader';
+import { setupNotifications } from './utils';
 
 export default defineComponent({
   setup() {
     const editOpen = ref(false);
-
+    const intervals: Ref<Interval[]> = ref([]);
     const { status, play, pause } = useStatus();
-    let intervals: Ref<Interval[]>;
+    const { exec, loading } = useLoader();
+
+    const { load: loadIntervals, save: saveIntervals } = useStorage<Interval[]>(
+      'intervals',
+      [],
+    );
 
     const {
       cycle,
@@ -76,34 +84,25 @@ export default defineComponent({
       resetCycle();
     }
 
-    function saveChanges(newIntervals: Interval[]) {
+    async function saveChanges(newIntervals: Interval[]) {
       reset();
-      updateCycle(newIntervals);
-      intervals.value = newIntervals;
       editOpen.value = false;
+      intervals.value = newIntervals;
+      updateCycle(newIntervals);
+      exec(saveIntervals(newIntervals));
     }
 
     function onEditToggle(open: boolean) {
       editOpen.value = open;
     }
 
-    function notifyInterval(type: IntervalType, duration: number) {
-      const minutes = pluralize(getMinutes(duration), 'minute', 'minutes');
-
-      if (IntervalType.Work === type) {
-        notify('Time to work!', {
-          body: `\nLet's get some job done for the next ${minutes}!`,
-        });
-        return;
-      }
-
-      notify(
-        `Time for a ${
-          type === IntervalType.ShortBreak ? 'short' : 'long'
-        } break!`,
-        { body: `\nLet's rest for about ${minutes}!` },
-      );
+    async function initialize() {
+      intervals.value = await exec(loadIntervals());
+      updateCycle(intervals.value);
+      nextInterval();
     }
+
+    const notifyInterval = setupNotifications(notify);
 
     watch(status, (value, _, onInvalidate) => {
       onInvalidate(stopTicker);
@@ -125,12 +124,7 @@ export default defineComponent({
       },
     );
 
-    onMounted(() => {
-      ({ value: intervals } = useStorage<Interval[]>('intervals', []));
-      updateCycle(intervals.value);
-    });
-
-    onMounted(nextInterval);
+    onMounted(initialize);
     onMounted(askPermission);
 
     return {
@@ -143,6 +137,7 @@ export default defineComponent({
       saveChanges,
       editOpen,
       onEditToggle,
+      loading,
     };
   },
   components: {
@@ -152,6 +147,7 @@ export default defineComponent({
     TheControls,
     TheCycleEdit,
     TheCycle,
+    TheLoader,
   },
   name: 'App',
 });

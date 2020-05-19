@@ -1,18 +1,25 @@
-import { ref, watch } from '@vue/composition-api';
-
-export function useStorage<T>(key: string, initial: T) {
-  const item = localStorage.getItem(key);
-
-  const value = ref<T>(item !== null ? JSON.parse(item) : initial);
-
-  const unwatch = watch(value, (to) => {
-    localStorage.setItem(key, JSON.stringify(to));
-  });
-
-  function remove() {
-    localStorage.removeItem(key);
-    stop();
+export function useStorage<T>(key: string, defaultValue: T) {
+  async function load() {
+    try {
+      const item = localStorage.getItem(key);
+      if (item !== null) {
+        return JSON.parse(item) as T;
+      }
+      return defaultValue;
+    } catch (e) {
+      throw new Error(
+        `Unable to parse key ${key} from localStorage: ${e.message}`,
+      );
+    }
   }
 
-  return { value, unwatch, remove };
+  async function save(newValue: T) {
+    localStorage.setItem(key, JSON.stringify(newValue));
+  }
+
+  async function remove() {
+    localStorage.removeItem(key);
+  }
+
+  return { remove, load, save };
 }

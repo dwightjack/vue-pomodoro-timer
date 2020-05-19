@@ -42,3 +42,23 @@ export function createInterval(type = IntervalType.Work, mins = 0): Interval {
     id: uid(),
   };
 }
+
+export function setupNotifications(notify: Function) {
+  return (type: IntervalType, duration: number) => {
+    const minutes = pluralize(getMinutes(duration), 'minute', 'minutes');
+
+    if (IntervalType.Work === type) {
+      notify('Time to work!', {
+        body: `\nLet's get some job done for the next ${minutes}!`,
+      });
+      return;
+    }
+
+    notify(
+      `Time for a ${
+        type === IntervalType.ShortBreak ? 'short' : 'long'
+      } break!`,
+      { body: `\nLet's rest for about ${minutes}!` },
+    );
+  };
+}
