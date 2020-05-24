@@ -11,4 +11,8 @@ module.exports = {
       .use('vue-svg-loader')
       .loader('vue-svg-loader');
   },
+  pwa: {
+    name: 'Pomodoro Timer',
+    themeColor: '#ffffff',
+  },
 };
