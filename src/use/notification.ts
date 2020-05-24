@@ -3,7 +3,7 @@ import { ref } from '@vue/composition-api';
 export function useNotification() {
   const notification = ref<Notification>();
 
-  function askPermission() {
+  async function askPermission() {
     if (Notification.permission === 'default') {
       // ask for permission
       return Notification.requestPermission();
@@ -12,9 +12,7 @@ export function useNotification() {
   }
 
   async function notify(message: string, options: NotificationOptions = {}) {
-    const permission = await askPermission();
-
-    if (permission === 'denied') {
+    if (Notification.permission !== 'granted') {
       return;
     }
     if (notification.value) {

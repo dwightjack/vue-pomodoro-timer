@@ -1,25 +1,30 @@
 <template>
-  <TheContainer>
-    <LayoutStack centered>
-      <TheTimerList v-bind="cycle" />
+  <div role="presentation">
+    <TheNotificationBar ref="notificationBarRef">
+      <p>Do you want to manage notification settings for this app?</p>
+    </TheNotificationBar>
+    <TheContainer>
+      <LayoutStack centered>
+        <TheTimerList v-bind="cycle" />
 
-      <TheCycle :cycle="cycle" />
-      <TheControls
-        @play="play"
-        @pause="pause"
-        @skip="skip"
-        @reset="reset"
-        :status="status"
-      />
-      <TheCycleEdit
-        :intervals="cycle.intervals"
-        @save="saveChanges"
-        @toggle="onEditToggle"
-        :open="editOpen"
-      />
-    </LayoutStack>
+        <TheCycle :cycle="cycle" />
+        <TheControls
+          @play="play"
+          @pause="pause"
+          @skip="skip"
+          @reset="reset"
+          :status="status"
+        />
+        <TheCycleEdit
+          :intervals="cycle.intervals"
+          @save="saveChanges"
+          @toggle="onEditToggle"
+          :open="editOpen"
+        />
+      </LayoutStack>
+    </TheContainer>
     <TheLoader :visible="loading" message="Loading..." />
-  </TheContainer>
+  </div>
 </template>
 
 <script lang="ts">
@@ -30,6 +35,8 @@ import TheControls from '@/components/TheControls.vue';
 import TheCycle from '@/components/TheCycle.vue';
 import TheCycleEdit from '@/components/TheCycleEdit.vue';
 import TheLoader from '@/components/TheLoader.vue';
+import TheNotificationBar from '@/components/TheNotificationBar.vue';
+
 import {
   defineComponent,
   watch,
@@ -37,25 +44,31 @@ import {
   ref,
   Ref,
 } from '@vue/composition-api';
-import { Status, Interval } from '@/types';
+import { Status, Interval, IntervalType } from '@/types';
 import { useStatus } from '@/use/status';
 import { useCycle } from '@/use/cycle';
 import { useTicker } from '@/use/ticker';
 import { useStorage } from '@/use/storage';
 import { useNotification } from '@/use/notification';
 import { useLoader } from '@/use/loader';
-import { setupNotifications } from './utils';
+import { setupNotifications, createInterval } from './utils';
+
+type NotificationBar = InstanceType<typeof TheNotificationBar>;
 
 export default defineComponent({
   setup() {
     const editOpen = ref(false);
     const intervals: Ref<Interval[]> = ref([]);
+    const notificationBarRef = ref<NotificationBar>();
+
     const { status, play, pause } = useStatus();
     const { exec, loading } = useLoader();
-
-    const { load: loadIntervals, save: saveIntervals } = useStorage<Interval[]>(
-      'intervals',
-      [],
+    const intervalsStore = useStorage<Interval[]>('intervals', [
+      createInterval(IntervalType.Work, 45),
+    ]);
+    const permissionsStore = useStorage<{ notification?: boolean }>(
+      'permissions',
+      {},
     );
 
     const {
@@ -89,7 +102,7 @@ export default defineComponent({
       editOpen.value = false;
       intervals.value = newIntervals;
       updateCycle(newIntervals);
-      exec(saveIntervals(newIntervals));
+      exec(intervalsStore.save(newIntervals));
     }
 
     function onEditToggle(open: boolean) {
@@ -97,9 +110,22 @@ export default defineComponent({
     }
 
     async function initialize() {
-      intervals.value = await exec(loadIntervals());
+      intervals.value = await exec(intervalsStore.load());
       updateCycle(intervals.value);
       nextInterval();
+    }
+
+    async function checkNotifyPermission() {
+      const permissions = await permissionsStore.load();
+      if (permissions.notification !== undefined) {
+        return;
+      }
+      const confirmed = await notificationBarRef.value?.show();
+      permissionsStore.save({ ...permissions, notification: confirmed });
+
+      if (confirmed) {
+        askPermission();
+      }
     }
 
     const notifyInterval = setupNotifications(notify);
@@ -125,7 +151,7 @@ export default defineComponent({
     );
 
     onMounted(initialize);
-    onMounted(askPermission);
+    onMounted(checkNotifyPermission);
 
     return {
       status,
@@ -138,6 +164,8 @@ export default defineComponent({
       editOpen,
       onEditToggle,
       loading,
+      askPermission,
+      notificationBarRef,
     };
   },
   components: {
@@ -148,6 +176,7 @@ export default defineComponent({
     TheCycleEdit,
     TheCycle,
     TheLoader,
+    TheNotificationBar,
   },
   name: 'App',
 });
