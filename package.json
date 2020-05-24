@@ -1,5 +1,6 @@
 {
-  "name": "timer",
+  "name": "pomodoro-timer",
+  "description": "A configurable pomodoro-like timer",
   "version": "0.1.0",
   "private": true,
   "scripts": {
