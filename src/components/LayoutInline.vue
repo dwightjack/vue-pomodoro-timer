@@ -36,5 +36,6 @@ export default Vue.extend({
   grid-auto-columns: auto;
   grid-auto-rows: auto;
   justify-items: start;
+  min-width: 1px;
 }
 </style>

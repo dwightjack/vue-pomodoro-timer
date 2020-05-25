@@ -1,12 +1,13 @@
 <template>
-  <LayoutInline tag="ul" space="1">
+  <ul class="flex flex-wrap justify-center items-center -mt-1 -ml-1">
     <IntervalSquare
       v-for="(interval, i) in cycle.intervals"
       :key="i"
       v-bind="interval"
       :current="cycle.current === i"
+      class="ml-1 mt-1"
     />
-  </LayoutInline>
+  </ul>
 </template>
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';

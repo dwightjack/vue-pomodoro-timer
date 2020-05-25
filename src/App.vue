@@ -112,7 +112,6 @@ export default defineComponent({
     async function initialize() {
       intervals.value = await exec(intervalsStore.load());
       updateCycle(intervals.value);
-      nextInterval();
     }
 
     async function checkNotifyPermission() {

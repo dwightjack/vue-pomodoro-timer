@@ -1,44 +1,46 @@
 <template>
-  <LayoutInline tag="fieldset" class="items-center">
+  <fieldset class="min-w-0">
     <legend class="sr-only">{{ IntervalType[type] }} interval settings</legend>
-    <label class="grid grid-flow-col items-center">
-      <select
-        class="c-interval-edit-box__input pr-6 col-start-1 row-start-1"
-        v-model="typeRef"
-        @change="onInput"
-      >
-        <option
-          v-for="(value, name) in IntervalType"
-          :key="value"
-          :value="value"
-          :selected="value === type"
-          >{{ name }}</option
+    <LayoutInline class="items-center">
+      <label class="grid grid-flow-col items-center">
+        <select
+          class="c-interval-edit-box__input pr-6 col-start-1 row-start-1 min-w-0 truncate"
+          v-model="typeRef"
+          @change="onInput"
         >
-      </select>
-      <BaseIcon
-        name="cheveron-down"
-        class="pointer-events-none col-start-1 row-start-1 ml-auto mr-1"
-      />
-      <span class="sr-only">Type</span>
-    </label>
-    <label>
-      <input
-        class="c-interval-edit-box__input"
-        type="number"
-        min="1"
-        max="60"
-        size="5"
-        v-model="durationRef"
-        @input="onInput"
-      />
-      <span class="sr-only">Duration</span>
-      <span class="text-sm pl-1">mins</span>
-    </label>
-    <BaseControl @click="$emit('delete', id)">
-      <BaseIcon name="trash" />
-      <span class="sr-only">Delete</span>
-    </BaseControl>
-  </LayoutInline>
+          <option
+            v-for="(value, name) in IntervalType"
+            :key="value"
+            :value="value"
+            :selected="value === type"
+            >{{ name }}</option
+          >
+        </select>
+        <BaseIcon
+          name="cheveron-down"
+          class="pointer-events-none col-start-1 row-start-1 ml-auto mr-1"
+        />
+        <span class="sr-only">Type</span>
+      </label>
+      <label class="flex items-center">
+        <input
+          class="c-interval-edit-box__input"
+          type="number"
+          min="1"
+          max="60"
+          size="5"
+          v-model="durationRef"
+          @input="onInput"
+        />
+        <span class="sr-only">Duration</span>
+        <span class="text-sm pl-1">mins</span>
+      </label>
+      <BaseControl @click="$emit('delete', id)">
+        <BaseIcon name="trash" />
+        <span class="sr-only">Delete</span>
+      </BaseControl>
+    </LayoutInline>
+  </fieldset>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';

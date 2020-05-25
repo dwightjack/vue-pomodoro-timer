@@ -14,5 +14,8 @@ module.exports = {
   pwa: {
     name: 'Pomodoro Timer',
     themeColor: '#ffffff',
+    manifestOptions: {
+      background_color: '#ffffff',
+    },
   },
 };
