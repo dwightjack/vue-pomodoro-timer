@@ -1,20 +1,11 @@
 <template>
-  <div class="c-graphic-timer" :class="colorType">
-    <svg
-      ref="svgRef"
-      viewBox="-1.2 -1.2 2.4 2.4"
-      style="transform: rotate(-0.25turn)"
-    >
-      <circle
-        cx="0"
-        cy="0"
-        r="1"
-        stroke-width="0.4"
-        class="c-graphic-timer__circle"
-      />
-      <path v-if="arc" :d="arc" class="text-white c-graphic-timer__arc" />
-    </svg>
-  </div>
+  <canvas
+    class="c-graphic-timer sr-only"
+    :class="colorType"
+    ref="canvasRef"
+    :width="size"
+    :height="size"
+  />
 </template>
 <script lang="ts">
 import {
@@ -22,61 +13,83 @@ import {
   watch,
   ref,
   onMounted,
-  watchEffect,
+  computed,
 } from '@vue/composition-api';
-import { getMinutes, getIntervalTypeColor } from '@/utils';
+import { getIntervalTypeColor } from '@/utils';
 import VueTypes from 'vue-types';
-import svgToMiniDataURI from 'mini-svg-data-uri';
 import { IntervalType } from '../types';
 
-// https://medium.com/hackernoon/a-simple-pie-chart-in-svg-dbdd653b6936
-function getCoordinatesForPercent(percent: number) {
-  const x = Math.cos(2 * Math.PI * percent);
-  const y = Math.sin(2 * Math.PI * percent);
-  return [x, y];
+const currentMinute = (v: number) => Math.ceil(v / 1000 / 30);
+
+function drawCircle(
+  ctx: CanvasRenderingContext2D,
+  color: string,
+  center: number,
+  radius: number,
+  start = 0,
+  end = 2 * Math.PI,
+) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(center, center);
+  ctx.arc(center, center, radius, start, end);
+  ctx.fill();
 }
 
 export default defineComponent({
   setup(props) {
     const arc = ref<string>('');
-    const colorType = ref<string>('');
-    const svgRef = ref<SVGGraphicsElement>();
-
-    watch(
-      () => props.type as IntervalType,
-      (type: IntervalType) => {
-        colorType.value = getIntervalTypeColor(type);
-      },
+    const canvasRef = ref<HTMLCanvasElement>();
+    const minutes = ref<number>(currentMinute(props.remaining));
+    const colorType = computed(() =>
+      getIntervalTypeColor(props.type as IntervalType),
     );
 
-    watch(
-      () => getMinutes(props.duration - props.remaining),
-      () => {
-        const percent = (props.duration - props.remaining) / props.duration;
-
-        const [startX, startY] = getCoordinatesForPercent(0);
-        const [endX, endY] = getCoordinatesForPercent(percent);
-        const largeArcFlag = percent > 0.5 ? 1 : 0;
-
-        arc.value = [
-          `M ${startX} ${startY}`,
-          `A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`,
-          `L 0 0`,
-        ].join(' ');
-      },
-    );
-
-    watchEffect(() => {
-      if (!svgRef.value) {
+    function renderCanvas() {
+      const percent = (props.duration - props.remaining) / props.duration;
+      if (!canvasRef.value) {
         return;
       }
-      const { width, height } = svgRef.value.getBBox();
-      console.log(width, height);
-    });
+      const canvas = canvasRef.value;
+      const ctx = canvas.getContext('2d');
 
-    return { arc, colorType, svgRef };
+      if (!ctx) {
+        return;
+      }
+      const size = props.size / 2;
+      const color = window.getComputedStyle(canvas).getPropertyValue('color');
+
+      const start = Math.PI / -2;
+      const end = start + 2 * Math.PI * percent;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawCircle(ctx, color, size, size);
+      drawCircle(ctx, '#fff', size, size - size / 10, start, end);
+
+      const favicon = document.querySelector<HTMLLinkElement>(
+        'link[rel="icon"][type="image/png"]',
+      );
+
+      if (favicon) {
+        favicon.href = canvas.toDataURL('image/png');
+      }
+    }
+
+    watch(
+      () => currentMinute(props.remaining),
+      (v) => {
+        if (minutes.value !== v) {
+          minutes.value = v;
+        }
+      },
+    );
+
+    watch([minutes, colorType], renderCanvas);
+    onMounted(renderCanvas);
+
+    return { arc, colorType, canvasRef };
   },
   props: {
+    size: VueTypes.number.def(50),
     duration: VueTypes.number.isRequired,
     remaining: VueTypes.number.isRequired,
     type: VueTypes.string.def(''),
