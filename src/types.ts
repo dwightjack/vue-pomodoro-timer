@@ -7,6 +7,7 @@ export enum IntervalType {
   Work = 'work',
   ShortBreak = 'short-break',
   LongBreak = 'long-break',
+  None = 'none',
 }
 
 export interface Interval {

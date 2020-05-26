@@ -62,3 +62,16 @@ export function setupNotifications(notify: Function) {
     );
   };
 }
+
+export function getIntervalTypeColor(type: IntervalType) {
+  if (type === IntervalType.Work) {
+    return 'text-orange-500';
+  }
+  if (type === IntervalType.ShortBreak) {
+    return 'text-green-500';
+  }
+  if (type === IntervalType.LongBreak) {
+    return 'text-green-700';
+  }
+  return 'text-blue-300';
+}

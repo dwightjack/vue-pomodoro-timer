@@ -7,6 +7,10 @@ export function useCycle(intervals: Interval[] = []) {
     current: -1,
   });
 
+  const current = computed(() => {
+    return cycle.intervals[cycle.current];
+  });
+
   function getCurrent() {
     return cycle.intervals[cycle.current];
   }
@@ -55,6 +59,7 @@ export function useCycle(intervals: Interval[] = []) {
   return {
     cycle,
     getCurrent,
+    current,
     nextInterval,
     toInterval,
     resetCycle,

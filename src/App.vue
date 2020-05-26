@@ -1,5 +1,6 @@
 <template>
   <div role="presentation">
+    <GraphicTimer v-if="currentInterval" v-bind="currentInterval" />
     <TheNotificationBar ref="notificationBarRef">
       <p>Do you want to manage notification settings for this app?</p>
     </TheNotificationBar>
@@ -36,6 +37,7 @@ import TheCycle from '@/components/TheCycle.vue';
 import TheCycleEdit from '@/components/TheCycleEdit.vue';
 import TheLoader from '@/components/TheLoader.vue';
 import TheNotificationBar from '@/components/TheNotificationBar.vue';
+import GraphicTimer from '@/components/GraphicTimer.vue';
 
 import {
   defineComponent,
@@ -74,6 +76,7 @@ export default defineComponent({
     const {
       cycle,
       getCurrent: getCurrentInterval,
+      current: currentInterval,
       resetCycle,
       nextInterval,
       countDown,
@@ -165,6 +168,7 @@ export default defineComponent({
       loading,
       askPermission,
       notificationBarRef,
+      currentInterval,
     };
   },
   components: {
@@ -176,6 +180,7 @@ export default defineComponent({
     TheCycle,
     TheLoader,
     TheNotificationBar,
+    GraphicTimer,
   },
   name: 'App',
 });

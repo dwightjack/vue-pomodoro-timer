@@ -11,23 +11,14 @@
 import { defineComponent, computed } from '@vue/composition-api';
 import VueTypes from 'vue-types';
 import { IntervalType } from '@/types';
-import { formatTime } from '@/utils';
+import { formatTime, getIntervalTypeColor } from '@/utils';
 
 export default defineComponent({
   setup(props) {
     const time = computed(() => formatTime(props.duration));
 
     const classes = computed(() => {
-      if (props.type === IntervalType.Work) {
-        return 'text-orange-500';
-      }
-      if (props.type === IntervalType.ShortBreak) {
-        return 'text-green-500';
-      }
-      if (props.type === IntervalType.LongBreak) {
-        return 'text-green-700';
-      }
-      return 'text-blue-300';
+      return getIntervalTypeColor(props.type as IntervalType);
     });
 
     return { time, IntervalType, classes };
