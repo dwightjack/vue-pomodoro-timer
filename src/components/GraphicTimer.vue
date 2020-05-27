@@ -13,6 +13,7 @@ import {
   watch,
   ref,
   onMounted,
+  onUnmounted,
   computed,
 } from '@vue/composition-api';
 import { getIntervalTypeColor } from '@/utils';
@@ -44,6 +45,7 @@ export default defineComponent({
     const colorType = computed(() =>
       getIntervalTypeColor(props.type as IntervalType),
     );
+    let originalFavicon = '';
 
     function renderCanvas() {
       const percent = (props.duration - props.remaining) / props.duration;
@@ -61,15 +63,19 @@ export default defineComponent({
 
       const start = Math.PI / -2;
       const end = start + 2 * Math.PI * percent;
+      const radius = size;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawCircle(ctx, color, size, size);
-      drawCircle(ctx, '#fff', size, size - size / 10, start, end);
+      drawCircle(ctx, color, size, radius);
+      drawCircle(ctx, '#fff', size, radius - size / 10, start, end);
 
       const favicon = document.querySelector<HTMLLinkElement>(
         'link[rel="icon"][type="image/png"]',
       );
 
       if (favicon) {
+        if (!originalFavicon) {
+          originalFavicon = favicon.href;
+        }
         favicon.href = canvas.toDataURL('image/png');
       }
     }
@@ -85,6 +91,18 @@ export default defineComponent({
 
     watch([minutes, colorType], renderCanvas);
     onMounted(renderCanvas);
+    onUnmounted(() => {
+      if (!originalFavicon) {
+        return;
+      }
+      const favicon = document.querySelector<HTMLLinkElement>(
+        'link[rel="icon"][type="image/png"]',
+      );
+
+      if (favicon) {
+        favicon.href = originalFavicon;
+      }
+    });
 
     return { arc, colorType, canvasRef };
   },
@@ -92,7 +110,7 @@ export default defineComponent({
     size: VueTypes.number.def(50),
     duration: VueTypes.number.isRequired,
     remaining: VueTypes.number.isRequired,
-    type: VueTypes.string.def(''),
+    type: VueTypes.string.isRequired,
   },
 });
 </script>
