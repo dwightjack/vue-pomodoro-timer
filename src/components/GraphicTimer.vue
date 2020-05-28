@@ -45,7 +45,7 @@ export default defineComponent({
     const colorType = computed(() =>
       getIntervalTypeColor(props.type as IntervalType),
     );
-    let originalFavicon = '';
+    const originalFavicon = new Map();
 
     function renderCanvas() {
       const percent = (props.duration - props.remaining) / props.duration;
@@ -68,15 +68,17 @@ export default defineComponent({
       drawCircle(ctx, color, size, radius);
       drawCircle(ctx, '#fff', size, radius - size / 10, start, end);
 
-      const favicon = document.querySelector<HTMLLinkElement>(
+      const favicons = document.querySelectorAll<HTMLLinkElement>(
         'link[rel="icon"][type="image/png"]',
       );
-
-      if (favicon) {
-        if (!originalFavicon) {
-          originalFavicon = favicon.href;
-        }
-        favicon.href = canvas.toDataURL('image/png');
+      if (favicons.length > 0) {
+        const dataUrl = canvas.toDataURL('image/png');
+        favicons.forEach((favicon) => {
+          if (!originalFavicon.has(favicon)) {
+            originalFavicon.set(favicon, favicon.href);
+          }
+          favicon.href = dataUrl;
+        });
       }
     }
 
@@ -92,16 +94,13 @@ export default defineComponent({
     watch([minutes, colorType], renderCanvas);
     onMounted(renderCanvas);
     onUnmounted(() => {
-      if (!originalFavicon) {
+      if (originalFavicon.size === 0) {
         return;
       }
-      const favicon = document.querySelector<HTMLLinkElement>(
-        'link[rel="icon"][type="image/png"]',
-      );
-
-      if (favicon) {
-        favicon.href = originalFavicon;
-      }
+      originalFavicon.forEach((href, favicon) => {
+        favicon.href = href;
+      });
+      originalFavicon.clear();
     });
 
     return { arc, colorType, canvasRef };
