@@ -5,7 +5,7 @@ const postcssPurgecss = require(`@fullhuman/postcss-purgecss`);
 /* eslint-enable */
 
 const purgecss = postcssPurgecss({
-  content: ['./public/**/*.html', './src/**/*.vue'],
+  content: ['./public/**/*.html', './src/**/*.vue', './src/**/*.ts'],
   defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
   whitelistPatterns: [
     /-(leave|enter|appear)(|-(to|from|active))$/,
