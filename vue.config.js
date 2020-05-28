@@ -15,6 +15,7 @@ module.exports = {
     name: 'Pomodoro Timer',
     themeColor: '#ffffff',
     manifestOptions: {
+      // eslint-disable-next-line @typescript-eslint/camelcase
       background_color: '#ffffff',
     },
   },
