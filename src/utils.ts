@@ -49,7 +49,7 @@ export function setupNotifications(notify: Function) {
 
     if (IntervalType.Work === type) {
       notify('Time to work!', {
-        body: `\nLet's get some job done for the next ${minutes}!`,
+        body: `\nLet's get some work done for the next ${minutes}!`,
       });
       return;
     }
