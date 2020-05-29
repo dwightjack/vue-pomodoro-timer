@@ -9,7 +9,7 @@
     <div
       class="fixed inset-x-0 top-0 p-2 flex items-center space-x-2 text-sm bg-blue-600 text-white"
       role="status"
-      aria-live="assertive"
+      aria-live="polite"
       v-show="visible"
     >
       <slot :visible="visible" :confirm="confirm" :cancel="cancel" />

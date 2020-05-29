@@ -1,18 +1,23 @@
 <template>
-  <transition
-    name="opacity"
-    enter-class="opacity-0"
-    enter-active-class="transition-opacity duration-200"
-    leave-active-class="transition-opacity duration-200"
-    leave-to-class="opacity-0"
-  >
-    <div role="status" v-show="visible">
-      <span class="sr-only">{{ message }}</span>
-      <div class="bg-opacity-75 bg-white fixed inset-0 flex items-center">
+  <div role="status">
+    <transition
+      name="opacity"
+      enter-class="opacity-0"
+      enter-active-class="transition-opacity duration-200"
+      leave-active-class="transition-opacity duration-200"
+      leave-to-class="opacity-0"
+    >
+      <div
+        aria-hidden="true"
+        v-show="visible"
+        class="bg-opacity-75 bg-white fixed inset-0 flex items-center"
+      >
         <div class="mx-auto w-40 bg-blue-500 h-2 c-the-loader-animate" />
       </div>
-    </div>
-  </transition>
+    </transition>
+
+    <p v-if="visible" class="sr-only">{{ message }}</p>
+  </div>
 </template>
 <script lang="ts">
 import Vue from 'vue';

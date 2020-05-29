@@ -3,6 +3,7 @@
     role="timer"
     class="c-base-timer text-4xl py-4 px-8 rounded-lg border-current border-4 text-gray-800"
     :class="classes"
+    :aria-label="label"
   >
     {{ time }}
   </div>
@@ -11,17 +12,27 @@
 import { defineComponent, computed } from '@vue/composition-api';
 import VueTypes from 'vue-types';
 import { IntervalType } from '@/types';
-import { formatTime, getIntervalTypeColor } from '@/utils';
+import {
+  formatTime,
+  getIntervalTypeColor,
+  getMinutes,
+  getSeconds,
+} from '@/utils';
 
 export default defineComponent({
   setup(props) {
     const time = computed(() => formatTime(props.duration));
+    const label = computed(() => {
+      const mins = getMinutes(props.duration);
+      const secs = getSeconds(props.duration);
+      return `${mins} minutes ${secs ? secs + ' seconds ' : ''}left`;
+    });
 
     const classes = computed(() => {
       return getIntervalTypeColor(props.type as IntervalType);
     });
 
-    return { time, IntervalType, classes };
+    return { time, IntervalType, classes, label };
   },
   props: {
     type: VueTypes.oneOf(['none', ...Object.values(IntervalType)]).def('none'),

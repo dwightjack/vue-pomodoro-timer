@@ -1,6 +1,6 @@
 <template>
   <fieldset class="min-w-0">
-    <legend class="sr-only">{{ IntervalType[type] }} interval settings</legend>
+    <legend class="sr-only">Interval Settings</legend>
     <LayoutInline class="items-center">
       <label class="grid grid-flow-col items-center">
         <select

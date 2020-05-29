@@ -5,17 +5,18 @@
     :aria-current="current && 'time'"
   >
     <b class="text-sm text-gray-700" aria-hidden="true">{{ abbr }}</b>
-    <span class="sr-only">{{ type }}</span>
-    <time class="text-xs text-gray-700" :datetime="durationAttr">{{
-      durationFormatted
-    }}</time>
+    <span class="sr-only">{{ typeFormatted }}</span>
+    <time class="text-xs text-gray-700" :datetime="durationAttr"
+      >{{ durationFormatted }}
+      <span class="sr-only"> minutes</span>
+    </time>
   </li>
 </template>
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api';
 import VueTypes from 'vue-types';
 import { IntervalType } from '@/types';
-import { formatTime, formatTimeDuration } from '@/utils';
+import { formatTime, formatTimeDuration, toTitleCase } from '@/utils';
 
 export default defineComponent({
   setup(props) {
@@ -40,7 +41,8 @@ export default defineComponent({
 
     const durationFormatted = computed(() => formatTime(props.duration));
     const durationAttr = computed(() => formatTimeDuration(props.duration));
-    return { abbr, classes, durationFormatted, durationAttr };
+    const typeFormatted = computed(() => toTitleCase(props.type));
+    return { abbr, classes, durationFormatted, durationAttr, typeFormatted };
   },
   props: {
     type: VueTypes.oneOf(Object.values(IntervalType)).isRequired,

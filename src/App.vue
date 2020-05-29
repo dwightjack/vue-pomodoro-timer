@@ -5,6 +5,7 @@
       <p>Do you want to manage notification settings for this app?</p>
     </TheNotificationBar>
     <TheContainer>
+      <h1 class="sr-only">Pomodoro Timer</h1>
       <LayoutStack centered>
         <TheTimerList v-bind="cycle" />
 

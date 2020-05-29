@@ -34,6 +34,14 @@ export function pluralize(count: number, singular: string, plural: string) {
   }
 }
 
+export function toSpacedString(str: string) {
+  return str.replace(/[-_]/g, ' ');
+}
+
+export function toTitleCase(str: string) {
+  return toSpacedString(str).replace(/\b(\w)/g, (_, a) => a.toUpperCase());
+}
+
 export function createInterval(type = IntervalType.Work, mins = 0): Interval {
   return {
     type,

@@ -5,6 +5,7 @@
     ref="canvasRef"
     :width="size"
     :height="size"
+    aria-hidden="true"
   />
 </template>
 <script lang="ts">
