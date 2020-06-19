@@ -6,6 +6,18 @@ export const getMinutes = (v: number) => Math.floor(v / 1000 / 60);
 export const getSeconds = (v: number) => Math.floor((v / 1000) % 60);
 export const minutesToMs = (v: number) => v * 60 * 1000;
 
+export const ID_STORE: string[] = [];
+export function uniqId() {
+  let id = uid();
+  let iterations = 10;
+  while (ID_STORE.includes(id) && iterations) {
+    id = uid();
+    iterations -= 1;
+  }
+  ID_STORE.push(id);
+  return id;
+}
+
 export function formatTime(ms: number) {
   const minutes = toString(getMinutes(ms));
   const seconds = toString(getSeconds(ms));
@@ -47,7 +59,7 @@ export function createInterval(type = IntervalType.Work, mins = 0): Interval {
     type,
     duration: mins ? mins * 60 * 1000 : 0,
     remaining: 0,
-    id: uid(),
+    id: uniqId(),
   };
 }
 

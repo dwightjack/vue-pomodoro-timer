@@ -54,7 +54,7 @@ import { useTicker } from '@/use/ticker';
 import { useStorage } from '@/use/storage';
 import { useNotification } from '@/use/notification';
 import { useLoader } from '@/use/loader';
-import { setupNotifications, createInterval } from './utils';
+import { setupNotifications, createInterval, ID_STORE } from './utils';
 
 type NotificationBar = InstanceType<typeof TheNotificationBar>;
 
@@ -114,7 +114,12 @@ export default defineComponent({
     }
 
     async function initialize() {
-      intervals.value = await exec(intervalsStore.load());
+      const storedIntervals = await exec(intervalsStore.load());
+      // we use a function to create unique IDs,
+      // but we need to exclude IDs generate in previous sessions
+      // and stored in local storage
+      ID_STORE.push(...storedIntervals.map(({ id }) => id));
+      intervals.value = storedIntervals;
       updateCycle(intervals.value);
     }
 
