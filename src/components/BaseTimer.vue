@@ -9,8 +9,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed } from '@vue/composition-api';
-import VueTypes from 'vue-types';
+import { defineComponent, computed } from 'vue';
+import { oneOf, integer } from 'vue-types';
 import { IntervalType } from '@/types';
 import {
   formatTime,
@@ -35,8 +35,8 @@ export default defineComponent({
     return { time, IntervalType, classes, label };
   },
   props: {
-    type: VueTypes.oneOf(['none', ...Object.values(IntervalType)]).def('none'),
-    duration: VueTypes.integer.def(0),
+    type: oneOf(['none', ...Object.values(IntervalType)]).def('none'),
+    duration: integer().def(0),
   },
 });
 </script>

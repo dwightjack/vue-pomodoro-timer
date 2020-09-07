@@ -14,15 +14,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import VueTypes from 'vue-types';
 import IntervalSquare from '@/components/IntervalSquare.vue';
-import LayoutInline from '@/components/LayoutInline.vue';
 
 export default defineComponent({
   props: {
     cycle: VueTypes.object.isRequired,
   },
-  components: { IntervalSquare, LayoutInline },
+  components: { IntervalSquare },
 });
 </script>

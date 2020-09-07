@@ -43,8 +43,8 @@
   </fieldset>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api';
-import VueTypes from 'vue-types';
+import { defineComponent, ref } from 'vue';
+import { string, integer } from 'vue-types';
 import BaseIcon from '@/components/BaseIcon.vue';
 import BaseControl from '@/components/BaseControl.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
@@ -67,10 +67,10 @@ export default defineComponent({
     return { IntervalType, typeRef, durationRef, onInput };
   },
   props: {
-    type: VueTypes.string.def(''),
-    duration: VueTypes.integer.def(0),
-    id: VueTypes.string.isRequired,
-    remaining: VueTypes.integer.def(0),
+    type: string().def(''),
+    duration: integer().def(0),
+    id: string().isRequired,
+    remaining: integer().def(0),
   },
   components: {
     BaseControl,

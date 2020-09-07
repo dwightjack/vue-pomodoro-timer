@@ -1,16 +1,17 @@
 <template>
-  <span
-    class="c-base-icon inline-flex items-center"
+  <component
+    class="c-base-icon inline-flex items-center fill-current"
     aria-hidden="true"
     :is="icon"
   />
 </template>
 <script lang="ts">
-import { defineComponent, watch, ref } from '@vue/composition-api';
-import VueTypes from 'vue-types';
+import { defineComponent, watch, shallowRef } from 'vue';
+import { string } from 'vue-types';
+
 export default defineComponent({
   setup(props) {
-    const icon = ref<unknown>();
+    const icon = shallowRef<unknown>();
     watch(
       () => props.name,
       async (name) => {
@@ -24,19 +25,18 @@ export default defineComponent({
           icon.value = undefined;
         }
       },
+      { immediate: true },
     );
     return { icon };
   },
   props: {
-    name: VueTypes.string.isRequired,
+    name: string().isRequired,
   },
 });
 </script>
 <style scoped>
 .c-base-icon {
-  display: inline-block;
   width: 1em;
   height: 1em;
-  fill: currentColor;
 }
 </style>

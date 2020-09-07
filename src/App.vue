@@ -20,7 +20,7 @@
         <TheCycleEdit
           :intervals="cycle.intervals"
           @save="saveChanges"
-          @toggle="onEditToggle"
+          @toggled="onEditToggle"
           :open="editOpen"
         />
       </LayoutStack>
@@ -40,13 +40,7 @@ import TheLoader from '@/components/TheLoader.vue';
 import TheNotificationBar from '@/components/TheNotificationBar.vue';
 import GraphicTimer from '@/components/GraphicTimer.vue';
 
-import {
-  defineComponent,
-  watch,
-  onMounted,
-  ref,
-  Ref,
-} from '@vue/composition-api';
+import { defineComponent, watch, onMounted, ref, Ref } from 'vue';
 import { Status, Interval, IntervalType } from '@/types';
 import { useStatus } from '@/use/status';
 import { useCycle } from '@/use/cycle';

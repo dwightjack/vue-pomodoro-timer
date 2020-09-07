@@ -13,7 +13,7 @@
   </li>
 </template>
 <script lang="ts">
-import { defineComponent, computed } from '@vue/composition-api';
+import { defineComponent, computed } from 'vue';
 import VueTypes from 'vue-types';
 import { IntervalType } from '@/types';
 import { formatTime, formatTimeDuration, toTitleCase } from '@/utils';

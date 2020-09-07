@@ -33,7 +33,7 @@
   </transition>
 </template>
 <script lang="ts">
-import { defineComponent, ref, onBeforeUnmount } from '@vue/composition-api';
+import { defineComponent, ref, onBeforeUnmount } from 'vue';
 import VueTypes from 'vue-types';
 
 export default defineComponent({

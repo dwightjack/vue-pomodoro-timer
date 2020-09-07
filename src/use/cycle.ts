@@ -1,5 +1,5 @@
 import { Interval, Cycle } from '@/types';
-import { reactive, computed } from '@vue/composition-api';
+import { reactive, computed } from 'vue';
 
 export function useCycle(intervals: Interval[] = []) {
   const cycle: Cycle = reactive({

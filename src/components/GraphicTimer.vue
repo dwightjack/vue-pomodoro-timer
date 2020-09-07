@@ -16,9 +16,9 @@ import {
   onMounted,
   onUnmounted,
   computed,
-} from '@vue/composition-api';
+} from 'vue';
 import { getIntervalTypeColor } from '@/utils';
-import VueTypes from 'vue-types';
+import { number, string } from 'vue-types';
 import { IntervalType } from '../types';
 
 const currentMinute = (v: number) => Math.ceil(v / 1000 / 30);
@@ -107,19 +107,10 @@ export default defineComponent({
     return { arc, colorType, canvasRef };
   },
   props: {
-    size: VueTypes.number.def(50),
-    duration: VueTypes.number.isRequired,
-    remaining: VueTypes.number.isRequired,
-    type: VueTypes.string.isRequired,
+    size: number().def(50),
+    duration: number().isRequired,
+    remaining: number().isRequired,
+    type: string().isRequired,
   },
 });
 </script>
-<style lang="postcss" scoped>
-.c-graphic-timer__circle {
-  fill: currentColor;
-  stroke: currentColor;
-}
-path {
-  fill: currentColor;
-}
-</style>

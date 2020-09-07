@@ -20,10 +20,10 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VueTypes from 'vue-types';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     message: VueTypes.string.def(''),
     visible: VueTypes.bool.def(false),

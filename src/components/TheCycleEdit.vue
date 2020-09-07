@@ -3,7 +3,7 @@
     class="w-full"
     :class="open && 'border rounded-lg overflow-hidden border-blue-200'"
     :open="open"
-    @toggle="$emit('toggle', $event.target.open)"
+    @toggle.stop="$emit('toggled', $event.target.open)"
   >
     <summary
       class="py-1 list-none c-cycle-edit__summary text-gray-700 text-center cursor-pointer hover:bg-blue-100 rounded"
@@ -39,8 +39,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from '@vue/composition-api';
-import VueTypes from 'vue-types';
+import { defineComponent, ref, watch } from 'vue';
+import { arrayOf, object, bool } from 'vue-types';
 import IntervalEditBox from '@/components/IntervalEditBox.vue';
 import BaseControl from '@/components/BaseControl.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
@@ -80,11 +80,17 @@ export default defineComponent({
       },
     );
 
-    return { intervalsRef, update, deleteInterval, onSubmit, addInterval };
+    return {
+      intervalsRef,
+      update,
+      deleteInterval,
+      onSubmit,
+      addInterval,
+    };
   },
   props: {
-    intervals: VueTypes.arrayOf(Object).def([]),
-    open: VueTypes.bool.def(false),
+    intervals: arrayOf(object<Interval>()).def([]),
+    open: bool().def(false),
   },
   components: {
     IntervalEditBox,

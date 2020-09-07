@@ -1,37 +1,25 @@
+<template>
+  <component
+    :is="tag"
+    class="flex flex-col"
+    :class="{
+      'items-center': centered,
+      'items-start': !centered,
+      [`gap-y-${space}`]: space,
+    }"
+  >
+    <slot />
+  </component>
+</template>
 <script lang="ts">
-import Vue from 'vue';
-import VueTypes from 'vue-types';
+import { defineComponent } from 'vue';
+import { string, bool, oneOfType } from 'vue-types';
 
-export default Vue.extend({
-  functional: true,
+export default defineComponent({
   props: {
-    tag: VueTypes.string.def('div'),
-    centered: VueTypes.bool.def(false),
-    space: VueTypes.oneOfType([String, Number]).def(4),
-  },
-  render(h, { props, data, children }) {
-    const classes = [
-      'grid grid-col-1',
-      data.class,
-      {
-        'c-layout-stack--centered': props.centered,
-        [`gap-${props.space}`]: props.space,
-      },
-    ];
-
-    return h(
-      props.tag,
-      {
-        ...data,
-        class: classes,
-      },
-      children,
-    );
+    tag: string().def('div'),
+    centered: bool().def(false),
+    space: oneOfType([String, Number]).def(4),
   },
 });
 </script>
-<style scoped>
-.c-layout-stack--centered {
-  justify-items: center;
-}
-</style>

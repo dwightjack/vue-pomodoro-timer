@@ -11,11 +11,11 @@
   </transition-group>
 </template>
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import VueTypes from 'vue-types';
 import BaseTimer from '@/components/BaseTimer.vue';
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     intervals: VueTypes.arrayOf(Object).def([]),
     current: VueTypes.integer.def(0),
@@ -30,7 +30,7 @@ export default Vue.extend({
 .timer-leave-active {
   @apply transition-all duration-500 ease-in-out;
 }
-.timer-enter {
+.timer-enter-from {
   @apply transform translate-y-2 opacity-0;
 }
 .timer-leave-to {
