@@ -2,7 +2,7 @@
   <li
     class="grid text-center px-2 py-1 rounded-md border border-current transition duration-150 ease-out"
     :class="[classes, { 'bg-current': current }]"
-    :aria-current="current && 'time'"
+    :aria-current="current ? 'time' : null"
   >
     <b class="text-sm text-gray-700" aria-hidden="true">{{ abbr }}</b>
     <span class="sr-only">{{ typeFormatted }}</span>
@@ -14,7 +14,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import VueTypes from 'vue-types';
+import { oneOf, integer, bool } from 'vue-types';
 import { IntervalType } from '@/types';
 import { formatTime, formatTimeDuration, toTitleCase } from '@/utils';
 
@@ -45,9 +45,9 @@ export default defineComponent({
     return { abbr, classes, durationFormatted, durationAttr, typeFormatted };
   },
   props: {
-    type: VueTypes.oneOf(Object.values(IntervalType)).isRequired,
-    duration: VueTypes.integer.def(0),
-    current: VueTypes.bool.def(false),
+    type: oneOf(Object.values(IntervalType)).isRequired,
+    duration: integer().def(0),
+    current: bool().def(false),
   },
 });
 </script>

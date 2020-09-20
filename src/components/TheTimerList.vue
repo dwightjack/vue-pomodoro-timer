@@ -12,13 +12,14 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import VueTypes from 'vue-types';
+import { array, integer } from 'vue-types';
 import BaseTimer from '@/components/BaseTimer.vue';
+import { Interval } from '@/types';
 
 export default defineComponent({
   props: {
-    intervals: VueTypes.arrayOf(Object).def([]),
-    current: VueTypes.integer.def(0),
+    intervals: array<Interval>().def([]),
+    current: integer().def(0),
   },
   components: {
     BaseTimer,

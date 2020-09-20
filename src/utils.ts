@@ -63,6 +63,7 @@ export function createInterval(type = IntervalType.Work, mins = 0): Interval {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function setupNotifications(notify: Function) {
   return (type: IntervalType, duration: number) => {
     const minutes = pluralize(getMinutes(duration), 'minute', 'minutes');

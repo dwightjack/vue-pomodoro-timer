@@ -7,7 +7,6 @@
       'hover:bg-blue-100': !pressed,
     }"
     :aria-pressed="pressed"
-    v-bind="$attrs"
   >
     <slot />
   </button>

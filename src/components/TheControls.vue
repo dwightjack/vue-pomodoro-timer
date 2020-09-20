@@ -28,7 +28,7 @@
 import BaseControl from '@/components/BaseControl.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
-import VueTypes from 'vue-types';
+import { oneOf } from 'vue-types';
 import { defineComponent, computed } from 'vue';
 import { Status } from '@/types';
 
@@ -44,7 +44,7 @@ export default defineComponent({
     LayoutInline,
   },
   props: {
-    status: VueTypes.oneOf(Object.values(Status)).def(Status.Pause),
+    status: oneOf(Object.values(Status)).def(Status.Pause),
   },
 });
 </script>

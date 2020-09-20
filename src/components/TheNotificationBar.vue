@@ -34,11 +34,11 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, onBeforeUnmount } from 'vue';
-import VueTypes from 'vue-types';
+import { bool } from 'vue-types';
 
 export default defineComponent({
   setup(_, { emit }) {
-    const resolver = ref<Function>();
+    const resolver = ref<(v: boolean) => void>();
     const visible = ref(false);
 
     function confirm() {
@@ -76,7 +76,7 @@ export default defineComponent({
     };
   },
   props: {
-    actions: VueTypes.bool.def(true),
+    actions: bool().def(true),
   },
 });
 </script>

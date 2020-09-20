@@ -21,12 +21,12 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import VueTypes from 'vue-types';
+import { string, bool } from 'vue-types';
 
 export default defineComponent({
   props: {
-    message: VueTypes.string.def(''),
-    visible: VueTypes.bool.def(false),
+    message: string().def(''),
+    visible: bool().def(false),
   },
 });
 </script>

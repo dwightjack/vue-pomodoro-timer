@@ -35,7 +35,7 @@ export default defineComponent({
     return { time, IntervalType, classes, label };
   },
   props: {
-    type: oneOf(['none', ...Object.values(IntervalType)]).def('none'),
+    type: oneOf(['none', ...Object.values(IntervalType)] as const).def('none'),
     duration: integer().def(0),
   },
 });

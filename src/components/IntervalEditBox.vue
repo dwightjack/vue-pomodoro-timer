@@ -13,8 +13,9 @@
             :key="value"
             :value="value"
             :selected="value === type"
-            >{{ name }}</option
           >
+            {{ name }}
+          </option>
         </select>
         <BaseIcon
           name="cheveron-down"

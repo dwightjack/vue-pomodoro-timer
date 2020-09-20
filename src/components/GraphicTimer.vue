@@ -1,6 +1,6 @@
 <template>
   <canvas
-    class="c-graphic-timer sr-only"
+    class="sr-only"
     :class="colorType"
     ref="canvasRef"
     :width="size"
@@ -40,7 +40,6 @@ function drawCircle(
 
 export default defineComponent({
   setup(props) {
-    const arc = ref<string>('');
     const canvasRef = ref<HTMLCanvasElement>();
     const minutes = ref<number>(currentMinute(props.remaining));
     const colorType = computed(() =>
@@ -92,8 +91,12 @@ export default defineComponent({
       },
     );
 
-    watch([minutes, colorType], renderCanvas);
-    onMounted(renderCanvas);
+    watch([minutes, colorType], renderCanvas, {
+      flush: 'post',
+    });
+    onMounted(() => {
+      setTimeout(renderCanvas, 0);
+    });
     onUnmounted(() => {
       if (originalFavicon.size === 0) {
         return;
@@ -104,7 +107,7 @@ export default defineComponent({
       originalFavicon.clear();
     });
 
-    return { arc, colorType, canvasRef };
+    return { colorType, canvasRef };
   },
   props: {
     size: number().def(50),
