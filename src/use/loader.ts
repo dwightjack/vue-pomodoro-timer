@@ -9,8 +9,7 @@ export function useLoader() {
     try {
       return await promise;
     } finally {
-      const next = pending.value - 1;
-      pending.value = Math.max(next, 0);
+      pending.value = Math.max(pending.value - 1, 0);
     }
   }
 

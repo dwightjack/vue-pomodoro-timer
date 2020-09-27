@@ -40,7 +40,7 @@ import TheLoader from '@/components/TheLoader.vue';
 import TheNotificationBar from '@/components/TheNotificationBar.vue';
 import GraphicTimer from '@/components/GraphicTimer.vue';
 
-import { defineComponent, watch, onMounted, ref, Ref } from 'vue';
+import { defineComponent, watch, onMounted, ref } from 'vue';
 import { Status, Interval, IntervalType } from '@/types';
 import { useStatus } from '@/use/status';
 import { useCycle } from '@/use/cycle';
@@ -55,7 +55,7 @@ type NotificationBar = InstanceType<typeof TheNotificationBar>;
 export default defineComponent({
   setup() {
     const editOpen = ref(false);
-    const intervals: Ref<Interval[]> = ref([]);
+    const intervals = ref<Interval[]>([]);
     const notificationBarRef = ref<NotificationBar>();
 
     const { status, play, pause } = useStatus();
