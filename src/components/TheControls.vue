@@ -5,13 +5,9 @@
     aria-label="Timer controls"
     space="2"
   >
-    <BaseControl :pressed="isPlaying" @click="$emit('play')">
-      <BaseIcon name="play" />
-      <span class="sr-only">Play</span>
-    </BaseControl>
-    <BaseControl :pressed="!isPlaying" @click="$emit('pause')">
-      <BaseIcon name="pause" />
-      <span class="sr-only">Pause</span>
+    <BaseControl @click="$emit(isPlaying ? 'pause' : 'play')">
+      <BaseIcon :name="isPlaying ? 'pause' : 'play'" />
+      <span class="sr-only">{{ isPlaying ? 'Pause' : 'Play' }}</span>
     </BaseControl>
     <span class="mx-1 border-l border-blue-400 h-6" role="separator" />
     <BaseControl @click="$emit('skip')">
