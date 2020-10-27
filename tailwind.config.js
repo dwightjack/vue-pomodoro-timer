@@ -3,7 +3,18 @@ const { colors } = require('tailwindcss/defaultTheme');
 const { green, gray, blue, orange, white, transparent, current } = colors;
 
 module.exports = {
-  purge: false,
+  purge: {
+    content: ['./public/**/*.html', './src/**/*.vue', './src/**/*.ts'],
+    options: {
+      defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
+      whitelistPatterns: [
+        /-(leave|enter|appear)(|-(to|from|active))$/,
+        /^(?!(|.*?:)cursor-move).+-move$/,
+        /^router-link(|-exact)-active$/,
+        /^gap-([x-y]-|)\d+$/,
+      ],
+    },
+  },
   theme: {
     colors: {
       green,
