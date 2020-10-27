@@ -7,7 +7,7 @@ const postcssPurgecss = require(`@fullhuman/postcss-purgecss`);
 const purgecss = postcssPurgecss({
   content: ['./public/**/*.html', './src/**/*.vue', './src/**/*.ts'],
   defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
-  whitelistPatterns: [
+  safelistPatterns: [
     /-(leave|enter|appear)(|-(to|from|active))$/,
     /^(?!(|.*?:)cursor-move).+-move$/,
     /^router-link(|-exact)-active$/,

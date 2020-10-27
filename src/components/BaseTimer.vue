@@ -1,7 +1,7 @@
 <template>
   <div
     role="timer"
-    class="c-base-timer text-4xl py-4 px-8 rounded-lg border-current border-4 text-gray-800"
+    class="c-base-timer text-4xl py-4 px-8 rounded-lg border-current border-4"
     :class="classes"
     :aria-label="label"
   >
