@@ -1,6 +1,8 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import './registerServiceWorker';
+import { install } from './registerServiceWorker';
 import './assets/css/tailwind.css';
 
-createApp(App).mount('#app');
+const { worker } = install();
+
+createApp(App).provide('worker', worker).mount('#app');

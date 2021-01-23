@@ -40,7 +40,7 @@ import TheLoader from '@/components/TheLoader.vue';
 import TheNotificationBar from '@/components/TheNotificationBar.vue';
 import GraphicTimer from '@/components/GraphicTimer.vue';
 
-import { defineComponent, watch, onMounted, ref } from 'vue';
+import { defineComponent, watch, onMounted, ref, inject, Ref } from 'vue';
 import { Status, Interval, IntervalType } from '@/types';
 import { useStatus } from '@/use/status';
 import { useCycle } from '@/use/cycle';
@@ -57,6 +57,7 @@ export default defineComponent({
     const editOpen = ref(false);
     const intervals = ref<Interval[]>([]);
     const notificationBarRef = ref<NotificationBar>();
+    const worker = inject<Ref<ServiceWorkerRegistration>>('worker');
 
     const { status, play, pause } = useStatus();
     const { exec, loading } = useLoader();
@@ -80,7 +81,7 @@ export default defineComponent({
 
     const { startTicker, stopTicker } = useTicker(countDown);
 
-    const { notify, askPermission } = useNotification();
+    const { notify, askPermission } = useNotification(worker);
 
     function skip() {
       stopTicker();

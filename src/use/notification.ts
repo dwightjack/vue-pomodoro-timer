@@ -1,6 +1,6 @@
-import { ref } from 'vue';
+import { ref, Ref } from 'vue';
 
-export function useNotification() {
+export function useNotification(worker?: Ref<ServiceWorkerRegistration>) {
   const notification = ref<Notification>();
 
   async function askPermission() {
@@ -18,7 +18,14 @@ export function useNotification() {
     if (notification.value) {
       notification.value.close();
     }
-    notification.value = new Notification(message, options);
+    if (!worker?.value) {
+      // browser notification
+      notification.value = new Notification(message, options);
+      return;
+    }
+    // use service worker notifications (work on mobile too)
+    worker.value.showNotification(message, options);
+    notification.value = undefined;
   }
 
   return {

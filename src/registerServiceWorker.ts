@@ -1,14 +1,18 @@
 /* eslint-disable no-console */
 
 import { register } from 'register-service-worker';
+import { ref } from 'vue';
+export function install() {
+  const worker = ref<ServiceWorkerRegistration>();
 
-if (process.env.NODE_ENV === 'production') {
+  // if (process.env.NODE_ENV === 'production') {
   register(`${process.env.BASE_URL}service-worker.js`, {
-    ready() {
+    ready(registration) {
       console.log(
         'App is being served from cache by a service worker.\n' +
           'For more details, visit https://goo.gl/AFskqB',
       );
+      worker.value = registration;
     },
     registered() {
       console.log('Service worker has been registered.');
@@ -31,4 +35,7 @@ if (process.env.NODE_ENV === 'production') {
       console.error('Error during service worker registration:', error);
     },
   });
+  // }
+
+  return { worker };
 }
