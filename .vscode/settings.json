@@ -1,0 +1,23 @@
+{
+  "[js]": {
+    "editor.formatOnSave": false
+  },
+  "[ts]": {
+    "editor.formatOnSave": false
+  },
+  "css.validate": false,
+  "[css]": {
+    "editor.formatOnSave": false
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "vetur.format.enable": false,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true
+  },
+  "volar.tsPlugin": true
+}
