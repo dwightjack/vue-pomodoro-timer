@@ -75,6 +75,7 @@ export default defineComponent({
     const intervals = ref<Interval[]>([]);
     const notificationBarRef = ref<NotificationBar>();
     const worker = inject<Ref<ServiceWorkerRegistration>>('worker');
+    const tickWorker = new Worker('/tick-worker.js');
 
     const { status, play, pause } = useStatus();
     const { exec, loading } = useLoader();
@@ -96,7 +97,7 @@ export default defineComponent({
       updateCycle,
     } = useCycle();
 
-    const { startTicker, stopTicker } = useTicker(countDown);
+    const { startTicker, stopTicker } = useTicker(tickWorker, countDown);
 
     const { notify, askPermission } = useNotification(worker);
 
