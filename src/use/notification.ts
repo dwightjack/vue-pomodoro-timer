@@ -1,6 +1,7 @@
-import { ref, Ref } from 'vue';
+import { ref } from 'vue';
 
-export function useNotification(worker?: Ref<ServiceWorkerRegistration>) {
+export function useNotification() {
+  const worker = ref<ServiceWorkerRegistration>();
   const notification = ref<Notification>();
 
   async function askPermission() {
@@ -27,6 +28,10 @@ export function useNotification(worker?: Ref<ServiceWorkerRegistration>) {
     worker.value.showNotification(message, options);
     notification.value = undefined;
   }
+
+  navigator.serviceWorker.getRegistration().then((registration) => {
+    worker.value = registration;
+  });
 
   return {
     notify,

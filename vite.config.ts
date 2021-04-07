@@ -15,7 +15,6 @@ export default defineConfig({
     vue(),
     svgLoader(),
     VitePWA({
-      registerType: 'autoUpdate',
       injectRegister: null,
       manifest: {
         name: 'Pomodoro Timer',
@@ -48,6 +47,9 @@ export default defineConfig({
         start_url: '.',
         display: 'standalone',
         background_color: '#ffffff',
+      },
+      workbox: {
+        skipWaiting: true,
       },
     }),
   ],

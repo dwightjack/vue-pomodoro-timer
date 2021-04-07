@@ -6,8 +6,22 @@
       :remaining="currentInterval.remaining"
       :type="currentInterval.type"
     />
-    <TheNotificationBar ref="notificationBarRef">
-      <p>Do you want to manage notification settings for this app?</p>
+    <TheNotificationBar>
+      <TransitionFadeSlide>
+        <BaseToast
+          v-if="notifyBarVisible"
+          :on-cancel="notifyBar.cancel"
+          :on-confirm="notifyBar.confirm"
+        >
+          <p>Do you want to manage notification settings for this app?</p>
+        </BaseToast>
+      </TransitionFadeSlide>
+      <TransitionFadeSlide>
+        <BaseToast v-if="needRefresh" role="alert">
+          <p>Application update available.</p>
+          <BaseButton @click="updateServiceWorker()">Update</BaseButton>
+        </BaseToast>
+      </TransitionFadeSlide>
     </TheNotificationBar>
     <TheContainer>
       <h1 class="sr-only">Pomodoro Timer</h1>
@@ -43,9 +57,13 @@ import TheCycle from '@/components/TheCycle.vue';
 import TheCycleEdit from '@/components/TheCycleEdit.vue';
 import TheLoader from '@/components/TheLoader.vue';
 import TheNotificationBar from '@/components/TheNotificationBar.vue';
+import BaseToast from '@/components/BaseToast.vue';
+import BaseButton from '@/components/BaseButton.vue';
 import GraphicTimer from '@/components/GraphicTimer.vue';
+import TransitionFadeSlide from '@/components/transitions/FadeSlide.vue';
 
-import { defineComponent, watch, onMounted, ref, inject, Ref } from 'vue';
+import { defineComponent, watch, onMounted, ref } from 'vue';
+import { useRegisterSW } from 'virtual:pwa-register/vue';
 import { Status, Interval, IntervalType } from '@/types';
 import { useStatus } from '@/use/status';
 import { useCycle } from '@/use/cycle';
@@ -53,9 +71,8 @@ import { useTicker } from '@/use/ticker';
 import { useStorage } from '@/use/storage';
 import { useNotification } from '@/use/notification';
 import { useLoader } from '@/use/loader';
+import { useAsyncModal } from '@/use/asyncModal';
 import { setupNotifications, createInterval, ID_STORE } from './utils';
-
-type NotificationBar = InstanceType<typeof TheNotificationBar>;
 
 export default defineComponent({
   name: 'App',
@@ -69,13 +86,16 @@ export default defineComponent({
     TheLoader,
     TheNotificationBar,
     GraphicTimer,
+    BaseToast,
+    BaseButton,
+    TransitionFadeSlide,
   },
   setup() {
     const editOpen = ref(false);
     const intervals = ref<Interval[]>([]);
-    const notificationBarRef = ref<NotificationBar>();
-    const worker = inject<Ref<ServiceWorkerRegistration>>('worker');
     const tickWorker = new Worker('/tick-worker.js');
+
+    const { needRefresh, updateServiceWorker } = useRegisterSW();
 
     const { status, play, pause } = useStatus();
     const { exec, loading } = useLoader();
@@ -99,7 +119,8 @@ export default defineComponent({
 
     const { startTicker, stopTicker } = useTicker(tickWorker, countDown);
 
-    const { notify, askPermission } = useNotification(worker);
+    const { notify, askPermission } = useNotification();
+    const [notifyBarVisible, notifyBar] = useAsyncModal();
 
     function skip() {
       stopTicker();
@@ -141,7 +162,7 @@ export default defineComponent({
       if (permissions.notification !== undefined) {
         return;
       }
-      const confirmed = await notificationBarRef.value?.show();
+      const confirmed = await notifyBar.show();
       permissionsStore.save({ ...permissions, notification: confirmed });
 
       if (confirmed) {
@@ -162,7 +183,7 @@ export default defineComponent({
 
     watch(
       () => cycle.current,
-      (next, prev) => {
+      (_, prev) => {
         if (prev === -1 || status.value !== Status.Play) {
           return;
         }
@@ -186,8 +207,11 @@ export default defineComponent({
       onEditToggle,
       loading,
       askPermission,
-      notificationBarRef,
+      notifyBarVisible,
+      notifyBar,
       currentInterval,
+      needRefresh,
+      updateServiceWorker,
     };
   },
 });
