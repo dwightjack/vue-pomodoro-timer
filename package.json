@@ -14,7 +14,7 @@
     "tailwindcss": "2.0.4",
     "uid": "^1.0.0",
     "vue": "^3.0.5",
-    "vue-types": "^3.0.0"
+    "vue-types": "4.0.0-rc.2"
   },
   "devDependencies": {
     "@types/node": "^14.14.37",
