@@ -10,7 +10,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "prettier": "2.2.1",
+    "prettier": "2.3.2",
     "tailwindcss": "2.0.4",
     "uid": "1.0.0",
     "vue": "3.0.11",
