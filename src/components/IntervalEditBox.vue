@@ -5,7 +5,14 @@
       <label class="grid grid-flow-col items-center">
         <select
           v-model="typeRef"
-          class="c-interval-edit-box__input pr-6 col-start-1 row-start-1 min-w-0 truncate"
+          class="
+            c-interval-edit-box__input
+            pr-6
+            col-start-1
+            row-start-1
+            min-w-0
+            truncate
+          "
           @change="onInput"
         >
           <option
