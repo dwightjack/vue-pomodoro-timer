@@ -31,7 +31,7 @@
     "typescript": "4.3.5",
     "vite": "2.3.8",
     "vite-plugin-pwa": "0.8.1",
-    "vite-svg-loader": "1.5.1",
+    "vite-svg-loader": "2.1.0",
     "vue-tsc": "0.2.0"
   },
   "prettier": {
