@@ -8,7 +8,15 @@
     @toggle.stop="$emit('toggled', $event.target.open)"
   >
     <summary
-      class="py-1 list-none c-cycle-edit__summary text-gray-700 text-center cursor-pointer hover:bg-blue-100 rounded"
+      class="
+        py-1
+        list-none
+        c-cycle-edit__summary
+        text-gray-700 text-center
+        cursor-pointer
+        hover:bg-blue-100
+        rounded
+      "
     >
       <BaseIcon name="wrench" />
       Settings

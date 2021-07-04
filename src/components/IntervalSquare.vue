@@ -1,14 +1,24 @@
 <template>
   <li
-    class="grid text-center px-2 py-1 rounded-md border border-current transition duration-150 ease-out"
+    class="
+      grid
+      text-center
+      px-2
+      py-1
+      rounded-md
+      border border-current
+      transition
+      duration-150
+      ease-out
+    "
     :class="[classes, { 'bg-current': current }]"
-    :aria-current="current ? 'time' : null"
+    :aria-current="current ? 'time' : undefined"
   >
     <b class="text-sm text-gray-700" aria-hidden="true">{{ abbr }}</b>
     <span class="sr-only">{{ typeFormatted }}</span>
-    <time class="text-xs text-gray-700" :datetime="durationAttr"
-      >{{ durationFormatted }}
-      <span class="sr-only"> minutes</span>
+    <time class="text-xs text-gray-700" :datetime="durationAttr">
+      {{ durationFormatted }}
+      <span class="sr-only">minutes</span>
     </time>
   </li>
 </template>
