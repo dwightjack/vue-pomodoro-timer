@@ -1,4 +1,4 @@
-import uid from 'uid';
+import { uid } from 'uid';
 import { IntervalType, Interval } from '@/types';
 
 export const toString = (v: number) => String(v).padStart(2, '0');
