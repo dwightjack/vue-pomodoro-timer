@@ -19,13 +19,17 @@ export function useNotification() {
     if (notification.value) {
       notification.value.close();
     }
+    const opts: NotificationOptions = {
+      vibrate: [400, 200, 400],
+      ...options,
+    };
     if (!worker?.value) {
       // browser notification
-      notification.value = new Notification(message, options);
+      notification.value = new Notification(message, opts);
       return;
     }
     // use service worker notifications (work on mobile too)
-    worker.value.showNotification(message, options);
+    worker.value.showNotification(message, opts);
     notification.value = undefined;
   }
 
