@@ -71,6 +71,7 @@ export function setupNotifications(notify: Function) {
     if (IntervalType.Work === type) {
       notify('Time to work!', {
         body: `\nLet's get some work done for the next ${minutes}!`,
+        requireInteraction: true,
       });
       return;
     }
