@@ -80,7 +80,7 @@ export function setupNotifications(notify: Function) {
       `Time for a ${
         type === IntervalType.ShortBreak ? 'short' : 'long'
       } break!`,
-      { body: `\nLet's rest for about ${minutes}!`, requireInteraction: true },
+      { body: `\nLet's rest for about ${minutes}!`, requireInteraction: false },
     );
   };
 }
