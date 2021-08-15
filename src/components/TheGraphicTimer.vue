@@ -9,12 +9,14 @@
   />
 </template>
 <script lang="ts">
-import { number, oneOf } from 'vue-types';
-import { IntervalType } from '../types';
+import { number } from 'vue-types';
 </script>
 <script setup lang="ts">
 import { watch, ref, onMounted, onUnmounted, computed } from 'vue';
 import { getIntervalTypeColor } from '@/utils';
+import { useCycle } from '@/stores/cycle';
+
+const cycle = useCycle();
 
 const currentMinute = (v: number) => Math.ceil(v / 1000 / 30);
 
@@ -35,19 +37,21 @@ function drawCircle(
 
 const props = defineProps({
   size: number().def(50),
-  duration: number().isRequired,
-  remaining: number(),
-  type: oneOf(Object.values(IntervalType)).isRequired,
 });
 
 const canvasRef = ref<HTMLCanvasElement>();
-const remaining = computed(() => props.remaining ?? props.duration);
+const remaining = computed(
+  () => cycle.currentInterval.remaining ?? cycle.currentInterval.duration,
+);
 const minutes = ref<number>(currentMinute(remaining.value));
-const colorType = computed(() => getIntervalTypeColor(props.type));
+const colorType = computed(() =>
+  getIntervalTypeColor(cycle.currentInterval.type),
+);
 const originalFavicon = new Map();
 
 function renderCanvas() {
-  const percent = (props.duration - remaining.value) / props.duration;
+  const { duration } = cycle.currentInterval;
+  const percent = (duration - remaining.value) / duration;
   if (!canvasRef.value) {
     return;
   }

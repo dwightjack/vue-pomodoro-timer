@@ -12,14 +12,9 @@
     </ul>
   </div>
 </template>
-<script lang="ts">
-import { object } from 'vue-types';
-import type { Cycle } from '@/types';
-</script>
 <script setup lang="ts">
 import IntervalSquare from '@/components/IntervalSquare.vue';
+import { useCycle } from '@/stores/cycle';
 
-defineProps({
-  cycle: object<Cycle>().isRequired,
-});
+const cycle = useCycle();
 </script>

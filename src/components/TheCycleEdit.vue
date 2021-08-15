@@ -3,8 +3,10 @@
   <component
     :is="'details'"
     class="w-full"
-    :class="open && 'border rounded-lg overflow-hidden border-blue-200'"
-    :open="open"
+    :class="
+      main.editOpen && 'border rounded-lg overflow-hidden border-blue-200'
+    "
+    :open="main.editOpen"
     @toggle.stop="$emit('toggled', $event.target.open)"
   >
     <summary
@@ -51,26 +53,23 @@
     </LayoutStack>
   </component>
 </template>
-<script lang="ts">
-import { arrayOf, object, bool } from 'vue-types';
-import type { Interval } from '@/types';
-</script>
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, unref } from 'vue';
 import IntervalEditBox from '@/components/IntervalEditBox.vue';
 import BaseControl from '@/components/BaseControl.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
 import { createInterval } from '@/utils';
+import { useCycle } from '@/stores/cycle';
+import { useMain } from '@/stores/main';
+import type { Interval } from '@/types';
 
-const props = defineProps({
-  intervals: arrayOf(object<Interval>()).def([]),
-  open: bool().def(false),
-});
+const cycle = useCycle();
+const main = useMain();
 
 const emit = defineEmits(['save', 'toggled']);
-const intervalsRef = ref<Interval[]>([...props.intervals]);
+const intervalsRef = ref<Interval[]>([...unref(cycle.intervals)]);
 
 function update(interval: Interval) {
   intervalsRef.value = intervalsRef.value.map((int) =>
@@ -87,7 +86,7 @@ function onSubmit() {
 }
 
 function onCancel() {
-  intervalsRef.value = [...props.intervals];
+  intervalsRef.value = [...unref(cycle.intervals)];
   emit('toggled', false);
 }
 
@@ -96,7 +95,7 @@ function addInterval() {
 }
 
 watch(
-  () => props.intervals,
+  () => cycle.intervals,
   (newIntervals) => {
     intervalsRef.value = newIntervals;
   },

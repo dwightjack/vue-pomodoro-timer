@@ -1,8 +1,8 @@
 <template>
   <transition-group name="timer" tag="div" class="grid grid-rows-1 grid-cols-1">
     <BaseTimer
-      v-for="(interval, i) in intervals"
-      v-show="i === current"
+      v-for="(interval, i) in cycle.intervals"
+      v-show="i === cycle.current"
       :key="i"
       :duration="interval.remaining"
       :type="interval.type"
@@ -10,17 +10,11 @@
     />
   </transition-group>
 </template>
-<script lang="ts">
-import { array, integer } from 'vue-types';
-import type { Interval } from '@/types';
-</script>
 <script setup lang="ts">
 import BaseTimer from '@/components/BaseTimer.vue';
+import { useCycle } from '@/stores/cycle';
 
-defineProps({
-  intervals: array<Interval>().def([]),
-  current: integer().def(0),
-});
+const cycle = useCycle();
 </script>
 <style lang="postcss" scoped>
 .timer-enter-active,

@@ -1,11 +1,6 @@
 <template>
   <div role="presentation">
-    <GraphicTimer
-      v-if="currentInterval"
-      :duration="currentInterval.duration"
-      :remaining="currentInterval.remaining"
-      :type="currentInterval.type"
-    />
+    <TheGraphicTimer v-if="cycle.currentInterval" />
     <TheNotificationBar>
       <TransitionFadeSlide>
         <BaseToast
@@ -26,22 +21,17 @@
     <TheContainer>
       <h1 class="sr-only">Pomodoro Timer</h1>
       <LayoutStack centered>
-        <TheTimerList v-bind="cycle" />
+        <TheTimerList />
 
-        <TheCycle :cycle="cycle" />
+        <TheCycle />
         <TheControls
-          :status="status"
-          @play="play"
-          @pause="pause"
+          :status="main.status"
+          @play="main.play"
+          @pause="main.pause"
           @skip="skip"
           @reset="reset"
         />
-        <TheCycleEdit
-          :intervals="cycle.intervals"
-          :open="editOpen"
-          @save="saveChanges"
-          @toggled="onEditToggle"
-        />
+        <TheCycleEdit @save="saveChanges" @toggled="onEditToggle" />
       </LayoutStack>
     </TheContainer>
     <TheLoader :visible="loading" message="Loading..." />
@@ -59,14 +49,14 @@ import TheLoader from '@/components/TheLoader.vue';
 import TheNotificationBar from '@/components/TheNotificationBar.vue';
 import BaseToast from '@/components/BaseToast.vue';
 import BaseButton from '@/components/BaseButton.vue';
-import GraphicTimer from '@/components/GraphicTimer.vue';
+import TheGraphicTimer from '@/components/TheGraphicTimer.vue';
 import TransitionFadeSlide from '@/components/transitions/FadeSlide.vue';
 
-import { defineComponent, watch, onMounted, ref } from 'vue';
+import { defineComponent, watch, onMounted } from 'vue';
 import { useRegisterSW } from 'virtual:pwa-register/vue';
 import { Status, Interval, IntervalType } from '@/types';
-import { useStatus } from '@/use/status';
-import { useCycle } from '@/use/cycle';
+import { useMain } from '@/stores/main';
+import { useCycle } from '@/stores/cycle';
 import { useTicker } from '@/use/ticker';
 import { useStorage } from '@/use/storage';
 import { useNotification } from '@/use/notification';
@@ -85,19 +75,16 @@ export default defineComponent({
     TheCycle,
     TheLoader,
     TheNotificationBar,
-    GraphicTimer,
+    TheGraphicTimer,
     BaseToast,
     BaseButton,
     TransitionFadeSlide,
   },
   setup() {
-    const editOpen = ref(false);
-    const intervals = ref<Interval[]>([]);
     const tickWorker = new Worker('/tick-worker.js');
 
     const { needRefresh, updateServiceWorker } = useRegisterSW();
 
-    const { status, play, pause } = useStatus();
     const { exec, loading } = useLoader();
     const intervalsStore = useStorage<Interval[]>('intervals', [
       createInterval(IntervalType.Work, 45),
@@ -106,45 +93,36 @@ export default defineComponent({
       'permissions',
       {},
     );
+    const main = useMain();
+    const cycle = useCycle();
 
-    const {
-      cycle,
-      getCurrent: getCurrentInterval,
-      current: currentInterval,
-      resetCycle,
-      nextInterval,
-      countDown,
-      updateCycle,
-    } = useCycle();
-
-    const { startTicker, stopTicker } = useTicker(tickWorker, countDown);
+    const { startTicker, stopTicker } = useTicker(tickWorker, cycle.countDown);
 
     const { notify, askPermission } = useNotification();
     const [notifyBarVisible, notifyBar] = useAsyncModal();
 
     function skip() {
       stopTicker();
-      nextInterval();
-      if (status.value === Status.Play) {
+      cycle.nextInterval();
+      if (main.isPlaying) {
         startTicker();
       }
     }
 
     function reset() {
-      pause();
-      resetCycle();
+      main.pause();
+      cycle.resetCycle();
     }
 
     async function saveChanges(newIntervals: Interval[]) {
       reset();
-      editOpen.value = false;
-      intervals.value = newIntervals;
-      updateCycle(newIntervals);
+      main.editOpen = false;
+      cycle.updateCycle(newIntervals);
       exec(intervalsStore.save(newIntervals));
     }
 
     function onEditToggle(open: boolean) {
-      editOpen.value = open;
+      main.editOpen = open;
     }
 
     async function initialize() {
@@ -153,8 +131,7 @@ export default defineComponent({
       // but we need to exclude IDs generate in previous sessions
       // and stored in local storage
       ID_STORE.push(...storedIntervals.map(({ id }) => id));
-      intervals.value = storedIntervals;
-      updateCycle(intervals.value);
+      cycle.updateCycle(storedIntervals);
     }
 
     async function checkNotifyPermission() {
@@ -172,22 +149,25 @@ export default defineComponent({
 
     const notifyInterval = setupNotifications(notify);
 
-    watch(status, (value, _, onInvalidate) => {
-      onInvalidate(stopTicker);
-      if (value === Status.Play) {
-        startTicker();
-        return;
-      }
-      stopTicker();
-    });
+    watch(
+      () => main.status,
+      (value, _, onInvalidate) => {
+        onInvalidate(stopTicker);
+        if (value === Status.Play) {
+          startTicker();
+          return;
+        }
+        stopTicker();
+      },
+    );
 
     watch(
       () => cycle.current,
       (_, prev) => {
-        if (prev === -1 || status.value !== Status.Play) {
+        if (prev === -1 || !main.isPlaying) {
           return;
         }
-        const { type, duration } = getCurrentInterval();
+        const { type, duration } = cycle.getCurrent();
         notifyInterval(type, duration);
       },
     );
@@ -196,20 +176,15 @@ export default defineComponent({
     onMounted(checkNotifyPermission);
 
     return {
-      status,
-      play,
-      pause,
+      main,
       cycle,
       skip,
       reset,
       saveChanges,
-      editOpen,
       onEditToggle,
       loading,
-      askPermission,
       notifyBarVisible,
       notifyBar,
-      currentInterval,
       needRefresh,
       updateServiceWorker,
     };
