@@ -7,11 +7,7 @@
       leave-active-class="transition-opacity duration-200"
       leave-to-class="opacity-0"
     >
-      <div
-        v-show="visible"
-        aria-hidden="true"
-        class="bg-opacity-75 bg-white fixed inset-0 flex items-center"
-      >
+      <div v-show="visible" aria-hidden="true" class="bg-white/75 fixed inset-0 flex items-center">
         <div class="mx-auto w-40 bg-blue-500 h-2 c-the-loader-animate" />
       </div>
     </transition>
@@ -19,16 +15,13 @@
     <p v-if="visible" class="sr-only">{{ message }}</p>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import { string, bool } from 'vue-types';
 
-export default defineComponent({
-  props: {
-    message: string().def(''),
-    visible: bool().def(false),
-  },
-});
+defineProps({
+  message: string().def(''),
+  visible: bool().def(false),
+})
 </script>
 <style scoped>
 .c-the-loader-animate {

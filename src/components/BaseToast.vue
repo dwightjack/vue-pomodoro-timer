@@ -9,19 +9,13 @@
     <BaseButton v-if="onCancel" @click="onCancel">dismiss</BaseButton>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import BaseButton from '@/components/BaseButton.vue';
 import { func, oneOf } from 'vue-types';
 
-export default defineComponent({
-  components: {
-    BaseButton,
-  },
-  props: {
-    onConfirm: func(),
-    onCancel: func(),
-    role: oneOf(['status', 'alert']).def('status'),
-  },
+defineProps({
+  onConfirm: func(),
+  onCancel: func(),
+  role: oneOf(['status', 'alert']).def('status'),
 });
 </script>

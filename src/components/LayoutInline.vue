@@ -10,15 +10,12 @@
     <slot />
   </component>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import { string, bool, oneOfType } from 'vue-types';
 
-export default defineComponent({
-  props: {
-    tag: string().def('div'),
-    centered: bool().def(false),
-    space: oneOfType([String, Number]).def(4),
-  },
-});
+defineProps({
+  tag: string().def('div'),
+  centered: bool().def(false),
+  space: oneOfType([String, Number]).def(4),
+})
 </script>

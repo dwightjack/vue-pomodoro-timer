@@ -8,25 +8,12 @@
     @toggle.stop="$emit('toggled', $event.target.open)"
   >
     <summary
-      class="
-        py-1
-        list-none
-        c-cycle-edit__summary
-        text-gray-700 text-center
-        cursor-pointer
-        hover:bg-blue-100
-        rounded
-      "
+      class="py-1 list-none c-cycle-edit__summary text-gray-700 text-center cursor-pointer hover:bg-blue-100 rounded"
     >
       <BaseIcon name="wrench" />
-      Settings
+      <span class="align-middle ml-1">Settings</span>
     </summary>
-    <LayoutStack
-      tag="form"
-      space="1"
-      class="px-4 py-2"
-      @submit.prevent="onSubmit"
-    >
+    <LayoutStack tag="form" space="1" class="px-4 py-2" @submit.prevent="onSubmit">
       <IntervalEditBox
         v-for="interval in intervalsRef"
         :key="interval.id"
@@ -37,92 +24,74 @@
       <LayoutInline :space="3" centered class="mt-2">
         <BaseControl @click="addInterval">
           <BaseIcon name="add-outline" />
-          Add
+          <span class="align-middle">Add</span>
         </BaseControl>
         <BaseControl @click="onCancel">
           <BaseIcon name="close" />
-          Cancel
+          <span class="align-middle">Cancel</span>
         </BaseControl>
         <BaseControl type="submit">
           <BaseIcon name="save-disk" />
-          Save
+          <span class="align-middle">Save</span>
         </BaseControl>
       </LayoutInline>
     </LayoutStack>
   </component>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
+<script setup lang="ts">
+import { ref, watch } from 'vue';
 import { arrayOf, object, bool } from 'vue-types';
 import IntervalEditBox from '@/components/IntervalEditBox.vue';
 import BaseControl from '@/components/BaseControl.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
-import { Interval } from '@/types';
+import type { Interval } from '@/types';
 import { createInterval } from '@/utils';
 
-export default defineComponent({
-  components: {
-    IntervalEditBox,
-    BaseControl,
-    BaseIcon,
-    LayoutStack,
-    LayoutInline,
+
+const props = defineProps({
+  intervals: arrayOf(object<Interval>()).def([]),
+  open: bool().def(false),
+})
+
+const emit = defineEmits(['save', 'toggled'])
+const intervalsRef = ref<Interval[]>([...props.intervals]);
+
+function update(interval: Interval) {
+  intervalsRef.value = intervalsRef.value.map((int) =>
+    int.id === interval.id ? interval : int,
+  );
+}
+
+function deleteInterval(deleteId: string) {
+  intervalsRef.value = intervalsRef.value.filter(
+    ({ id }) => deleteId !== id,
+  );
+}
+
+function onSubmit() {
+  emit('save', [...intervalsRef.value]);
+}
+
+function onCancel() {
+  intervalsRef.value = [...props.intervals];
+  emit('toggled', false);
+}
+
+function addInterval() {
+  intervalsRef.value = [...intervalsRef.value, createInterval()];
+}
+
+watch(
+  () => props.intervals,
+  (newIntervals) => {
+    intervalsRef.value = newIntervals;
   },
-  props: {
-    intervals: arrayOf(object<Interval>()).def([]),
-    open: bool().def(false),
-  },
-  emits: ['save', 'toggled'],
-  setup(props, { emit }) {
-    const intervalsRef = ref<Interval[]>([...props.intervals]);
-
-    function update(interval: Interval) {
-      intervalsRef.value = intervalsRef.value.map((int) =>
-        int.id === interval.id ? interval : int,
-      );
-    }
-
-    function deleteInterval(deleteId: string) {
-      intervalsRef.value = intervalsRef.value.filter(
-        ({ id }) => deleteId !== id,
-      );
-    }
-
-    function onSubmit() {
-      emit('save', [...intervalsRef.value]);
-    }
-
-    function onCancel() {
-      intervalsRef.value = [...props.intervals];
-      emit('toggled', false);
-    }
-
-    function addInterval() {
-      intervalsRef.value = [...intervalsRef.value, createInterval()];
-    }
-
-    watch(
-      () => props.intervals,
-      (newIntervals) => {
-        intervalsRef.value = newIntervals;
-      },
-    );
-
-    return {
-      intervalsRef,
-      update,
-      deleteInterval,
-      onSubmit,
-      addInterval,
-      onCancel,
-    };
-  },
-});
+);
 </script>
-<style lang="postcss" scoped>
+<style scoped>
 .c-cycle-edit__summary::-webkit-details-marker {
   display: none;
 }

@@ -6,25 +6,19 @@
       :key="i"
       :duration="interval.remaining"
       :type="interval.type"
-      class="row-start-1 col-start-1"
+      class="row-start-1 col-start-1 translate-y-0"
     />
   </transition-group>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import { array, integer } from 'vue-types';
 import BaseTimer from '@/components/BaseTimer.vue';
-import { Interval } from '@/types';
+import type { Interval } from '@/types';
 
-export default defineComponent({
-  components: {
-    BaseTimer,
-  },
-  props: {
-    intervals: array<Interval>().def([]),
-    current: integer().def(0),
-  },
-});
+defineProps({
+  intervals: array<Interval>().def([]),
+  current: integer().def(0),
+})
 </script>
 <style lang="postcss" scoped>
 .timer-enter-active,
@@ -32,9 +26,9 @@ export default defineComponent({
   @apply transition-all duration-500 ease-in-out;
 }
 .timer-enter-from {
-  @apply transform translate-y-2 opacity-0;
+  @apply translate-y-2 opacity-0;
 }
 .timer-leave-to {
-  @apply transform -translate-y-2 opacity-0;
+  @apply -translate-y-2 opacity-0;
 }
 </style>

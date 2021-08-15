@@ -1,16 +1,16 @@
+function range(length=1, from = 0, prefix) {
+  return Array.from({ length}, (_, i) => prefix ? `${prefix}${from+i}`:  from + i)
+}
+
 module.exports = {
+  mode: 'jit',
   purge: {
     content: ['./public/**/*.html', './src/**/*.vue', './src/**/*.ts'],
-    options: {
-      defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
-      preserveHtmlElements: false,
-      safelist: [
-        /-(leave|enter|appear)(|-(to|from|active))$/,
-        /^(?!(|.*?:)cursor-move).+-move$/,
-        /^router-link(|-exact)-active$/,
-        /^gap-([x-y]-|)\d+$/,
-      ],
-    },
+    safelist: [
+      ...range(10, 0, 'gap-'),
+      ...range(10, 0, 'gap-x-'),
+      ...range(10, 0, 'gap-y-'),
+    ],
   },
   darkMode: false,
   theme: {

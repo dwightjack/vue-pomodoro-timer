@@ -8,9 +8,8 @@
     aria-hidden="true"
   />
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   watch,
   ref,
   onMounted,
@@ -38,81 +37,77 @@ function drawCircle(
   ctx.fill();
 }
 
-export default defineComponent({
-  props: {
-    size: number().def(50),
-    duration: number().isRequired,
-    remaining: number(),
-    type: oneOf(Object.values(IntervalType)).isRequired,
-  },
-  setup(props) {
-    const canvasRef = ref<HTMLCanvasElement>();
-    const remaining = computed(() => props.remaining ?? props.duration);
-    const minutes = ref<number>(currentMinute(remaining.value));
-    const colorType = computed(() => getIntervalTypeColor(props.type));
-    const originalFavicon = new Map();
+const props = defineProps({
+  size: number().def(50),
+  duration: number().isRequired,
+  remaining: number(),
+  type: oneOf(Object.values(IntervalType)).isRequired,
+})
 
-    function renderCanvas() {
-      const percent = (props.duration - remaining.value) / props.duration;
-      if (!canvasRef.value) {
-        return;
+const canvasRef = ref<HTMLCanvasElement>();
+const remaining = computed(() => props.remaining ?? props.duration);
+const minutes = ref<number>(currentMinute(remaining.value));
+const colorType = computed(() => getIntervalTypeColor(props.type));
+const originalFavicon = new Map();
+
+function renderCanvas() {
+  const percent = (props.duration - remaining.value) / props.duration;
+  if (!canvasRef.value) {
+    return;
+  }
+  const canvas = canvasRef.value;
+  const ctx = canvas.getContext('2d');
+
+  if (!ctx) {
+    return;
+  }
+  const size = props.size / 2;
+  const color = window.getComputedStyle(canvas).getPropertyValue('color');
+
+  const start = Math.PI / -2;
+  const end = start + 2 * Math.PI * percent;
+  const radius = size;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawCircle(ctx, color, size, radius);
+  drawCircle(ctx, '#fff', size, radius - size / 10, start, end);
+
+  const favicons = document.querySelectorAll<HTMLLinkElement>(
+    'link[rel="icon"][type="image/png"]',
+  );
+  if (favicons.length > 0) {
+    const dataUrl = canvas.toDataURL('image/png');
+    favicons.forEach((favicon) => {
+      if (!originalFavicon.has(favicon)) {
+        originalFavicon.set(favicon, favicon.href);
       }
-      const canvas = canvasRef.value;
-      const ctx = canvas.getContext('2d');
+      favicon.href = dataUrl;
+    });
+  }
+}
 
-      if (!ctx) {
-        return;
-      }
-      const size = props.size / 2;
-      const color = window.getComputedStyle(canvas).getPropertyValue('color');
-
-      const start = Math.PI / -2;
-      const end = start + 2 * Math.PI * percent;
-      const radius = size;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawCircle(ctx, color, size, radius);
-      drawCircle(ctx, '#fff', size, radius - size / 10, start, end);
-
-      const favicons = document.querySelectorAll<HTMLLinkElement>(
-        'link[rel="icon"][type="image/png"]',
-      );
-      if (favicons.length > 0) {
-        const dataUrl = canvas.toDataURL('image/png');
-        favicons.forEach((favicon) => {
-          if (!originalFavicon.has(favicon)) {
-            originalFavicon.set(favicon, favicon.href);
-          }
-          favicon.href = dataUrl;
-        });
-      }
+watch(
+  () => currentMinute(remaining.value),
+  (v) => {
+    if (minutes.value !== v) {
+      minutes.value = v;
     }
-
-    watch(
-      () => currentMinute(remaining.value),
-      (v) => {
-        if (minutes.value !== v) {
-          minutes.value = v;
-        }
-      },
-    );
-
-    watch([minutes, colorType], renderCanvas, {
-      flush: 'post',
-    });
-    onMounted(() => {
-      setTimeout(renderCanvas, 0);
-    });
-    onUnmounted(() => {
-      if (originalFavicon.size === 0) {
-        return;
-      }
-      originalFavicon.forEach((href, favicon) => {
-        favicon.href = href;
-      });
-      originalFavicon.clear();
-    });
-
-    return { colorType, canvasRef };
   },
+);
+
+watch([minutes, colorType], renderCanvas, {
+  flush: 'post',
 });
+onMounted(() => {
+  setTimeout(renderCanvas, 0);
+});
+onUnmounted(() => {
+  if (originalFavicon.size === 0) {
+    return;
+  }
+  originalFavicon.forEach((href, favicon) => {
+    favicon.href = href;
+  });
+  originalFavicon.clear();
+});
+
 </script>
