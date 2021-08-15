@@ -9,9 +9,11 @@
     <BaseButton v-if="onCancel" @click="onCancel">dismiss</BaseButton>
   </div>
 </template>
+<script lang="ts">
+import { func, oneOf } from 'vue-types';
+</script>
 <script setup lang="ts">
 import BaseButton from '@/components/BaseButton.vue';
-import { func, oneOf } from 'vue-types';
 
 defineProps({
   onConfirm: func(),

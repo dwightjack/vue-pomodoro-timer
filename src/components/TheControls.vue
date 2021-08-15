@@ -1,5 +1,10 @@
 <template>
-  <LayoutInline role="group" class="items-center" aria-label="Timer controls" space="2">
+  <LayoutInline
+    role="group"
+    class="items-center"
+    aria-label="Timer controls"
+    space="2"
+  >
     <BaseControl @click="$emit(isPlaying ? 'pause' : 'play')">
       <BaseIcon :name="isPlaying ? 'pause' : 'play'" />
       <span class="sr-only">{{ isPlaying ? 'Pause' : 'Play' }}</span>
@@ -15,20 +20,21 @@
     </BaseControl>
   </LayoutInline>
 </template>
+<script lang="ts">
+import { oneOf } from 'vue-types';
+import { Status } from '@/types';
+</script>
 <script setup lang="ts">
 import BaseControl from '@/components/BaseControl.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
-import { oneOf } from 'vue-types';
 import { computed } from 'vue';
-import { Status } from '@/types';
 
 const props = defineProps({
   status: oneOf(Object.values(Status)).def(Status.Pause),
-})
+});
 
-defineEmits(['skip', 'reset', 'play', 'pause'])
+defineEmits(['skip', 'reset', 'play', 'pause']);
 
 const isPlaying = computed(() => props.status === Status.Play);
-
 </script>

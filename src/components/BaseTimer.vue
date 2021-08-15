@@ -1,15 +1,19 @@
 <template>
   <div
     role="timer"
-    class="c-base-timer text-4xl py-4 px-8 rounded-lg border-current border-4"
+    class="tabular-nums text-4xl py-4 px-8 rounded-lg border-current border-4"
     :class="classes"
     :aria-label="label"
-  >{{ time }}</div>
+  >
+    {{ time }}
+  </div>
 </template>
-<script setup lang="ts">
-import { computed } from 'vue';
+<script lang="ts">
 import { oneOf, integer } from 'vue-types';
 import { IntervalType } from '@/types';
+</script>
+<script setup lang="ts">
+import { computed } from 'vue';
 import {
   formatTime,
   getIntervalTypeColor,
@@ -20,7 +24,7 @@ import {
 const props = defineProps({
   type: oneOf(['none', ...Object.values(IntervalType)] as const).def('none'),
   duration: integer().def(0),
-})
+});
 
 const time = computed(() => formatTime(props.duration));
 const label = computed(() => {
@@ -32,11 +36,4 @@ const label = computed(() => {
 const classes = computed(() => {
   return getIntervalTypeColor(props.type as IntervalType);
 });
-
 </script>
-
-<style scoped>
-.c-base-timer {
-  font-variant-numeric: tabular-nums;
-}
-</style>

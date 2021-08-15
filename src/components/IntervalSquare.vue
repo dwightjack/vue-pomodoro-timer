@@ -1,6 +1,16 @@
 <template>
   <li
-    class="grid text-center px-2 py-1 rounded-md border border-current transition duration-150 ease-out"
+    class="
+      grid
+      text-center
+      px-2
+      py-1
+      rounded-md
+      border border-current
+      transition
+      duration-150
+      ease-out
+    "
     :class="[classes, { 'bg-current': current }]"
     :aria-current="current ? 'time' : undefined"
   >
@@ -12,18 +22,19 @@
     </time>
   </li>
 </template>
-<script setup lang="ts">
-import { computed } from 'vue';
+<script lang="ts">
 import { oneOf, integer, bool } from 'vue-types';
 import { IntervalType } from '@/types';
+</script>
+<script setup lang="ts">
+import { computed } from 'vue';
 import { formatTime, formatTimeDuration, toTitleCase } from '@/utils';
-
 
 const props = defineProps({
   type: oneOf(Object.values(IntervalType)).isRequired,
   duration: integer().def(0),
   current: bool().def(false),
-})
+});
 
 const abbr = computed(() =>
   props.type.replace(/(\w).+?($|-)/g, (_: string, v: string) =>

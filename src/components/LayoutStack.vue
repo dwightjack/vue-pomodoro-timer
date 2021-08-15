@@ -11,9 +11,10 @@
     <slot />
   </component>
 </template>
-<script setup lang="ts">
+<script lang="ts">
 import { string, bool, oneOfType } from 'vue-types';
-
+</script>
+<script setup lang="ts">
 defineProps({
   tag: string().def('div'),
   centered: bool().def(false),

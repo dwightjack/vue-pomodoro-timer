@@ -8,17 +8,13 @@
     aria-hidden="true"
   />
 </template>
-<script setup lang="ts">
-import {
-  watch,
-  ref,
-  onMounted,
-  onUnmounted,
-  computed,
-} from 'vue';
-import { getIntervalTypeColor } from '@/utils';
+<script lang="ts">
 import { number, oneOf } from 'vue-types';
 import { IntervalType } from '../types';
+</script>
+<script setup lang="ts">
+import { watch, ref, onMounted, onUnmounted, computed } from 'vue';
+import { getIntervalTypeColor } from '@/utils';
 
 const currentMinute = (v: number) => Math.ceil(v / 1000 / 30);
 
@@ -42,7 +38,7 @@ const props = defineProps({
   duration: number().isRequired,
   remaining: number(),
   type: oneOf(Object.values(IntervalType)).isRequired,
-})
+});
 
 const canvasRef = ref<HTMLCanvasElement>();
 const remaining = computed(() => props.remaining ?? props.duration);
@@ -109,5 +105,4 @@ onUnmounted(() => {
   });
   originalFavicon.clear();
 });
-
 </script>

@@ -12,10 +12,12 @@
     </ul>
   </div>
 </template>
-<script setup lang="ts">
+<script lang="ts">
 import { object } from 'vue-types';
-import IntervalSquare from '@/components/IntervalSquare.vue';
 import type { Cycle } from '@/types';
+</script>
+<script setup lang="ts">
+import IntervalSquare from '@/components/IntervalSquare.vue';
 
 defineProps({
   cycle: object<Cycle>().isRequired,

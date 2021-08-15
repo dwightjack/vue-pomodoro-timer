@@ -1,14 +1,16 @@
 <template>
   <component
     :is="icon"
-    class="c-base-icon inline-flex items-center fill-current"
+    class="inline-flex items-center fill-current w-[1em] h-[1em]"
     aria-hidden="true"
   />
 </template>
+<script lang="ts">
+import { oneOf } from 'vue-types';
+</script>
 <script setup lang="ts">
 import { watch, shallowRef } from 'vue';
-import type { Component } from 'vue'
-import { oneOf } from 'vue-types';
+import type { Component } from 'vue';
 
 const icons = import.meta.glob(
   '../assets/zondicons/{trash,pause,fast-forward,reload,wrench,add-outline,close,save-disk,cheveron-down,play}.svg',
@@ -27,7 +29,7 @@ const props = defineProps({
     'cheveron-down',
     'play',
   ] as const).isRequired,
-})
+});
 
 const icon = shallowRef<Component>();
 
@@ -38,9 +40,7 @@ watch(
       icon.value = undefined;
     }
     try {
-      icon.value = (
-        await icons[`../assets/zondicons/${name}.svg`]()
-      ).default;
+      icon.value = (await icons[`../assets/zondicons/${name}.svg`]()).default;
     } catch (e) {
       console.error(e);
       icon.value = undefined;
@@ -49,9 +49,3 @@ watch(
   { immediate: true },
 );
 </script>
-<style scoped>
-.c-base-icon {
-  width: 1em;
-  height: 1em;
-}
-</style>

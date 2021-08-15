@@ -5,7 +5,14 @@
       <label class="grid grid-flow-col items-center">
         <select
           v-model="typeRef"
-          class="c-interval-edit-box__input pr-6 col-start-1 row-start-1 min-w-0 truncate"
+          class="
+            c-interval-edit-box__input
+            pr-6
+            col-start-1
+            row-start-1
+            min-w-0
+            truncate
+          "
           @change="onInput"
         >
           <option
@@ -13,7 +20,9 @@
             :key="value"
             :value="value"
             :selected="value === interval?.type"
-          >{{ name }}</option>
+          >
+            {{ name }}
+          </option>
         </select>
         <BaseIcon
           name="cheveron-down"
@@ -41,14 +50,16 @@
     </LayoutInline>
   </fieldset>
 </template>
+<script lang="ts">
+import { string, integer, oneOf, shape } from 'vue-types';
+import { IntervalType } from '@/types';
+import type { Interval } from '@/types';
+</script>
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { string, integer, oneOf, shape } from 'vue-types';
 import BaseIcon from '@/components/BaseIcon.vue';
 import BaseControl from '@/components/BaseControl.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
-import type { Interval } from '@/types';
-import { IntervalType } from '@/types';
 import { minutesToMs, getMinutes } from '@/utils';
 
 const props = defineProps({
@@ -58,9 +69,9 @@ const props = defineProps({
     id: string().isRequired,
     remaining: integer(),
   }),
-})
+});
 
-const emit = defineEmits(['delete', 'update'])
+const emit = defineEmits(['delete', 'update']);
 
 const typeRef = ref<IntervalType>(props.interval?.type ?? IntervalType.None);
 const durationRef = ref(getMinutes(props.interval?.duration || 0));
@@ -78,19 +89,18 @@ function onInput() {
   const payload: Interval = Object.assign({}, props.interval, {
     type: typeRef.value as IntervalType,
     duration: minutesToMs(durationRef.value),
-  })
+  });
   return emit('update', payload);
 }
-
 </script>
 <style lang="postcss" scoped>
 .c-interval-edit-box__input {
   @apply appearance-none bg-transparent border rounded-lg pl-2 py-1 text-gray-700;
 }
-.c-interval-edit-box__input[type="number"] {
+.c-interval-edit-box__input[type='number'] {
   -moz-appearance: textfield;
 }
-.c-interval-edit-box__input[type="number"]::-webkit-inner-spin-button {
+.c-interval-edit-box__input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 </style>

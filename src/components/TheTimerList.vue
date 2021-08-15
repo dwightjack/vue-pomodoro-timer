@@ -10,15 +10,17 @@
     />
   </transition-group>
 </template>
-<script setup lang="ts">
+<script lang="ts">
 import { array, integer } from 'vue-types';
-import BaseTimer from '@/components/BaseTimer.vue';
 import type { Interval } from '@/types';
+</script>
+<script setup lang="ts">
+import BaseTimer from '@/components/BaseTimer.vue';
 
 defineProps({
   intervals: array<Interval>().def([]),
   current: integer().def(0),
-})
+});
 </script>
 <style lang="postcss" scoped>
 .timer-enter-active,

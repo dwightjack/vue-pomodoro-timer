@@ -8,12 +8,25 @@
     @toggle.stop="$emit('toggled', $event.target.open)"
   >
     <summary
-      class="py-1 list-none c-cycle-edit__summary text-gray-700 text-center cursor-pointer hover:bg-blue-100 rounded"
+      class="
+        py-1
+        list-none
+        c-cycle-edit__summary
+        text-gray-700 text-center
+        cursor-pointer
+        hover:bg-blue-100
+        rounded
+      "
     >
       <BaseIcon name="wrench" />
       <span class="align-middle ml-1">Settings</span>
     </summary>
-    <LayoutStack tag="form" space="1" class="px-4 py-2" @submit.prevent="onSubmit">
+    <LayoutStack
+      tag="form"
+      space="1"
+      class="px-4 py-2"
+      @submit.prevent="onSubmit"
+    >
       <IntervalEditBox
         v-for="interval in intervalsRef"
         :key="interval.id"
@@ -38,25 +51,25 @@
     </LayoutStack>
   </component>
 </template>
-
+<script lang="ts">
+import { arrayOf, object, bool } from 'vue-types';
+import type { Interval } from '@/types';
+</script>
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { arrayOf, object, bool } from 'vue-types';
 import IntervalEditBox from '@/components/IntervalEditBox.vue';
 import BaseControl from '@/components/BaseControl.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
-import type { Interval } from '@/types';
 import { createInterval } from '@/utils';
-
 
 const props = defineProps({
   intervals: arrayOf(object<Interval>()).def([]),
   open: bool().def(false),
-})
+});
 
-const emit = defineEmits(['save', 'toggled'])
+const emit = defineEmits(['save', 'toggled']);
 const intervalsRef = ref<Interval[]>([...props.intervals]);
 
 function update(interval: Interval) {
@@ -66,9 +79,7 @@ function update(interval: Interval) {
 }
 
 function deleteInterval(deleteId: string) {
-  intervalsRef.value = intervalsRef.value.filter(
-    ({ id }) => deleteId !== id,
-  );
+  intervalsRef.value = intervalsRef.value.filter(({ id }) => deleteId !== id);
 }
 
 function onSubmit() {

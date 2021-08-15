@@ -21,6 +21,8 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     '@typescript-eslint/ban-types': 'off',
+    'vue/valid-define-props': 'warn',
+    'no-undef': 'off',
   },
   overrides: [
     {
