@@ -5,14 +5,7 @@
       <label class="grid grid-flow-col items-center">
         <select
           v-model="typeRef"
-          class="
-            c-interval-edit-box__input
-            pr-6
-            col-start-1
-            row-start-1
-            min-w-0
-            truncate
-          "
+          class="input pr-6 col-start-1 row-start-1 min-w-0 truncate"
           @change="onInput"
         >
           <option
@@ -33,7 +26,7 @@
       <label class="flex items-center">
         <input
           v-model="durationRef"
-          class="c-interval-edit-box__input"
+          class="input"
           type="number"
           min="1"
           max="60"
@@ -93,14 +86,3 @@ function onInput() {
   return emit('update', payload);
 }
 </script>
-<style lang="postcss" scoped>
-.c-interval-edit-box__input {
-  @apply appearance-none bg-transparent border rounded-lg pl-2 py-1 text-gray-700;
-}
-.c-interval-edit-box__input[type='number'] {
-  -moz-appearance: textfield;
-}
-.c-interval-edit-box__input[type='number']::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
-</style>

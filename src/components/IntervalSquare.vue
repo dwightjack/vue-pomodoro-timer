@@ -44,8 +44,9 @@ const abbr = computed(() =>
 
 const classes = computed(() => {
   if (props.type === IntervalType.Work) {
-    return 'text-orange-200';
+    return 'text-amber-300';
   }
+
   if (props.type === IntervalType.ShortBreak) {
     return 'text-green-300';
   }

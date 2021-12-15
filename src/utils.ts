@@ -87,10 +87,10 @@ export function setupNotifications(notify: Function) {
 
 export function getIntervalTypeColor(type: IntervalType) {
   if (type === IntervalType.Work) {
-    return 'text-orange-500';
+    return 'text-amber-600';
   }
   if (type === IntervalType.ShortBreak) {
-    return 'text-green-500';
+    return 'text-green-600';
   }
   if (type === IntervalType.LongBreak) {
     return 'text-green-700';

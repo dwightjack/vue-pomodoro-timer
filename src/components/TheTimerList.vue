@@ -6,7 +6,7 @@
       :key="i"
       :duration="interval.remaining"
       :type="interval.type"
-      class="row-start-1 col-start-1 translate-y-0"
+      class="row-start-1 col-start-1 will-change-transform"
     />
   </transition-group>
 </template>
@@ -16,7 +16,7 @@ import { useCycle } from '@/stores/cycle';
 
 const cycle = useCycle();
 </script>
-<style lang="postcss" scoped>
+<style scoped>
 .timer-enter-active,
 .timer-leave-active {
   @apply transition-all duration-500 ease-in-out;

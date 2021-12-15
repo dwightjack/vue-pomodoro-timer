@@ -12,7 +12,7 @@
         aria-hidden="true"
         class="bg-white/75 fixed inset-0 flex items-center"
       >
-        <div class="mx-auto w-40 bg-blue-500 h-2 c-the-loader-animate" />
+        <div class="mx-auto w-40 bg-blue-500 h-2 loader-animate" />
       </div>
     </transition>
 
@@ -29,7 +29,7 @@ defineProps({
 });
 </script>
 <style scoped>
-.c-the-loader-animate {
+.loader-animate {
   animation-name: loader-animate;
   animation-duration: 1s;
   animation-timing-function: cubic-bezier(0.9, 0.05, 0.35, 0.97);

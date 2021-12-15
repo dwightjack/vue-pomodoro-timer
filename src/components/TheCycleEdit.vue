@@ -13,7 +13,6 @@
       class="
         py-1
         list-none
-        c-cycle-edit__summary
         text-gray-700 text-center
         cursor-pointer
         hover:bg-blue-100
@@ -101,8 +100,3 @@ watch(
   },
 );
 </script>
-<style scoped>
-.c-cycle-edit__summary::-webkit-details-marker {
-  display: none;
-}
-</style>
