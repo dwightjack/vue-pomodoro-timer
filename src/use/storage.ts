@@ -8,7 +8,7 @@ export function useStorage<T>(key: string, defaultValue: T) {
       return defaultValue;
     } catch (e) {
       throw new Error(
-        `Unable to parse key ${key} from localStorage: ${e.message}`,
+        `Unable to parse key ${key} from localStorage: ${(e as Error).message}`,
       );
     }
   }

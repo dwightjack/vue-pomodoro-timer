@@ -12,7 +12,7 @@ import { oneOf } from 'vue-types';
 import { watch, shallowRef } from 'vue';
 import type { Component } from 'vue';
 
-const icons = import.meta.glob(
+const icons = import.meta.glob<{ default: Component }>(
   '../assets/zondicons/{trash,pause,fast-forward,reload,wrench,add-outline,close,save-disk,cheveron-down,play}.svg',
 );
 

@@ -10,14 +10,7 @@
     @toggle.stop="$emit('toggled', $event.target.open)"
   >
     <summary
-      class="
-        py-1
-        list-none
-        text-gray-700 text-center
-        cursor-pointer
-        hover:bg-blue-100
-        rounded
-      "
+      class="py-1 list-none text-gray-700 text-center cursor-pointer hover:bg-blue-100 rounded"
     >
       <BaseIcon name="wrench" />
       <span class="align-middle ml-1">Settings</span>

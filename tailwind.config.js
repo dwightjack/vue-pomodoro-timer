@@ -4,22 +4,21 @@ function range(length = 1, from = 0, prefix) {
   );
 }
 
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  purge: {
-    content: ['./public/**/*.html', './src/**/*.vue', './src/**/*.ts'],
-    safelist: [
-      ...range(10, 0, 'gap-'),
-      ...range(10, 0, 'gap-x-'),
-      ...range(10, 0, 'gap-y-'),
-    ],
-  },
-  extends: {
-    colors: {
-      transparent: 'transparent',
-      current: 'currentColor',
-    },
-  },
+  content: ['./public/**/*.html', './src/**/*.vue', './src/**/*.ts'],
+  safelist: [
+    ...range(10, 0, 'gap-'),
+    ...range(10, 0, 'gap-x-'),
+    ...range(10, 0, 'gap-y-'),
+  ],
   theme: {
+    extends: {
+      colors: {
+        transparent: 'transparent',
+        current: 'currentColor',
+      },
+    },
     fontSize: {
       xs: '0.75rem',
       sm: '0.875rem',
