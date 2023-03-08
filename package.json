@@ -19,7 +19,7 @@
     "prettier": "2.8.4",
     "uid": "2.0.1",
     "vue": "3.2.47",
-    "vue-types": "4.2.1"
+    "vue-types": "5.0.2"
   },
   "devDependencies": {
     "@types/node": "18.14.6",
