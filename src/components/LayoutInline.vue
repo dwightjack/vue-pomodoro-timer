@@ -18,5 +18,5 @@ defineProps({
   space: oneOfType([String, Number]).def(4),
 });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-defineSlots<{ default?: () => any }>();
+defineSlots<{ default?: (props: any) => any }>();
 </script>

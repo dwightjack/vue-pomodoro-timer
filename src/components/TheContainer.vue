@@ -8,5 +8,5 @@
 </template>
 <script lang="ts" setup>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-defineSlots<{ default?: () => any }>();
+defineSlots<{ default?: (props: any) => any }>();
 </script>

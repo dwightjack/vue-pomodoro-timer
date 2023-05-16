@@ -18,5 +18,5 @@ defineProps({
   type: oneOf(['button', 'reset', 'submit', undefined] as const).def('button'),
 });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-defineSlots<{ default?: () => any }>();
+defineSlots<{ default?: (props: any) => any }>();
 </script>

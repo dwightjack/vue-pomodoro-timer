@@ -19,5 +19,5 @@ defineProps({
   role: oneOf(['status', 'alert'] as const).def('status'),
 });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-defineSlots<{ default?: () => any }>();
+defineSlots<{ default?: (props: any) => any }>();
 </script>
