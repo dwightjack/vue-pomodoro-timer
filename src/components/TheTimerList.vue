@@ -1,5 +1,5 @@
 <template>
-  <transition-group name="timer" tag="div" class="grid grid-rows-1 grid-cols-1">
+  <TransitionGroup name="timer" tag="div" class="grid grid-rows-1 grid-cols-1">
     <BaseTimer
       v-for="(interval, i) in cycle.intervals"
       v-show="i === cycle.current"
@@ -8,7 +8,7 @@
       :type="interval.type"
       class="row-start-1 col-start-1 will-change-transform"
     />
-  </transition-group>
+  </TransitionGroup>
 </template>
 <script setup lang="ts">
 import BaseTimer from '@/components/BaseTimer.vue';

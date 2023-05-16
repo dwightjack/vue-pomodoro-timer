@@ -8,11 +8,9 @@
     aria-hidden="true"
   />
 </template>
-<script lang="ts">
-import { number } from 'vue-types';
-</script>
 <script setup lang="ts">
 import { watch, ref, onMounted, onUnmounted, computed } from 'vue';
+import { number } from 'vue-types';
 import { getIntervalTypeColor } from '@/utils';
 import { useCycle } from '@/stores/cycle';
 

@@ -9,15 +9,15 @@
     <BaseButton v-if="onCancel" @click="onCancel">dismiss</BaseButton>
   </div>
 </template>
-<script lang="ts">
-import { func, oneOf } from 'vue-types';
-</script>
 <script setup lang="ts">
+import { func, oneOf } from 'vue-types';
 import BaseButton from '@/components/BaseButton.vue';
 
 defineProps({
   onConfirm: func(),
   onCancel: func(),
-  role: oneOf(['status', 'alert']).def('status'),
+  role: oneOf(['status', 'alert'] as const).def('status'),
 });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+defineSlots<{ default?: () => any }>();
 </script>

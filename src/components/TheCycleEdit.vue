@@ -1,16 +1,15 @@
 <template>
-  <!-- hack for volar to accept toggle event -->
-  <component
-    :is="'details'"
+  <details
     class="w-full"
     :class="
-      main.editOpen && 'border rounded-lg overflow-hidden border-blue-200'
+      main.editOpen &&
+      'border rounded-lg overflow-hidden border-blue-200 dark:border-sky-400'
     "
     :open="main.editOpen"
     @toggle.stop="$emit('toggled', $event.target.open)"
   >
     <summary
-      class="py-1 list-none text-gray-700 text-center cursor-pointer hover:bg-blue-100 rounded"
+      class="py-1 list-none text-center cursor-pointer hover:bg-blue-100 dark:hover:bg-sky-800 rounded"
     >
       <BaseIcon name="wrench" />
       <span class="align-middle ml-1">Settings</span>
@@ -43,7 +42,7 @@
         </BaseControl>
       </LayoutInline>
     </LayoutStack>
-  </component>
+  </details>
 </template>
 <script setup lang="ts">
 import { ref, watch, unref } from 'vue';
@@ -60,7 +59,10 @@ import type { Interval } from '@/types';
 const cycle = useCycle();
 const main = useMain();
 
-const emit = defineEmits(['save', 'toggled']);
+const emit = defineEmits<{
+  toggled: [open: boolean];
+  save: [intervals: Interval[]];
+}>();
 const intervalsRef = ref<Interval[]>([...unref(cycle.intervals)]);
 
 function update(interval: Interval) {

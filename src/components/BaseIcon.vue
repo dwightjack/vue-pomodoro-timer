@@ -1,7 +1,7 @@
 <template>
   <component
     :is="icon"
-    class="inline-flex items-center fill-current w-[1em] h-[1em]"
+    class="inline-flex items-center fill-current w-[1em] aspect-square"
     aria-hidden="true"
   />
 </template>
@@ -14,6 +14,9 @@ import type { Component } from 'vue';
 
 const icons = import.meta.glob<{ default: Component }>(
   '../assets/zondicons/{trash,pause,fast-forward,reload,wrench,add-outline,close,save-disk,cheveron-down,play}.svg',
+  {
+    import: 'default',
+  },
 );
 
 const props = defineProps({
@@ -40,7 +43,7 @@ watch(
       icon.value = undefined;
     }
     try {
-      icon.value = (await icons[`../assets/zondicons/${name}.svg`]()).default;
+      icon.value = await icons[`../assets/zondicons/${name}.svg`]();
     } catch (e) {
       console.error(e);
       icon.value = undefined;

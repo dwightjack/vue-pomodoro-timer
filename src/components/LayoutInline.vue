@@ -10,13 +10,13 @@
     <slot />
   </component>
 </template>
-<script lang="ts">
-import { string, bool, oneOfType } from 'vue-types';
-</script>
 <script setup lang="ts">
+import { string, bool, oneOfType } from 'vue-types';
 defineProps({
   tag: string().def('div'),
   centered: bool().def(false),
   space: oneOfType([String, Number]).def(4),
 });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+defineSlots<{ default?: () => any }>();
 </script>

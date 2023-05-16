@@ -6,11 +6,11 @@
     <slot />
   </button>
 </template>
-<script lang="ts">
-import { oneOf } from 'vue-types';
-</script>
 <script lang="ts" setup>
+import { oneOf } from 'vue-types';
 defineProps({
   type: oneOf(['button', 'reset', 'submit', undefined] as const).def('button'),
 });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+defineSlots<{ default?: () => any }>();
 </script>

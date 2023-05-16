@@ -1,8 +1,8 @@
 <template>
   <div role="status">
-    <transition
+    <Transition
       name="opacity"
-      enter-class="opacity-0"
+      enter-from-class="opacity-0"
       enter-active-class="transition-opacity duration-200"
       leave-active-class="transition-opacity duration-200"
       leave-to-class="opacity-0"
@@ -14,15 +14,13 @@
       >
         <div class="mx-auto w-40 bg-blue-500 h-2 loader-animate" />
       </div>
-    </transition>
+    </Transition>
 
     <p v-if="visible" class="sr-only">{{ message }}</p>
   </div>
 </template>
-<script lang="ts">
-import { string, bool } from 'vue-types';
-</script>
 <script setup lang="ts">
+import { string, bool } from 'vue-types';
 defineProps({
   message: string().def(''),
   visible: bool().def(false),

@@ -8,11 +8,8 @@
     {{ time }}
   </div>
 </template>
-<script lang="ts">
-import { oneOf, integer } from 'vue-types';
-import { IntervalType } from '@/types';
-</script>
 <script setup lang="ts">
+import { oneOf, integer } from 'vue-types';
 import { computed } from 'vue';
 import {
   formatTime,
@@ -20,6 +17,7 @@ import {
   getMinutes,
   getSeconds,
 } from '@/utils';
+import { IntervalType } from '@/types';
 
 const props = defineProps({
   type: oneOf(['none', ...Object.values(IntervalType)] as const).def('none'),
@@ -33,7 +31,7 @@ const label = computed(() => {
   return `${mins} minutes ${secs ? secs + ' seconds ' : ''}left`;
 });
 
-const classes = computed(() => {
-  return getIntervalTypeColor(props.type as IntervalType);
-});
+const classes = computed(() =>
+  getIntervalTypeColor(props.type as IntervalType),
+);
 </script>

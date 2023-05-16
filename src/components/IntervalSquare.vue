@@ -4,21 +4,34 @@
     :class="[classes, { 'bg-current': current }]"
     :aria-current="current ? 'time' : undefined"
   >
-    <b class="text-sm text-gray-700" aria-hidden="true">{{ abbr }}</b>
+    <b
+      class="text-sm text-gray-700"
+      :class="{
+        'dark:text-stone-800': current,
+        ' dark:text-inherit': !current,
+      }"
+      aria-hidden="true"
+      >{{ abbr }}</b
+    >
     <span class="sr-only">{{ typeFormatted }}</span>
-    <time class="text-xs text-gray-700" :datetime="durationAttr">
+    <time
+      class="text-xs text-gray-700"
+      :datetime="durationAttr"
+      :class="{
+        'dark:text-stone-800': current,
+        ' dark:text-inherit': !current,
+      }"
+    >
       {{ durationFormatted }}
       <span class="sr-only">minutes</span>
     </time>
   </li>
 </template>
-<script lang="ts">
-import { oneOf, integer, bool } from 'vue-types';
-import { IntervalType } from '@/types';
-</script>
 <script setup lang="ts">
 import { computed } from 'vue';
+import { oneOf, integer, bool } from 'vue-types';
 import { formatTime, formatTimeDuration, toTitleCase } from '@/utils';
+import { IntervalType } from '@/types';
 
 const props = defineProps({
   type: oneOf(Object.values(IntervalType)).isRequired,
@@ -36,7 +49,6 @@ const classes = computed(() => {
   if (props.type === IntervalType.Work) {
     return 'text-amber-300';
   }
-
   if (props.type === IntervalType.ShortBreak) {
     return 'text-green-300';
   }
