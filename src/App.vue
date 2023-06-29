@@ -52,7 +52,7 @@ import BaseButton from '@/components/BaseButton.vue';
 import TheGraphicTimer from '@/components/TheGraphicTimer.vue';
 import TransitionFadeSlide from '@/components/transitions/FadeSlide.vue';
 
-import { defineComponent, watch, onMounted } from 'vue';
+import { watch, onMounted } from 'vue';
 import { useRegisterSW } from 'virtual:pwa-register/vue';
 import { Status, Interval, IntervalType } from '@/types';
 import { useMain } from '@/stores/main';
