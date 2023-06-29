@@ -71,7 +71,7 @@ function update(interval: Interval) {
   );
 }
 
-function deleteInterval(deleteId: string) {
+function deleteInterval(deleteId?: string) {
   intervalsRef.value = intervalsRef.value.filter(({ id }) => deleteId !== id);
 }
 

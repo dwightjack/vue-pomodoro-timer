@@ -12,7 +12,7 @@
             <option
               v-if="value !== IntervalType.None"
               :value="value"
-              :selected="value === interval?.type"
+              :selected="value === interval.type"
             >
               {{ name }}
             </option></template
@@ -37,7 +37,7 @@
         <span class="sr-only">Duration</span>
         <span class="text-sm pl-1">mins</span>
       </label>
-      <BaseControl @click="$emit('delete', interval?.id)">
+      <BaseControl @click="$emit('delete', interval.id)">
         <BaseIcon name="trash" />
         <span class="sr-only">Delete</span>
       </BaseControl>
@@ -60,16 +60,16 @@ const props = defineProps({
     duration: integer(),
     id: string().isRequired,
     remaining: integer(),
-  }),
+  }).isRequired,
 });
 
 const emit = defineEmits<{
-  delete: [id?: number];
+  delete: [id?: string];
   update: [payload: Interval];
 }>();
 
-const typeRef = ref<IntervalType>(props.interval?.type ?? IntervalType.None);
-const durationRef = ref(getMinutes(props.interval?.duration || 0));
+const typeRef = ref<IntervalType>(props.interval.type ?? IntervalType.None);
+const durationRef = ref(getMinutes(props.interval.duration || 0));
 
 function onInput() {
   const payload: Interval = Object.assign({}, props.interval, {
@@ -80,11 +80,11 @@ function onInput() {
 }
 
 watch(
-  () => props.interval?.type,
+  () => props.interval.type,
   (type = IntervalType.None) => (typeRef.value = type),
 );
 watch(
-  () => props.interval?.duration,
+  () => props.interval.duration,
   (duration) => (durationRef.value = getMinutes(duration || 0)),
 );
 </script>
