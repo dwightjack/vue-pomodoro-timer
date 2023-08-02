@@ -4,15 +4,17 @@
     <LayoutInline class="items-center">
       <label class="grid grid-flow-col items-center">
         <select
-          v-model="typeRef"
+          :value="type ?? IntervalType.None"
           class="input pr-6 col-start-1 row-start-1 min-w-0 truncate"
-          @change="onInput"
+          @input="
+            $emit('update:type', ($event.target as HTMLInputElement).value)
+          "
         >
           <template v-for="(value, name) in IntervalType" :key="value">
             <option
               v-if="value !== IntervalType.None"
               :value="value"
-              :selected="value === interval.type"
+              :selected="value === type"
             >
               {{ name }}
             </option></template
@@ -26,18 +28,25 @@
       </label>
       <label class="flex items-center">
         <input
-          v-model="durationRef"
+          :value="getMinutes(duration ?? 0)"
           class="input"
           type="number"
           min="1"
           max="60"
           :size="5"
-          @input="onInput"
+          @input="
+            $emit(
+              'update:duration',
+              minutesToMs(
+                Number(($event.target as HTMLInputElement).value || 0),
+              ),
+            )
+          "
         />
         <span class="sr-only">Duration</span>
         <span class="text-sm pl-1">mins</span>
       </label>
-      <BaseControl @click="$emit('delete', interval.id)">
+      <BaseControl @click="$emit('delete', id)">
         <BaseIcon name="trash" />
         <span class="sr-only">Delete</span>
       </BaseControl>
@@ -45,46 +54,22 @@
   </fieldset>
 </template>
 <script setup lang="ts">
-import { string, integer, oneOf, shape } from 'vue-types';
-import { ref, watch } from 'vue';
+import { string, integer, oneOf } from 'vue-types';
 import BaseIcon from '@/components/BaseIcon.vue';
 import BaseControl from '@/components/BaseControl.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
 import { minutesToMs, getMinutes } from '@/utils';
 import { IntervalType } from '@/types';
-import type { Interval } from '@/types';
 
-const props = defineProps({
-  interval: shape<Interval>({
-    type: oneOf(Object.values(IntervalType)),
-    duration: integer(),
-    id: string().isRequired,
-    remaining: integer(),
-  }).isRequired,
+defineProps({
+  type: oneOf(Object.values(IntervalType)),
+  duration: integer(),
+  id: string().isRequired,
 });
 
-const emit = defineEmits<{
+defineEmits<{
   delete: [id?: string];
-  update: [payload: Interval];
+  'update:type': [type: IntervalType];
+  'update:duration': [duration: number];
 }>();
-
-const typeRef = ref<IntervalType>(props.interval.type ?? IntervalType.None);
-const durationRef = ref(getMinutes(props.interval.duration || 0));
-
-function onInput() {
-  const payload: Interval = Object.assign({}, props.interval, {
-    type: typeRef.value,
-    duration: minutesToMs(durationRef.value),
-  });
-  return emit('update', payload);
-}
-
-watch(
-  () => props.interval.type,
-  (type = IntervalType.None) => (typeRef.value = type),
-);
-watch(
-  () => props.interval.duration,
-  (duration) => (durationRef.value = getMinutes(duration || 0)),
-);
 </script>

@@ -22,9 +22,10 @@
     >
       <IntervalEditBox
         v-for="interval in intervalsRef"
+        :id="interval.id"
         :key="interval.id"
-        :interval="interval"
-        @update="update"
+        v-model:type="interval.type"
+        v-model:duration="interval.duration"
         @delete="deleteInterval"
       />
       <LayoutInline :space="3" centered class="mt-2">
@@ -63,13 +64,7 @@ const emit = defineEmits<{
   toggled: [open: boolean];
   save: [intervals: Interval[]];
 }>();
-const intervalsRef = ref<Interval[]>([...unref(cycle.intervals)]);
-
-function update(interval: Interval) {
-  intervalsRef.value = intervalsRef.value.map((int) =>
-    int.id === interval.id ? interval : int,
-  );
-}
+const intervalsRef = ref<Interval[]>(cycle.intervals.map((i) => ({ ...i })));
 
 function deleteInterval(deleteId?: string) {
   intervalsRef.value = intervalsRef.value.filter(({ id }) => deleteId !== id);
@@ -91,7 +86,7 @@ function addInterval() {
 watch(
   () => cycle.intervals,
   (newIntervals) => {
-    intervalsRef.value = newIntervals;
+    intervalsRef.value = newIntervals.map((i) => ({ ...i }));
   },
 );
 </script>
