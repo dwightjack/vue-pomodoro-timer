@@ -68,8 +68,8 @@ devDependencies:
     specifier: 0.19.2
     version: 0.19.2(vite@4.4.12)(workbox-build@7.0.0)(workbox-window@7.0.0)
   vite-svg-loader:
-    specifier: 4.0.0
-    version: 4.0.0
+    specifier: 5.1.0
+    version: 5.1.0(vue@3.4.21)
   vue-tsc:
     specifier: 1.8.8
     version: 1.8.8(typescript@5.3.3)
@@ -128,7 +128,7 @@ packages:
       '@babel/helper-compilation-targets': 7.22.9(@babel/core@7.22.9)
       '@babel/helper-module-transforms': 7.22.9(@babel/core@7.22.9)
       '@babel/helpers': 7.22.6
-      '@babel/parser': 7.22.7
+      '@babel/parser': 7.24.0
       '@babel/template': 7.22.5
       '@babel/traverse': 7.22.8
       '@babel/types': 7.22.5
@@ -1250,7 +1250,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.22.5
-      '@babel/parser': 7.22.7
+      '@babel/parser': 7.24.0
       '@babel/types': 7.22.5
     dev: true
 
@@ -1264,7 +1264,7 @@ packages:
       '@babel/helper-function-name': 7.22.5
       '@babel/helper-hoist-variables': 7.22.5
       '@babel/helper-split-export-declaration': 7.22.6
-      '@babel/parser': 7.22.7
+      '@babel/parser': 7.24.0
       '@babel/types': 7.22.5
       debug: 4.3.4
       globals: 11.12.0
@@ -4335,11 +4335,13 @@ packages:
       - supports-color
     dev: true
 
-  /vite-svg-loader@4.0.0:
-    resolution: {integrity: sha512-0MMf1yzzSYlV4MGePsLVAOqXsbF5IVxbn4EEzqRnWxTQl8BJg/cfwIzfQNmNQxZp5XXwd4kyRKF1LytuHZTnqA==}
+  /vite-svg-loader@5.1.0(vue@3.4.21):
+    resolution: {integrity: sha512-M/wqwtOEjgb956/+m5ZrYT/Iq6Hax0OakWbokj8+9PXOnB7b/4AxESHieEtnNEy7ZpjsjYW1/5nK8fATQMmRxw==}
+    peerDependencies:
+      vue: '>=3.2.13'
     dependencies:
-      '@vue/compiler-sfc': 3.4.21
       svgo: 3.0.2
+      vue: 3.4.21(typescript@5.3.3)
     dev: true
 
   /vite@4.4.12(@types/node@20.11.24):
