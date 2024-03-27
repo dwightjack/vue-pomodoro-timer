@@ -7,7 +7,10 @@
           :value="type ?? IntervalType.None"
           class="input pr-6 col-start-1 row-start-1 min-w-0 truncate"
           @input="
-            $emit('update:type', ($event.target as HTMLInputElement).value)
+            $emit(
+              'update:type',
+              ($event.target as HTMLInputElement).value as IntervalType,
+            )
           "
         >
           <template v-for="(value, name) in IntervalType" :key="value">

@@ -10,16 +10,17 @@
     "editor.formatOnSave": false
   },
   "[vue]": {
-    "editor.formatOnSave": false,
+    "editor.formatOnSave": false
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    "source.fixAll.stylelint": true
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
   },
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
     "**/node_modules/*/**": true
   },
-  "volar.tsPlugin": true
+  "volar.tsPlugin": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
