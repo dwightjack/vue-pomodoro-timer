@@ -19,15 +19,12 @@ dependencies:
     version: 5.1.1(vue@3.4.21)
 
 devDependencies:
+  '@eslint/js':
+    specifier: 8.57.0
+    version: 8.57.0
   '@types/node':
     specifier: 20.11.30
     version: 20.11.30
-  '@typescript-eslint/eslint-plugin':
-    specifier: 7.4.0
-    version: 7.4.0(@typescript-eslint/parser@7.4.0)(eslint@8.57.0)(typescript@5.4.3)
-  '@typescript-eslint/parser':
-    specifier: 7.4.0
-    version: 7.4.0(eslint@8.57.0)(typescript@5.4.3)
   '@vitejs/plugin-vue':
     specifier: 5.0.4
     version: 5.0.4(vite@5.2.6)(vue@3.4.21)
@@ -61,6 +58,9 @@ devDependencies:
   typescript:
     specifier: 5.4.3
     version: 5.4.3
+  typescript-eslint:
+    specifier: 7.4.0
+    version: 7.4.0(eslint@8.57.0)(typescript@5.4.3)
   vite:
     specifier: 5.2.6
     version: 5.2.6(@types/node@20.11.30)
@@ -70,6 +70,9 @@ devDependencies:
   vite-svg-loader:
     specifier: 5.1.0
     version: 5.1.0(vue@3.4.21)
+  vue-eslint-parser:
+    specifier: 9.4.2
+    version: 9.4.2(eslint@8.57.0)
   vue-tsc:
     specifier: 2.0.7
     version: 2.0.7(typescript@5.4.3)
@@ -4535,6 +4538,25 @@ packages:
       has-proto: 1.0.3
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
+    dev: true
+
+  /typescript-eslint@7.4.0(eslint@8.57.0)(typescript@5.4.3):
+    resolution: {integrity: sha512-8GYQsb/joknlAZEAs/kqonfrsAc98C5DoellmwHREPqKwSTKSY2YB93IwmvNuX6+WE5QkKc31X9wHo/UcpYXpw==}
+    engines: {node: ^18.18.0 || >=20.0.0}
+    peerDependencies:
+      eslint: ^8.56.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@typescript-eslint/eslint-plugin': 7.4.0(@typescript-eslint/parser@7.4.0)(eslint@8.57.0)(typescript@5.4.3)
+      '@typescript-eslint/parser': 7.4.0(eslint@8.57.0)(typescript@5.4.3)
+      '@typescript-eslint/utils': 7.4.0(eslint@8.57.0)(typescript@5.4.3)
+      eslint: 8.57.0
+      typescript: 5.4.3
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /typescript@5.4.3:

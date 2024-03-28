@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { bool, oneOf } from 'vue-types';
+defineProps({
+  pressed: bool().def(false),
+  type: oneOf(['button', 'reset', 'submit', undefined] as const).def('button'),
+});
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+defineSlots<{ default?: (props: any) => any }>();
+</script>
 <template>
   <button
     :type="type"
@@ -11,12 +20,3 @@
     <slot />
   </button>
 </template>
-<script setup lang="ts">
-import { bool, oneOf } from 'vue-types';
-defineProps({
-  pressed: bool().def(false),
-  type: oneOf(['button', 'reset', 'submit', undefined] as const).def('button'),
-});
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-defineSlots<{ default?: (props: any) => any }>();
-</script>

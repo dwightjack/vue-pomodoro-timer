@@ -1,3 +1,7 @@
+<script lang="ts" setup>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+defineSlots<{ default?: (props: any) => any }>();
+</script>
 <template>
   <main
     id="app"
@@ -6,7 +10,3 @@
     <slot />
   </main>
 </template>
-<script lang="ts" setup>
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-defineSlots<{ default?: (props: any) => any }>();
-</script>

@@ -1,3 +1,24 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+import { oneOf } from 'vue-types';
+import BaseControl from '@/components/BaseControl.vue';
+import BaseIcon from '@/components/BaseIcon.vue';
+import LayoutInline from '@/components/LayoutInline.vue';
+import { Status } from '@/types';
+
+const props = defineProps({
+  status: oneOf(Object.values(Status)).def(Status.Pause),
+});
+
+defineEmits<{
+  play: [];
+  pause: [];
+  skip: [];
+  reset: [];
+}>();
+
+const isPlaying = computed(() => props.status === Status.Play);
+</script>
 <template>
   <LayoutInline
     role="group"
@@ -23,24 +44,3 @@
     </BaseControl>
   </LayoutInline>
 </template>
-<script setup lang="ts">
-import { computed } from 'vue';
-import { oneOf } from 'vue-types';
-import BaseControl from '@/components/BaseControl.vue';
-import BaseIcon from '@/components/BaseIcon.vue';
-import LayoutInline from '@/components/LayoutInline.vue';
-import { Status } from '@/types';
-
-const props = defineProps({
-  status: oneOf(Object.values(Status)).def(Status.Pause),
-});
-
-defineEmits<{
-  play: [];
-  pause: [];
-  skip: [];
-  reset: [];
-}>();
-
-const isPlaying = computed(() => props.status === Status.Play);
-</script>

@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { string, integer, oneOf } from 'vue-types';
+import BaseIcon from '@/components/BaseIcon.vue';
+import BaseControl from '@/components/BaseControl.vue';
+import LayoutInline from '@/components/LayoutInline.vue';
+import { minutesToMs, getMinutes } from '@/utils';
+import { IntervalType } from '@/types';
+
+defineProps({
+  type: oneOf(Object.values(IntervalType)),
+  duration: integer(),
+  id: string().isRequired,
+});
+
+defineEmits<{
+  delete: [id?: string];
+  'update:type': [type: IntervalType];
+  'update:duration': [duration: number];
+}>();
+</script>
 <template>
   <fieldset class="min-w-0">
     <legend class="sr-only">Interval Settings</legend>
@@ -56,23 +76,3 @@
     </LayoutInline>
   </fieldset>
 </template>
-<script setup lang="ts">
-import { string, integer, oneOf } from 'vue-types';
-import BaseIcon from '@/components/BaseIcon.vue';
-import BaseControl from '@/components/BaseControl.vue';
-import LayoutInline from '@/components/LayoutInline.vue';
-import { minutesToMs, getMinutes } from '@/utils';
-import { IntervalType } from '@/types';
-
-defineProps({
-  type: oneOf(Object.values(IntervalType)),
-  duration: integer(),
-  id: string().isRequired,
-});
-
-defineEmits<{
-  delete: [id?: string];
-  'update:type': [type: IntervalType];
-  'update:duration': [duration: number];
-}>();
-</script>
