@@ -1,43 +1,3 @@
-<template>
-  <div role="presentation">
-    <TheGraphicTimer v-if="cycle.currentInterval" />
-    <TheNotificationBar>
-      <TransitionFadeSlide>
-        <BaseToast
-          v-if="notifyBarVisible"
-          :on-cancel="notifyBar.cancel"
-          :on-confirm="notifyBar.confirm"
-        >
-          <p>Do you want to manage notification settings for this app?</p>
-        </BaseToast>
-      </TransitionFadeSlide>
-      <TransitionFadeSlide>
-        <BaseToast v-if="needRefresh" role="alert">
-          <p>Application update available.</p>
-          <BaseButton @click="updateServiceWorker()">Update</BaseButton>
-        </BaseToast>
-      </TransitionFadeSlide>
-    </TheNotificationBar>
-    <TheContainer>
-      <h1 class="sr-only">Pomodoro Timer</h1>
-      <LayoutStack centered>
-        <TheTimerList />
-
-        <TheCycle />
-        <TheControls
-          :status="main.status"
-          @play="main.play"
-          @pause="main.pause"
-          @skip="skip"
-          @reset="reset"
-        />
-        <TheCycleEdit @save="saveChanges" @toggled="onEditToggle" />
-      </LayoutStack>
-    </TheContainer>
-    <TheLoader :visible="loading" message="Loading..." />
-  </div>
-</template>
-
 <script setup lang="ts">
 import TheContainer from '@/components/TheContainer.vue';
 import TheTimerList from '@/components/TheTimerList.vue';
@@ -158,3 +118,43 @@ watch(
 onMounted(initialize);
 onMounted(checkNotifyPermission);
 </script>
+
+<template>
+  <div role="presentation">
+    <TheGraphicTimer v-if="cycle.currentInterval" />
+    <TheNotificationBar>
+      <TransitionFadeSlide>
+        <BaseToast
+          v-if="notifyBarVisible"
+          @cancel="notifyBar.cancel"
+          @confirm="notifyBar.confirm"
+        >
+          <p>Do you want to manage notification settings for this app?</p>
+        </BaseToast>
+      </TransitionFadeSlide>
+      <TransitionFadeSlide>
+        <BaseToast v-if="needRefresh" role="alert">
+          <p>Application update available.</p>
+          <BaseButton @click="updateServiceWorker()"> Update </BaseButton>
+        </BaseToast>
+      </TransitionFadeSlide>
+    </TheNotificationBar>
+    <TheContainer>
+      <h1 class="sr-only">Pomodoro Timer</h1>
+      <LayoutStack centered>
+        <TheTimerList />
+
+        <TheCycle />
+        <TheControls
+          :status="main.status"
+          @play="main.play"
+          @pause="main.pause"
+          @skip="skip"
+          @reset="reset"
+        />
+        <TheCycleEdit @save="saveChanges" @toggled="onEditToggle" />
+      </LayoutStack>
+    </TheContainer>
+    <TheLoader :visible="loading" message="Loading..." />
+  </div>
+</template>

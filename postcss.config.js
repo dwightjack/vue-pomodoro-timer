@@ -1,8 +1,6 @@
-/*eslint-disable */
-const autoprefixer = require('autoprefixer');
-const tailwindcss = require('tailwindcss');
-/* eslint-enable */
+import autoprefixer from 'autoprefixer';
+import tailwindcss from 'tailwindcss';
 
-module.exports = {
+export default {
   plugins: [tailwindcss, autoprefixer],
 };

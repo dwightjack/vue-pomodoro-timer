@@ -1,3 +1,48 @@
+<script setup lang="ts">
+import { ref, watch, unref } from 'vue';
+import IntervalEditBox from '@/components/IntervalEditBox.vue';
+import BaseControl from '@/components/BaseControl.vue';
+import BaseIcon from '@/components/BaseIcon.vue';
+import LayoutStack from '@/components/LayoutStack.vue';
+import LayoutInline from '@/components/LayoutInline.vue';
+import { createInterval } from '@/utils';
+import { useCycle } from '@/stores/cycle';
+import { useMain } from '@/stores/main';
+import type { Interval } from '@/types';
+
+const cycle = useCycle();
+const main = useMain();
+
+const emit = defineEmits<{
+  toggled: [open: boolean];
+  save: [intervals: Interval[]];
+}>();
+const intervalsRef = ref<Interval[]>(cycle.intervals.map((i) => ({ ...i })));
+
+function deleteInterval(deleteId?: string) {
+  intervalsRef.value = intervalsRef.value.filter(({ id }) => deleteId !== id);
+}
+
+function onSubmit() {
+  emit('save', [...intervalsRef.value]);
+}
+
+function onCancel() {
+  intervalsRef.value = [...unref(cycle.intervals)];
+  emit('toggled', false);
+}
+
+function addInterval() {
+  intervalsRef.value = [...intervalsRef.value, createInterval()];
+}
+
+watch(
+  () => cycle.intervals,
+  (newIntervals) => {
+    intervalsRef.value = newIntervals.map((i) => ({ ...i }));
+  },
+);
+</script>
 <template>
   <details
     class="w-full"
@@ -45,48 +90,3 @@
     </LayoutStack>
   </details>
 </template>
-<script setup lang="ts">
-import { ref, watch, unref } from 'vue';
-import IntervalEditBox from '@/components/IntervalEditBox.vue';
-import BaseControl from '@/components/BaseControl.vue';
-import BaseIcon from '@/components/BaseIcon.vue';
-import LayoutStack from '@/components/LayoutStack.vue';
-import LayoutInline from '@/components/LayoutInline.vue';
-import { createInterval } from '@/utils';
-import { useCycle } from '@/stores/cycle';
-import { useMain } from '@/stores/main';
-import type { Interval } from '@/types';
-
-const cycle = useCycle();
-const main = useMain();
-
-const emit = defineEmits<{
-  toggled: [open: boolean];
-  save: [intervals: Interval[]];
-}>();
-const intervalsRef = ref<Interval[]>(cycle.intervals.map((i) => ({ ...i })));
-
-function deleteInterval(deleteId?: string) {
-  intervalsRef.value = intervalsRef.value.filter(({ id }) => deleteId !== id);
-}
-
-function onSubmit() {
-  emit('save', [...intervalsRef.value]);
-}
-
-function onCancel() {
-  intervalsRef.value = [...unref(cycle.intervals)];
-  emit('toggled', false);
-}
-
-function addInterval() {
-  intervalsRef.value = [...intervalsRef.value, createInterval()];
-}
-
-watch(
-  () => cycle.intervals,
-  (newIntervals) => {
-    intervalsRef.value = newIntervals.map((i) => ({ ...i }));
-  },
-);
-</script>

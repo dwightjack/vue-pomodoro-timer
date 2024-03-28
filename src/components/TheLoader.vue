@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { string, bool } from 'vue-types';
+defineProps({
+  message: string().def(''),
+  visible: bool().def(false),
+});
+</script>
 <template>
   <div role="status">
     <Transition
@@ -19,13 +26,6 @@
     <p v-if="visible" class="sr-only">{{ message }}</p>
   </div>
 </template>
-<script setup lang="ts">
-import { string, bool } from 'vue-types';
-defineProps({
-  message: string().def(''),
-  visible: bool().def(false),
-});
-</script>
 <style scoped>
 .loader-animate {
   animation-name: loader-animate;

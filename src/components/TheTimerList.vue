@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import BaseTimer from '@/components/BaseTimer.vue';
+import { useCycle } from '@/stores/cycle';
+
+const cycle = useCycle();
+</script>
 <template>
   <TransitionGroup name="timer" tag="div" class="grid grid-rows-1 grid-cols-1">
     <BaseTimer
@@ -10,12 +16,6 @@
     />
   </TransitionGroup>
 </template>
-<script setup lang="ts">
-import BaseTimer from '@/components/BaseTimer.vue';
-import { useCycle } from '@/stores/cycle';
-
-const cycle = useCycle();
-</script>
 <style scoped>
 .timer-enter-active,
 .timer-leave-active {

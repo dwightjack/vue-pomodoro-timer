@@ -1,13 +1,3 @@
-<template>
-  <canvas
-    ref="canvasRef"
-    class="sr-only"
-    :class="colorType"
-    :width="size"
-    :height="size"
-    aria-hidden="true"
-  />
-</template>
 <script setup lang="ts">
 import { watch, ref, onMounted, onUnmounted, computed } from 'vue';
 import { number } from 'vue-types';
@@ -108,3 +98,13 @@ onUnmounted(() => {
   originalFavicon.clear();
 });
 </script>
+<template>
+  <canvas
+    ref="canvasRef"
+    class="sr-only"
+    :class="colorType"
+    :width="size"
+    :height="size"
+    aria-hidden="true"
+  />
+</template>

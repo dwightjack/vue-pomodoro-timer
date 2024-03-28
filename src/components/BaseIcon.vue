@@ -1,13 +1,3 @@
-<template>
-  <component
-    :is="icon"
-    class="inline-flex items-center fill-current w-[1em] aspect-square"
-    aria-hidden="true"
-  />
-</template>
-<script lang="ts">
-import { oneOf } from 'vue-types';
-</script>
 <script setup lang="ts">
 import { watch, shallowRef } from 'vue';
 import type { Component } from 'vue';
@@ -51,4 +41,14 @@ watch(
   },
   { immediate: true },
 );
+</script>
+<template>
+  <component
+    :is="icon"
+    class="inline-flex items-center fill-current w-[1em] aspect-square"
+    aria-hidden="true"
+  />
+</template>
+<script lang="ts">
+import { oneOf } from 'vue-types';
 </script>

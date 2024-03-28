@@ -1,28 +1,3 @@
-<template>
-  <LayoutInline
-    role="group"
-    class="items-center"
-    aria-label="Timer controls"
-    space="2"
-  >
-    <BaseControl @click="$emit(isPlaying ? 'pause' : 'play')">
-      <BaseIcon :name="isPlaying ? 'pause' : 'play'" />
-      <span class="sr-only">{{ isPlaying ? 'Pause' : 'Play' }}</span>
-    </BaseControl>
-    <span
-      class="mx-1 border-l border-blue-400 dark:border-sky-400 h-6"
-      role="separator"
-    />
-    <BaseControl @click="$emit('skip')">
-      <BaseIcon name="fast-forward" />
-      <span class="sr-only">Skip</span>
-    </BaseControl>
-    <BaseControl @click="$emit('reset')">
-      <BaseIcon name="reload" />
-      <span class="sr-only">Reset</span>
-    </BaseControl>
-  </LayoutInline>
-</template>
 <script setup lang="ts">
 import { computed } from 'vue';
 import { oneOf } from 'vue-types';
@@ -44,3 +19,28 @@ defineEmits<{
 
 const isPlaying = computed(() => props.status === Status.Play);
 </script>
+<template>
+  <LayoutInline
+    role="group"
+    class="items-center"
+    aria-label="Timer controls"
+    space="2"
+  >
+    <BaseControl @click="isPlaying ? $emit('pause') : $emit('play')">
+      <BaseIcon :name="isPlaying ? 'pause' : 'play'" />
+      <span class="sr-only">{{ isPlaying ? 'Pause' : 'Play' }}</span>
+    </BaseControl>
+    <span
+      class="mx-1 border-l border-blue-400 dark:border-sky-400 h-6"
+      role="separator"
+    />
+    <BaseControl @click="$emit('skip')">
+      <BaseIcon name="fast-forward" />
+      <span class="sr-only">Skip</span>
+    </BaseControl>
+    <BaseControl @click="$emit('reset')">
+      <BaseIcon name="reload" />
+      <span class="sr-only">Reset</span>
+    </BaseControl>
+  </LayoutInline>
+</template>

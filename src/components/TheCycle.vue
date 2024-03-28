@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import IntervalSquare from '@/components/IntervalSquare.vue';
+import { useCycle } from '@/stores/cycle';
+
+const cycle = useCycle();
+</script>
 <template>
   <div>
     <h2 class="sr-only">Intervals</h2>
@@ -12,9 +18,3 @@
     </ul>
   </div>
 </template>
-<script setup lang="ts">
-import IntervalSquare from '@/components/IntervalSquare.vue';
-import { useCycle } from '@/stores/cycle';
-
-const cycle = useCycle();
-</script>
