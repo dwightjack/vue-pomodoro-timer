@@ -5,8 +5,7 @@ defineProps({
   centered: bool().def(false),
   space: oneOfType([String, Number]).def(4),
 });
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-defineSlots<{ default?: (props: any) => any }>();
+defineSlots<{ default?: () => unknown }>();
 </script>
 <template>
   <component

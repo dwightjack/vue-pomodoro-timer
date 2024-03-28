@@ -124,11 +124,7 @@ onMounted(checkNotifyPermission);
     <TheGraphicTimer v-if="cycle.currentInterval" />
     <TheNotificationBar>
       <TransitionFadeSlide>
-        <BaseToast
-          v-if="notifyBarVisible"
-          :on-cancel="notifyBar.cancel"
-          :on-confirm="notifyBar.confirm"
-        >
+        <BaseToast @cancel="notifyBar.cancel" @confirm="notifyBar.confirm">
           <p>Do you want to manage notification settings for this app?</p>
         </BaseToast>
       </TransitionFadeSlide>

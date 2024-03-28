@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { func, oneOf } from 'vue-types';
+import { oneOf } from 'vue-types';
 import BaseButton from '@/components/BaseButton.vue';
 
 defineProps({
-  onConfirm: func(),
-  onCancel: func(),
   role: oneOf(['status', 'alert'] as const).def('status'),
 });
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-defineSlots<{ default?: (props: any) => any }>();
+defineEmits<{
+  confirm: [];
+  cancel: [];
+}>();
+defineSlots<{ default?: () => unknown }>();
 </script>
 <template>
   <div
@@ -17,7 +18,11 @@ defineSlots<{ default?: (props: any) => any }>();
     aria-live="polite"
   >
     <slot />
-    <BaseButton v-if="onConfirm" @click="onConfirm">yes</BaseButton>
-    <BaseButton v-if="onCancel" @click="onCancel">dismiss</BaseButton>
+    <BaseButton v-if="$attrs.onConfirm" @click="$emit('confirm')"
+      >yes</BaseButton
+    >
+    <BaseButton v-if="$attrs.onCancel" @click="$emit('cancel')"
+      >dismiss</BaseButton
+    >
   </div>
 </template>
