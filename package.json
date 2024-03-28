@@ -10,7 +10,7 @@
     "lint": "ESLINT_USE_FLAT_CONFIG=true eslint 'src/**/*.*'",
     "serve": "vite preview"
   },
-  "packageManager": "pnpm@8.15.4",
+  "packageManager": "pnpm@8.15.5",
   "engines": {
     "node": ">=20.11.1",
     "pnpm": "^8.0.0"
