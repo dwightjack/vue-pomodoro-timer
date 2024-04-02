@@ -15,6 +15,6 @@
 Clone the repo then:
 
 ```
-npm ci
-npm run dev
+pnpm i
+pnpm dev
 ```
