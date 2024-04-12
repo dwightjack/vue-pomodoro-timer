@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { oneOf } from 'vue-types';
+import { bool, oneOf } from 'vue-types';
 import BaseButton from '@/components/BaseButton.vue';
 
 defineProps({
   role: oneOf(['status', 'alert'] as const).def('status'),
+  controls: bool().def(false),
 });
 defineEmits<{
   confirm: [];
@@ -18,11 +19,7 @@ defineSlots<{ default?: () => unknown }>();
     aria-live="polite"
   >
     <slot />
-    <BaseButton v-if="$attrs.onConfirm" @click="$emit('confirm')"
-      >yes</BaseButton
-    >
-    <BaseButton v-if="$attrs.onCancel" @click="$emit('cancel')"
-      >dismiss</BaseButton
-    >
+    <BaseButton @click="$emit('confirm')">yes</BaseButton>
+    <BaseButton @click="$emit('cancel')">dismiss</BaseButton>
   </div>
 </template>

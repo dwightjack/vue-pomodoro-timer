@@ -126,6 +126,7 @@ onMounted(checkNotifyPermission);
       <TransitionFadeSlide>
         <BaseToast
           v-if="notifyBarVisible"
+          controls
           @cancel="notifyBar.cancel"
           @confirm="notifyBar.confirm"
         >
