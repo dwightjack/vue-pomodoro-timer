@@ -18,14 +18,14 @@
   "dependencies": {
     "pinia": "2.1.7",
     "uid": "2.0.2",
-    "vue": "3.4.26",
+    "vue": "3.4.27",
     "vue-types": "5.1.2"
   },
   "devDependencies": {
     "@eslint/js": "8.57.0",
-    "@types/node": "20.12.8",
+    "@types/node": "20.12.12",
     "@vitejs/plugin-vue": "5.0.4",
-    "@vue/compiler-sfc": "3.4.26",
+    "@vue/compiler-sfc": "3.4.27",
     "autoprefixer": "10.4.19",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
