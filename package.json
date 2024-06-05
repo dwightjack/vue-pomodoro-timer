@@ -10,10 +10,10 @@
     "lint": "ESLINT_USE_FLAT_CONFIG=true eslint 'src/**/*.*'",
     "serve": "vite preview"
   },
-  "packageManager": "pnpm@8.15.8",
+  "packageManager": "pnpm@9.2.0",
   "engines": {
     "node": ">=20.11.1",
-    "pnpm": "^8.0.0"
+    "pnpm": "^9.0.0"
   },
   "dependencies": {
     "pinia": "2.1.7",
