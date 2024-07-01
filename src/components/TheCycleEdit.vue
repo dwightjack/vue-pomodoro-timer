@@ -51,7 +51,7 @@ watch(
       'border rounded-lg overflow-hidden border-blue-200 dark:border-sky-400'
     "
     :open="main.editOpen"
-    @toggle.stop="$emit('toggled', $event.target.open)"
+    @toggle.stop="$emit('toggled', ($event.target as HTMLDetailsElement).open)"
   >
     <summary
       class="py-1 list-none text-center cursor-pointer hover:bg-blue-100 dark:hover:bg-sky-800 rounded"
