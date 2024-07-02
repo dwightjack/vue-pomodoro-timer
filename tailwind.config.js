@@ -1,3 +1,5 @@
+import theme from 'tailwindcss/defaultTheme';
+
 function range(length = 1, from = 0, prefix) {
   return Array.from({ length }, (_, i) =>
     prefix ? `${prefix}${from + i}` : from + i,
@@ -13,6 +15,9 @@ module.exports = {
     ...range(10, 0, 'gap-y-'),
   ],
   theme: {
+    fontFamily: {
+      sans: ["'Inter Variable'", ...theme.fontFamily.sans],
+    },
     extends: {
       colors: {
         transparent: 'transparent',
