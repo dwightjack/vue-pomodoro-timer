@@ -45,4 +45,5 @@ export default ts.config(
     },
   },
   prettier,
+  { ignores: ['**/src/assets/**'] },
 );
