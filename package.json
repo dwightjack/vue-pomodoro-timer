@@ -10,24 +10,24 @@
     "lint": "ESLINT_USE_FLAT_CONFIG=true eslint 'src/**/*.*'",
     "serve": "vite preview"
   },
-  "packageManager": "pnpm@9.5.0",
+  "packageManager": "pnpm@9.6.0",
   "engines": {
     "node": ">=20.11.1",
     "pnpm": "^9.0.0"
   },
   "dependencies": {
-    "pinia": "2.1.7",
+    "pinia": "2.2.1",
     "uid": "2.0.2",
     "vue": "3.4.35",
     "vue-types": "5.1.3"
   },
   "devDependencies": {
-    "@eslint/js": "9.7.0",
+    "@eslint/js": "9.8.0",
     "@types/node": "20.14.13",
-    "@vitejs/plugin-vue": "5.0.5",
+    "@vitejs/plugin-vue": "5.1.2",
     "@vue/compiler-sfc": "3.4.35",
     "autoprefixer": "10.4.19",
-    "eslint": "9.7.0",
+    "eslint": "9.8.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",
     "eslint-plugin-vue": "9.27.0",
@@ -35,7 +35,7 @@
     "prettier": "3.3.3",
     "tailwindcss": "3.4.7",
     "typescript": "5.5.4",
-    "typescript-eslint": "7.16.1",
+    "typescript-eslint": "7.18.0",
     "vite": "5.3.5",
     "vite-plugin-pwa": "0.20.1",
     "vite-svg-loader": "5.1.0",
