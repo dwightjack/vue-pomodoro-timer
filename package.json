@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint 'src/**/*.*'",
+    "lint": "eslint 'src/**/*.*'",
     "serve": "vite preview"
   },
   "packageManager": "pnpm@9.12.3",
