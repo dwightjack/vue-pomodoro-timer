@@ -5,7 +5,7 @@ function range(length = 1, from = 0, prefix) {
 }
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: ['./public/**/*.html', './src/**/*.vue', './src/**/*.ts'],
   safelist: [
     ...range(10, 0, 'gap-'),

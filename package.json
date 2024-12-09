@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint 'src/**/*.*'",
+    "lint": "eslint 'src/**/*.*'",
     "serve": "vite preview"
   },
   "packageManager": "pnpm@9.12.3",
@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.14.0",
-    "@types/node": "20.17.9",
+    "@types/node": "22.10.1",
     "@vitejs/plugin-vue": "5.1.5",
     "@vue/compiler-sfc": "3.5.13",
     "autoprefixer": "10.4.20",
