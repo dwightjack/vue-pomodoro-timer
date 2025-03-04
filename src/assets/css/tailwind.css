@@ -15,6 +15,13 @@
   }
 } */
 
+@layer theme {
+  @property --s {
+    syntax: '*';
+    inherits: false;
+  }
+}
+
 @layer base {
   body {
     @apply text-gray-700 dark:bg-stone-800 dark:text-gray-50;

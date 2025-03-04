@@ -28,7 +28,6 @@ defineSlots<{ default?: () => unknown }>();
 </template>
 <style scoped>
 .gap {
-  --s: 4;
-  column-gap: calc(var(--spacing) * var(--s));
+  column-gap: calc(var(--spacing) * var(--s, 4));
 }
 </style>
