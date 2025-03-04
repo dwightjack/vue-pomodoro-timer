@@ -54,7 +54,7 @@ watch(
     @toggle.stop="$emit('toggled', ($event.target as HTMLDetailsElement).open)"
   >
     <summary
-      class="py-1 list-none text-center cursor-pointer hover:bg-blue-100 dark:hover:bg-sky-800 rounded"
+      class="py-1 list-none text-center cursor-pointer hover:bg-blue-100 dark:hover:bg-sky-800 rounded-sm"
     >
       <BaseIcon name="wrench" />
       <span class="align-middle ml-1">Settings</span>
