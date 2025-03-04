@@ -4,7 +4,7 @@ defineSlots<{ default?: () => unknown }>();
 <template>
   <main
     id="app"
-    class="container mx-auto px-8 py-4 flex flex-col items-center justify-center min-h-screen"
+    class="container mx-auto flex min-h-screen flex-col items-center justify-center px-8 py-4"
   >
     <slot />
   </main>

@@ -17,9 +17,9 @@ defineProps({
       <div
         v-show="visible"
         aria-hidden="true"
-        class="bg-white/75 fixed inset-0 flex items-center"
+        class="fixed inset-0 flex items-center bg-white/75"
       >
-        <div class="mx-auto w-40 bg-blue-500 h-2 loader-animate" />
+        <div class="loader-animate mx-auto h-2 w-40 bg-blue-500" />
       </div>
     </Transition>
 

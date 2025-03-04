@@ -8,7 +8,7 @@ defineSlots<{ default?: () => unknown }>();
 <template>
   <button
     :type="type"
-    class="bg-blue-700 hover:bg-blue-800 px-2 py-1 transition-colors duration-75 rounded-xs"
+    class="rounded-xs bg-blue-700 px-2 py-1 transition-colors duration-75 hover:bg-blue-800"
   >
     <slot />
   </button>

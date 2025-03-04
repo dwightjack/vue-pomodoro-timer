@@ -31,7 +31,7 @@ const isPlaying = computed(() => props.status === Status.Play);
       <span class="sr-only">{{ isPlaying ? 'Pause' : 'Play' }}</span>
     </BaseControl>
     <span
-      class="mx-1 border-l border-blue-400 dark:border-sky-400 h-6"
+      class="mx-1 h-6 border-l border-blue-400 dark:border-sky-400"
       role="separator"
     />
     <BaseControl @click="$emit('skip')">

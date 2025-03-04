@@ -45,7 +45,7 @@ watch(
 <template>
   <component
     :is="icon"
-    class="inline-flex items-center fill-current w-[1em] aspect-square"
+    class="inline-flex aspect-square w-[1em] items-center fill-current"
     aria-hidden="true"
   />
 </template>

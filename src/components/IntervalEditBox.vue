@@ -31,7 +31,7 @@ defineEmits<{
       <label class="grid grid-flow-col items-center">
         <select
           v-model="type"
-          class="input pr-6 col-start-1 row-start-1 min-w-0 truncate"
+          class="input col-start-1 row-start-1 min-w-0 truncate pr-6"
         >
           <template v-for="(value, name) in IntervalType" :key="value">
             <option
@@ -45,7 +45,7 @@ defineEmits<{
         </select>
         <BaseIcon
           name="cheveron-down"
-          class="pointer-events-none col-start-1 row-start-1 ml-auto mr-1"
+          class="pointer-events-none col-start-1 row-start-1 mr-1 ml-auto"
         />
         <span class="sr-only">Type</span>
       </label>
@@ -59,7 +59,7 @@ defineEmits<{
           :size="5"
         />
         <span class="sr-only">Duration</span>
-        <span class="text-sm pl-1">mins</span>
+        <span class="pl-1 text-sm">mins</span>
       </label>
       <BaseControl @click="$emit('delete', id)">
         <BaseIcon name="trash" />

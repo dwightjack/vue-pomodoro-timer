@@ -10,7 +10,7 @@ defineSlots<{ default?: () => unknown }>();
 <template>
   <component
     :is="tag"
-    class="flex items-start min-w-0"
+    class="flex min-w-0 items-start"
     :class="{
       'justify-center': centered,
       [`gap-${space}`]: space,
