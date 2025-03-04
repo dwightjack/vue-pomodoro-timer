@@ -3,7 +3,9 @@ import { string, bool, oneOfType, oneOf } from 'vue-types';
 defineProps({
   tag: string().def('div'),
   centered: bool().def(false),
-  verticalAlign: oneOf(['start', 'stretch', 'end', 'center']).def('start'),
+  verticalAlign: oneOf(['start', 'stretch', 'end', 'center'] as const).def(
+    'start',
+  ),
   space: oneOfType([String, Number]).def(4),
 });
 defineSlots<{ default?: () => unknown }>();

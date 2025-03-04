@@ -28,7 +28,7 @@ const classes = computed(() =>
 <template>
   <div
     role="timer"
-    class="rounded-lg border-4 border-current px-8 py-4 text-4xl tabular-nums"
+    class="rounded-lg border-4 px-8 py-4 text-4xl tabular-nums"
     :class="classes"
     :aria-label="label"
   >

@@ -3,17 +3,33 @@
 @config '../../../tailwind.config.js';
 
 @utility input {
-  @apply appearance-none bg-transparent border border-gray-300 dark:border-stone-600  rounded-lg pl-2 py-1 text-gray-700 dark:text-gray-200;
-}
+  
+  & {
+    @apply appearance-none bg-transparent border border-gray-300 dark:border-stone-600  rounded-lg px-2 py-1 text-gray-700 dark:text-gray-200;
+  }
 
-/* @utility text-gray-700 {
+  &:is(select) {
+    @apply pe-6;
+  }
+
   &[type='number'] {
-    -moz-appearance: textfield;
+    appearance: textfield;
   }
   &[type='number']::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }
-} */
+}
+
+
+@utility grid-overlap {
+  & {
+    grid-template: 'full' auto / auto
+  }
+
+  & > * {
+    grid-area: full;
+  }
+}
 
 @layer theme {
   @property --s {

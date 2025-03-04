@@ -35,28 +35,19 @@ const typeFormatted = computed(() => toTitleCase(props.type));
 </script>
 <template>
   <li
-    class="grid rounded-md border border-current px-2 py-1 text-center transition duration-150 ease-out"
-    :class="[classes, { 'bg-current': current }]"
+    class="grid rounded-md border px-2 py-1 text-center transition-colors duration-150 ease-out *:text-gray-700"
+    :class="[
+      classes,
+      {
+        'bg-current *:dark:text-stone-800': current,
+        '*:dark:text-inherit': !current,
+      },
+    ]"
     :aria-current="current ? 'time' : undefined"
   >
-    <b
-      class="text-sm text-gray-700"
-      :class="{
-        'dark:text-stone-800': current,
-        'dark:text-inherit': !current,
-      }"
-      aria-hidden="true"
-      >{{ abbr }}</b
-    >
+    <b class="text-sm" aria-hidden="true">{{ abbr }}</b>
     <span class="sr-only">{{ typeFormatted }}</span>
-    <time
-      class="text-xs text-gray-700"
-      :datetime="durationAttr"
-      :class="{
-        'dark:text-stone-800': current,
-        'dark:text-inherit': !current,
-      }"
-    >
+    <time class="text-xs" :datetime="durationAttr">
       {{ durationFormatted }}
       <span class="sr-only">minutes</span>
     </time>

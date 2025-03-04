@@ -14,7 +14,7 @@ defineSlots<{ default?: () => unknown }>();
 </script>
 <template>
   <div
-    class="flex items-center space-x-2 bg-blue-600 p-2 text-sm text-white"
+    class="flex items-center gap-2 bg-blue-600 p-2 text-sm text-white"
     :role="role"
     aria-live="polite"
   >

@@ -61,7 +61,7 @@ watch(
     </summary>
     <LayoutStack
       tag="form"
-      space="1"
+      space="2"
       class="px-4 py-2"
       @submit.prevent="onSubmit"
     >
