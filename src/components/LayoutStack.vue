@@ -10,13 +10,21 @@ defineSlots<{ default?: () => unknown }>();
 <template>
   <component
     :is="tag"
-    class="flex flex-col"
+    class="gap flex flex-col"
     :class="{
       'items-center': centered,
       'items-start': !centered,
-      [`gap-y-${space}`]: space,
+    }"
+    :style="{
+      '--s': space !== 4 ? space : undefined,
     }"
   >
     <slot />
   </component>
 </template>
+<style scoped>
+.gap {
+  --s: 4;
+  row-gap: calc(var(--spacing) * var(--s));
+}
+</style>

@@ -7,11 +7,6 @@ function range(length = 1, from = 0, prefix) {
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./public/**/*.html', './src/**/*.vue', './src/**/*.ts'],
-  safelist: [
-    ...range(10, 0, 'gap-'),
-    ...range(10, 0, 'gap-x-'),
-    ...range(10, 0, 'gap-y-'),
-  ],
   theme: {
     extends: {
       colors: {

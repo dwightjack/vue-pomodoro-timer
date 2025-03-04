@@ -21,8 +21,8 @@ const isPlaying = computed(() => props.status === Status.Play);
 </script>
 <template>
   <LayoutInline
+    vertical-align="center"
     role="group"
-    class="items-center"
     aria-label="Timer controls"
     space="2"
   >
