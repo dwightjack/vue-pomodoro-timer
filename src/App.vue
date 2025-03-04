@@ -120,7 +120,7 @@ onMounted(checkNotifyPermission);
 </script>
 
 <template>
-  <div role="presentation">
+  <div>
     <TheGraphicTimer v-if="cycle.currentInterval" />
     <TheNotificationBar>
       <TransitionFadeSlide>
