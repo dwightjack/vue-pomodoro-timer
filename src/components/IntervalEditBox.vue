@@ -25,10 +25,10 @@ defineEmits<{
 }>();
 </script>
 <template>
-  <fieldset class="min-w-0">
+  <fieldset class="w-full min-w-0">
     <legend class="sr-only">Interval Settings</legend>
     <LayoutInline vertical-align="center">
-      <label class="grid-overlap grid items-center">
+      <label class="grid-overlap grid grow items-center">
         <select v-model="type" class="input min-w-0 truncate">
           <template v-for="(value, name) in IntervalType" :key="value">
             <option
@@ -58,9 +58,8 @@ defineEmits<{
         <span class="sr-only">Duration</span>
         <span class="text-sm">mins</span>
       </label>
-      <BaseControl @click="$emit('delete', id)">
-        <BaseIcon name="trash" />
-        <span class="sr-only">Delete</span>
+      <BaseControl icon="trash" @click="$emit('delete', id)">
+        Delete
       </BaseControl>
     </LayoutInline>
   </fieldset>

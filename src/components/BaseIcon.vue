@@ -1,6 +1,21 @@
+<script lang="ts">
+export const iconList = [
+  'trash',
+  'pause',
+  'fast-forward',
+  'reload',
+  'wrench',
+  'add-outline',
+  'close',
+  'save-disk',
+  'cheveron-down',
+  'play',
+] as const;
+</script>
 <script setup lang="ts">
 import { watch, shallowRef } from 'vue';
 import type { Component } from 'vue';
+import { oneOf } from 'vue-types';
 
 const icons = import.meta.glob<{ default: Component }>(
   '../assets/zondicons/{trash,pause,fast-forward,reload,wrench,add-outline,close,save-disk,cheveron-down,play}.svg',
@@ -10,18 +25,7 @@ const icons = import.meta.glob<{ default: Component }>(
 );
 
 const props = defineProps({
-  name: oneOf([
-    'trash',
-    'pause',
-    'fast-forward',
-    'reload',
-    'wrench',
-    'add-outline',
-    'close',
-    'save-disk',
-    'cheveron-down',
-    'play',
-  ] as const).isRequired,
+  name: oneOf(iconList).isRequired,
 });
 
 const icon = shallowRef<Component>();
@@ -49,6 +53,3 @@ watch(
     aria-hidden="true"
   />
 </template>
-<script lang="ts">
-import { oneOf } from 'vue-types';
-</script>

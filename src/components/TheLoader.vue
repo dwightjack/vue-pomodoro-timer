@@ -17,7 +17,7 @@ defineProps({
       <div
         v-show="visible"
         aria-hidden="true"
-        class="fixed inset-0 flex items-center bg-white/75"
+        class="fixed inset-0 flex items-center bg-white/75 dark:bg-black/75"
       >
         <div class="loader-animate mx-auto h-2 w-40 bg-blue-500" />
       </div>
@@ -28,11 +28,7 @@ defineProps({
 </template>
 <style scoped>
 .loader-animate {
-  animation-name: loader-animate;
-  animation-duration: 1s;
-  animation-timing-function: cubic-bezier(0.9, 0.05, 0.35, 0.97);
-  animation-iteration-count: infinite;
-  animation-fill-mode: forwards;
+  animation: loader-animate 1s cubic-bezier(0.9, 0.05, 0.35, 0.97) infinite;
 }
 
 @keyframes loader-animate {

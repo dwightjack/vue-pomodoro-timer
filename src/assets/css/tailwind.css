@@ -1,7 +1,5 @@
 @import 'tailwindcss';
 
-@config '../../../tailwind.config.js';
-
 @utility input {
   
   & {
@@ -36,6 +34,8 @@
     syntax: '*';
     inherits: false;
   }
+
+  
 }
 
 @layer base {

@@ -12,7 +12,7 @@ const cycle = useCycle();
     enter-from-class="translate-y-2 opacity-0"
     leave-to-class="-translate-y-2 opacity-0"
     tag="div"
-    class="grid grid-cols-1 grid-rows-1"
+    class="grid-overlap grid"
   >
     <BaseTimer
       v-for="(interval, i) in cycle.intervals"
@@ -20,7 +20,7 @@ const cycle = useCycle();
       :key="i"
       :duration="interval.remaining"
       :type="interval.type"
-      class="col-start-1 row-start-1 will-change-transform"
+      class="will-change-transform"
     />
   </TransitionGroup>
 </template>

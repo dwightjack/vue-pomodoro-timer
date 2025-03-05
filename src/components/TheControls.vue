@@ -2,7 +2,6 @@
 import { computed } from 'vue';
 import { oneOf } from 'vue-types';
 import BaseControl from '@/components/BaseControl.vue';
-import BaseIcon from '@/components/BaseIcon.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
 import { Status } from '@/types';
 
@@ -20,27 +19,19 @@ defineEmits<{
 const isPlaying = computed(() => props.status === Status.Play);
 </script>
 <template>
-  <LayoutInline
-    vertical-align="center"
-    role="group"
-    aria-label="Timer controls"
-    space="2"
-  >
-    <BaseControl @click="isPlaying ? $emit('pause') : $emit('play')">
-      <BaseIcon :name="isPlaying ? 'pause' : 'play'" />
-      <span class="sr-only">{{ isPlaying ? 'Pause' : 'Play' }}</span>
+  <LayoutInline tag="fieldset" vertical-align="center" space="2">
+    <legend class="sr-only">Timer controls</legend>
+    <BaseControl
+      :icon="isPlaying ? 'pause' : 'play'"
+      @click="isPlaying ? $emit('pause') : $emit('play')"
+    >
+      {{ isPlaying ? 'Pause' : 'Play' }}
     </BaseControl>
     <span
       class="mx-1 h-6 border-l border-blue-400 dark:border-sky-400"
       role="separator"
     />
-    <BaseControl @click="$emit('skip')">
-      <BaseIcon name="fast-forward" />
-      <span class="sr-only">Skip</span>
-    </BaseControl>
-    <BaseControl @click="$emit('reset')">
-      <BaseIcon name="reload" />
-      <span class="sr-only">Reset</span>
-    </BaseControl>
+    <BaseControl icon="fast-forward" @click="$emit('skip')"> Skip </BaseControl>
+    <BaseControl icon="reload" @click="$emit('reset')"> Reset </BaseControl>
   </LayoutInline>
 </template>

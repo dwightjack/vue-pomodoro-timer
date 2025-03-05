@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, unref } from 'vue';
 import IntervalEditBox from '@/components/IntervalEditBox.vue';
-import BaseControl from '@/components/BaseControl.vue';
+import BaseButton from '@/components/BaseButton.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
@@ -74,18 +74,18 @@ watch(
         @delete="deleteInterval"
       />
       <LayoutInline :space="3" centered class="mt-2">
-        <BaseControl @click="addInterval">
+        <BaseButton variant="ghost" @click="addInterval">
           <BaseIcon name="add-outline" />
-          <span class="align-middle">Add</span>
-        </BaseControl>
-        <BaseControl @click="onCancel">
+          Add
+        </BaseButton>
+        <BaseButton variant="ghost" @click="onCancel">
           <BaseIcon name="close" />
-          <span class="align-middle">Cancel</span>
-        </BaseControl>
-        <BaseControl type="submit">
+          Cancel
+        </BaseButton>
+        <BaseButton variant="ghost" type="submit">
           <BaseIcon name="save-disk" />
-          <span class="align-middle">Save</span>
-        </BaseControl>
+          Save
+        </BaseButton>
       </LayoutInline>
     </LayoutStack>
   </details>

@@ -19,7 +19,11 @@ defineSlots<{ default?: () => unknown }>();
     aria-live="polite"
   >
     <slot />
-    <BaseButton @click="$emit('confirm')">yes</BaseButton>
-    <BaseButton @click="$emit('cancel')">dismiss</BaseButton>
+    <BaseButton variant="secondary" size="sm" @click="$emit('confirm')"
+      >yes</BaseButton
+    >
+    <BaseButton variant="secondary" size="sm" @click="$emit('cancel')"
+      >dismiss</BaseButton
+    >
   </div>
 </template>

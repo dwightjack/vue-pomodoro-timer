@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { string, bool, oneOfType, oneOf } from 'vue-types';
+type TagNames = keyof HTMLElementTagNameMap;
 defineProps({
-  tag: string().def('div'),
+  tag: string<TagNames>().def('div' as const),
   centered: bool().def(false),
   verticalAlign: oneOf(['start', 'stretch', 'end', 'center'] as const).def(
     'start',

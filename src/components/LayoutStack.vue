@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { string, bool, oneOfType } from 'vue-types';
+
+type TagNames = keyof HTMLElementTagNameMap;
+
 defineProps({
-  tag: string().def('div'),
+  tag: string<TagNames>().def('div'),
   centered: bool().def(false),
   space: oneOfType([String, Number]).def(4),
 });
