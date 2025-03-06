@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import TheContainer from '@/components/TheContainer.vue';
 import TheTimerList from '@/components/TheTimerList.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import TheControls from '@/components/TheControls.vue';
@@ -120,42 +119,49 @@ onMounted(checkNotifyPermission);
 </script>
 
 <template>
-  <div>
-    <TheGraphicTimer v-if="cycle.currentInterval" />
-    <TheNotificationBar>
-      <TransitionFadeSlide>
-        <BaseToast
-          v-if="notifyBarVisible"
-          controls
-          @cancel="notifyBar.cancel"
-          @confirm="notifyBar.confirm"
+  <TheGraphicTimer v-if="cycle.currentInterval" />
+  <TheNotificationBar>
+    <TransitionFadeSlide>
+      <BaseToast
+        v-if="notifyBarVisible"
+        controls
+        @cancel="notifyBar.cancel"
+        @confirm="notifyBar.confirm"
+      >
+        <p>Do you want to manage notification settings for this app?</p>
+      </BaseToast>
+    </TransitionFadeSlide>
+    <TransitionFadeSlide>
+      <BaseToast v-if="needRefresh">
+        <p>Application update available.</p>
+        <BaseButton
+          variant="secondary"
+          size="sm"
+          @click="updateServiceWorker()"
         >
-          <p>Do you want to manage notification settings for this app?</p>
-        </BaseToast>
-      </TransitionFadeSlide>
-      <TransitionFadeSlide>
-        <BaseToast v-if="needRefresh" role="alert">
-          <p>Application update available.</p>
-          <BaseButton @click="updateServiceWorker()"> Update </BaseButton>
-        </BaseToast>
-      </TransitionFadeSlide>
-    </TheNotificationBar>
-    <TheContainer>
-      <h1 class="sr-only">Pomodoro Timer</h1>
-      <LayoutStack centered>
-        <TheTimerList />
+          Update
+        </BaseButton>
+      </BaseToast>
+    </TransitionFadeSlide>
+  </TheNotificationBar>
+  <main
+    class="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-4 sm:px-8"
+  >
+    <h1 class="sr-only">Pomodoro Timer</h1>
+    <LayoutStack centered>
+      <TheTimerList />
 
-        <TheCycle />
-        <TheControls
-          :status="main.status"
-          @play="main.play"
-          @pause="main.pause"
-          @skip="skip"
-          @reset="reset"
-        />
-        <TheCycleEdit @save="saveChanges" @toggled="onEditToggle" />
-      </LayoutStack>
-    </TheContainer>
-    <TheLoader :visible="loading" message="Loading..." />
-  </div>
+      <TheCycle />
+      <TheControls
+        :status="main.status"
+        @play="main.play"
+        @pause="main.pause"
+        @skip="skip"
+        @reset="reset"
+      />
+      <TheCycleEdit @save="saveChanges" @toggled="onEditToggle" />
+    </LayoutStack>
+    <slot />
+  </main>
+  <TheLoader :visible="loading" message="Loading..." />
 </template>

@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { bool, oneOf } from 'vue-types';
+import { bool } from 'vue-types';
 import BaseButton from '@/components/BaseButton.vue';
 
 defineProps({
-  role: oneOf(['status', 'alert'] as const).def('status'),
   controls: bool().def(false),
 });
 defineEmits<{
@@ -13,17 +12,15 @@ defineEmits<{
 defineSlots<{ default?: () => unknown }>();
 </script>
 <template>
-  <div
-    class="flex items-center gap-2 bg-blue-600 p-2 text-sm text-white"
-    :role="role"
-    aria-live="polite"
-  >
+  <div class="flex items-center gap-2 bg-blue-600 p-2 text-sm text-white">
     <slot />
-    <BaseButton variant="secondary" size="sm" @click="$emit('confirm')"
-      >yes</BaseButton
-    >
-    <BaseButton variant="secondary" size="sm" @click="$emit('cancel')"
-      >dismiss</BaseButton
-    >
+    <template v-if="controls">
+      <BaseButton variant="secondary" size="sm" @click="$emit('confirm')"
+        >yes</BaseButton
+      >
+      <BaseButton variant="secondary" size="sm" @click="$emit('cancel')"
+        >dismiss</BaseButton
+      >
+    </template>
   </div>
 </template>
