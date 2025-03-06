@@ -13,7 +13,7 @@ import TransitionFadeSlide from '@/components/transitions/FadeSlide.vue';
 
 import { watch, onMounted } from 'vue';
 import { useRegisterSW } from 'virtual:pwa-register/vue';
-import { Status, Interval, IntervalType } from '@/types';
+import { Status, Interval } from '@/types';
 import { useMain } from '@/stores/main';
 import { useCycle } from '@/stores/cycle';
 import { useTicker } from '@/use/ticker';
@@ -21,16 +21,16 @@ import { useStorage } from '@/use/storage';
 import { useNotification } from '@/use/notification';
 import { useLoader } from '@/use/loader';
 import { useAsyncModal } from '@/use/asyncModal';
-import { setupNotifications, createInterval, ID_STORE } from './utils';
+import { setupNotifications } from './utils';
 
 const tickWorker = new Worker('/tick-worker.js');
 
 const { needRefresh, updateServiceWorker } = useRegisterSW();
 
 const { exec, loading } = useLoader();
-const intervalsStore = useStorage<Interval[]>('intervals', [
-  createInterval(IntervalType.Work, 45),
-]);
+// const intervalsStore = useStorage<Interval[]>('intervals', [
+//   createInterval(IntervalType.Work, 45),
+// ]);
 const permissionsStore = useStorage<{ notification?: boolean }>(
   'permissions',
   {},
@@ -60,7 +60,7 @@ async function saveChanges(newIntervals: Interval[]) {
   reset();
   main.editOpen = false;
   cycle.updateCycle(newIntervals);
-  exec(intervalsStore.save(newIntervals));
+  // exec(intervalsStore.save(newIntervals));
 }
 
 function onEditToggle(open: boolean) {
@@ -68,12 +68,12 @@ function onEditToggle(open: boolean) {
 }
 
 async function initialize() {
-  const storedIntervals = await exec(intervalsStore.load());
+  // const storedIntervals = await exec(intervalsStore.load());
   // we use a function to create unique IDs,
   // but we need to exclude IDs generate in previous sessions
   // and stored in local storage
-  ID_STORE.push(...storedIntervals.map(({ id }) => id));
-  cycle.updateCycle(storedIntervals);
+  // ID_STORE.push(...storedIntervals.map(({ id }) => id));
+  // cycle.updateCycle(storedIntervals);
 }
 
 async function checkNotifyPermission() {

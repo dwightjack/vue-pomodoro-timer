@@ -1,19 +1,35 @@
 import { defineStore } from 'pinia';
-import { Interval, Cycle } from '@/types';
+import { Interval, Cycle, IntervalType } from '@/types';
+import { uniqId } from '@/utils';
 
 export const useCycle = defineStore('cycle', {
   state: (): Cycle => ({
-    intervals: [],
-    current: -1,
+    intervals: [
+      {
+        type: IntervalType.Work,
+        duration: 45 * 60 * 100,
+        remaining: 0,
+        id: uniqId([]),
+      },
+    ],
+    current: 0,
   }),
 
   getters: {
-    currentInterval(): Interval {
-      return this.intervals[this.current];
-    },
+    currentInterval: (state) => state.intervals[state.current],
+    ids: (state) => state.intervals.map(({ id }) => id),
   },
 
   actions: {
+    createInterval() {
+      const id = uniqId(this.ids);
+      return {
+        type: IntervalType.Work,
+        duration: 0,
+        remaining: 0,
+        id,
+      };
+    },
     getCurrent() {
       return this.intervals[this.current];
     },
@@ -61,4 +77,5 @@ export const useCycle = defineStore('cycle', {
       this.resetCycle();
     },
   },
+  persist: true,
 });

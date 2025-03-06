@@ -5,6 +5,7 @@ export function useStorage<T>(key: string, defaultValue: T) {
       if (item !== null) {
         return JSON.parse(item) as T;
       }
+      localStorage.setItem(key, JSON.stringify(defaultValue));
       return defaultValue;
     } catch (e) {
       throw new Error(

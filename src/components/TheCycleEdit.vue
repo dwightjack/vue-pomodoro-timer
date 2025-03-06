@@ -33,7 +33,7 @@ function onCancel() {
 }
 
 function addInterval() {
-  intervalsRef.value = [...intervalsRef.value, createInterval()];
+  intervalsRef.value = [...intervalsRef.value, cycle.createInterval()];
 }
 
 watch(

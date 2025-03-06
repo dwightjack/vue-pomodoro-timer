@@ -7,6 +7,7 @@ const cycle = useCycle();
 <template>
   <TransitionGroup
     name="timer"
+    appear
     enter-active-class="transition-all duration-500 ease-in-out"
     leave-active-class="transition-all duration-500 ease-in-out"
     enter-from-class="translate-y-2 opacity-0"
