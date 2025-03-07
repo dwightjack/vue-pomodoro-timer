@@ -49,7 +49,7 @@ watch(
 <template>
   <component
     :is="icon"
-    class="inline-flex aspect-square w-[1em] items-center fill-current"
+    class="inline-flex aspect-square w-[1em] fill-current"
     aria-hidden="true"
   />
 </template>

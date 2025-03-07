@@ -59,20 +59,25 @@ function addInterval() {
     <LayoutStack
       v-show="open"
       tag="form"
-      space="2"
+      space="1"
       class="w-full rounded-lg border border-blue-200 bg-white px-4 py-2 dark:border-sky-400 dark:bg-stone-800"
       @submit.prevent="submit"
     >
-      <h2>Settings</h2>
-      <IntervalEditBox
-        v-for="interval in intervalsRef"
-        :id="interval.id"
-        :key="interval.id"
-        v-model:type="interval.type"
-        v-model:duration="interval.duration"
-        :cancellable="cancellable"
-        @delete="deleteInterval"
-      />
+      <h2 class="self-center text-lg">
+        <BaseIcon name="wrench" class="align-middle" />
+        Settings
+      </h2>
+      <div class="space-y-1 px-4 py-2">
+        <IntervalEditBox
+          v-for="interval in intervalsRef"
+          :id="interval.id"
+          :key="interval.id"
+          v-model:type="interval.type"
+          v-model:duration="interval.duration"
+          :cancellable="cancellable"
+          @delete="deleteInterval"
+        />
+      </div>
       <LayoutInline :space="3" centered class="mt-2">
         <BaseButton variant="ghost" @click="addInterval">
           <BaseIcon name="add-outline" />
