@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { string } from 'vue-types';
+import { bool, string } from 'vue-types';
 import BaseIcon from '@/components/BaseIcon.vue';
 import BaseControl from '@/components/BaseControl.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
@@ -18,6 +18,7 @@ const duration = defineModel<number>('duration', {
 
 defineProps({
   id: string().isRequired,
+  cancellable: bool().def(false),
 });
 
 defineEmits<{
@@ -58,7 +59,11 @@ defineEmits<{
         <span class="sr-only">Duration</span>
         <span class="text-sm">mins</span>
       </label>
-      <BaseControl icon="trash" @click="$emit('delete', id)">
+      <BaseControl
+        :disabled="!cancellable"
+        icon="trash"
+        @click="$emit('delete', id)"
+      >
         Delete
       </BaseControl>
     </LayoutInline>

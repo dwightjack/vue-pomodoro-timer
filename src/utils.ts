@@ -1,10 +1,16 @@
 import { uid } from 'uid';
 import { IntervalType } from '@/types';
+import { unref, type MaybeRef } from 'vue';
 
 export const toString = (v: number) => String(v).padStart(2, '0');
 export const getMinutes = (v: number) => Math.floor(v / 1000 / 60);
 export const getSeconds = (v: number) => Math.floor((v / 1000) % 60);
 export const minutesToMs = (v: number) => v * 60 * 1000;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const clone = <T extends MaybeRef<any[]>>(input: T) => [
+  ...unref(input).map((i) => ({ ...i })),
+];
 
 export function uniqId(existing: string[]) {
   let id = uid();

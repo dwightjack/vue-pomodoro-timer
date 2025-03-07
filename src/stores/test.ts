@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, toValue, watch } from 'vue';
 import { Interval, IntervalType } from '@/types';
 import { useStorage } from '@vueuse/core';
 import { uniqId } from '@/utils';
 
 export const useCycle = defineStore('cycle', () => {
-  const intervals = useStorage<Interval[]>('intervals', [
+  const intervalsStorage = useStorage<Interval[]>('intervals', [
     {
       type: IntervalType.Work,
       duration: 45 * 60 * 1000,
@@ -13,7 +13,7 @@ export const useCycle = defineStore('cycle', () => {
     },
   ]);
 
-  const countdowns = ref<number[]>([]);
+  const intervals = ref<Interval[]>(toValue(intervalsStorage));
   const current = ref(0);
 
   const currentInterval = computed(() => intervals.value[current.value]);
@@ -27,32 +27,29 @@ export const useCycle = defineStore('cycle', () => {
     if (next >= intervals.value.length) {
       next = 0;
     }
+    const $next = intervals.value[next];
     current.value = next;
+    $next.remaining = $next.duration;
   }
 
-  function toCountdowns() {
-    countdowns.value = intervals.value.map((i) => i.duration);
-  }
-
-  watch(() => intervals.value, toCountdowns, { immediate: true });
   watch(
-    () => current.value,
-    (next) => {
-      countdowns.value[next] = intervals.value[next].duration;
+    () => intervalsStorage.value,
+    () => {
+      intervals.value = toValue(intervalsStorage);
     },
   );
 
   return {
-    countdowns,
+    intervals,
     current,
     currentInterval,
-    intervals,
     ids,
     createInterval() {
       const id = uniqId(ids.value);
       return {
         type: IntervalType.Work,
         duration: 0,
+        remaining: 0,
         id,
       };
     },
@@ -66,19 +63,21 @@ export const useCycle = defineStore('cycle', () => {
     },
 
     resetCycle() {
-      toCountdowns();
       current.value = 0;
+      intervals.value.forEach((int) => {
+        int.remaining = int.duration;
+      });
     },
     countDown(ms = 1000) {
-      const tick = countdowns.value[current.value];
-      if (tick === undefined) {
+      const interval = intervals.value[current.value];
+      if (interval?.remaining === undefined) {
         return;
       }
-      if (tick <= 0) {
+      if (interval.remaining <= 0) {
         toInterval(current.value + 1);
         return;
       }
-      countdowns.value[current.value] = Math.max(0, tick - ms);
+      interval.remaining = Math.max(0, interval.remaining - ms);
     },
     updateCycle(updates: Interval[]) {
       // save intervals and reset everything

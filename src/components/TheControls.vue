@@ -4,6 +4,9 @@ import { oneOf } from 'vue-types';
 import BaseControl from '@/components/BaseControl.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
 import { Status } from '@/types';
+import { useMain } from '@/stores/main';
+
+const main = useMain();
 
 const props = defineProps({
   status: oneOf(Object.values(Status)).def(Status.Pause),
@@ -14,6 +17,7 @@ defineEmits<{
   pause: [];
   skip: [];
   reset: [];
+  settings: [];
 }>();
 
 const isPlaying = computed(() => props.status === Status.Play);
@@ -28,10 +32,17 @@ const isPlaying = computed(() => props.status === Status.Play);
       {{ isPlaying ? 'Pause' : 'Play' }}
     </BaseControl>
     <span
-      class="mx-1 h-6 border-l border-blue-400 dark:border-sky-400"
+      class="-mx-1 h-6 border-l border-blue-400 dark:border-sky-400"
       role="separator"
     />
     <BaseControl icon="fast-forward" @click="$emit('skip')"> Skip </BaseControl>
     <BaseControl icon="reload" @click="$emit('reset')"> Reset </BaseControl>
+    <BaseControl
+      icon="wrench"
+      :pressed="main.editOpen"
+      @click="main.toggleEdit()"
+    >
+      Settings
+    </BaseControl>
   </LayoutInline>
 </template>

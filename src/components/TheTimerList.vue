@@ -19,7 +19,7 @@ const cycle = useCycle();
       v-for="(interval, i) in cycle.intervals"
       v-show="i === cycle.current"
       :key="i"
-      :duration="interval.remaining"
+      :duration="cycle.countdowns[i]"
       :type="interval.type"
       class="will-change-transform"
     />
