@@ -29,7 +29,7 @@ const props = defineProps({
 
 const canvasRef = ref<HTMLCanvasElement>();
 const remaining = computed(
-  () => cycle.currentInterval.remaining ?? cycle.currentInterval.duration,
+  () => cycle.currentCountdown ?? cycle.currentInterval.duration,
 );
 const minutes = ref<number>(currentMinute(remaining.value));
 const colorType = computed(() =>

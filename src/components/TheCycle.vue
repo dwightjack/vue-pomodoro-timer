@@ -7,7 +7,7 @@ const cycle = useCycle();
 <template>
   <div>
     <h2 class="sr-only">Intervals</h2>
-    <ul class="flex flex-wrap justify-center items-center gap-1">
+    <ul class="flex flex-wrap items-center justify-center gap-1">
       <IntervalSquare
         v-for="(interval, i) in cycle.intervals"
         :key="i"
