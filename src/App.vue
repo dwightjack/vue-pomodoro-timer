@@ -51,12 +51,7 @@ function reset() {
 
 async function saveChanges(newIntervals: Interval[]) {
   reset();
-  main.editOpen = false;
   cycle.updateCycle(newIntervals);
-}
-
-function onEditToggle(open: boolean) {
-  main.editOpen = open;
 }
 
 async function checkNotifyPermission() {
@@ -146,7 +141,7 @@ onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
       <TheCycleEdit
         :open="main.editOpen"
         @save="saveChanges"
-        @toggled="onEditToggle"
+        @toggled="main.toggleEdit"
       />
     </LayoutStack>
     <slot />

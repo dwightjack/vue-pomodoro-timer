@@ -29,43 +29,39 @@ function deleteInterval(deleteId?: string) {
   intervalsRef.value = intervalsRef.value.filter(({ id }) => deleteId !== id);
 }
 
-function onSubmit() {
+function submit() {
   emit('save', clone(intervalsRef.value));
+  close();
 }
 
-function onCancel() {
-  intervalsRef.value = clone(cycle.intervals);
+function close() {
   emit('toggled', false);
 }
 
-function onToggle(toggle: boolean) {
-  emit('toggled', toggle);
-  if (toggle === true) {
-    intervalsRef.value = clone(cycle.intervals);
-    dialog.value?.showModal();
-    return;
-  }
-  dialog.value?.close();
-}
-
-watch(() => props.open, onToggle);
+watch(
+  () => props.open,
+  (open: boolean) => {
+    if (open === true) {
+      intervalsRef.value = clone(cycle.intervals);
+      dialog.value?.showModal();
+      return;
+    }
+    dialog.value?.close();
+  },
+);
 
 function addInterval() {
   intervalsRef.value.push(cycle.createInterval());
 }
 </script>
 <template>
-  <dialog
-    ref="dialog"
-    class="m-auto bg-transparent"
-    @close="() => onToggle(false)"
-  >
+  <dialog ref="dialog" class="m-auto bg-transparent" @close="close">
     <LayoutStack
       v-show="open"
       tag="form"
       space="2"
       class="w-full rounded-lg border border-blue-200 bg-white px-4 py-2 dark:border-sky-400 dark:bg-stone-800"
-      @submit.prevent="onSubmit"
+      @submit.prevent="submit"
     >
       <h2>Settings</h2>
       <IntervalEditBox
@@ -82,7 +78,7 @@ function addInterval() {
           <BaseIcon name="add-outline" />
           Add
         </BaseButton>
-        <BaseButton variant="ghost" @click="onCancel">
+        <BaseButton variant="ghost" @click="close">
           <BaseIcon name="close" />
           Cancel
         </BaseButton>
