@@ -17,6 +17,7 @@ export const useCycle = defineStore('cycle', () => {
   const current = ref(0);
 
   const currentInterval = computed(() => intervals.value[current.value]);
+  const currentCountdown = computed(() => countdowns.value[current.value]);
   const ids = computed(() => intervals.value.map(({ id }) => id));
 
   function toInterval(index: number) {
@@ -46,6 +47,7 @@ export const useCycle = defineStore('cycle', () => {
     countdowns,
     current,
     currentInterval,
+    currentCountdown,
     intervals,
     ids,
     createInterval() {
