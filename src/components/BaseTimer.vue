@@ -6,6 +6,7 @@ import {
   getIntervalTypeColor,
   getMinutes,
   getSeconds,
+  toSpacedString,
 } from '@/utils';
 import { IntervalType } from '@/types';
 
@@ -16,9 +17,15 @@ const { type, duration } = defineProps({
 
 const time = computed(() => formatTime(duration));
 const label = computed(() => {
-  const mins = getMinutes(duration);
+  let mins = getMinutes(duration);
   const secs = getSeconds(duration);
-  return `${mins} minutes ${secs ? secs + ' seconds ' : ''}left`;
+  if (mins === 0 && secs === 0) {
+    return `${toSpacedString(type)}: time out`;
+  }
+  if (mins === 0) {
+    return `${toSpacedString(type)}: less than 1 minute left`;
+  }
+  return `${toSpacedString(type)}: ${mins + 1} minutes left`;
 });
 
 const classes = computed(() => getIntervalTypeColor(type as IntervalType));
@@ -26,10 +33,12 @@ const classes = computed(() => getIntervalTypeColor(type as IntervalType));
 <template>
   <div
     role="timer"
+    aria-live="polite"
+    aria-atomic="true"
     class="rounded-lg border-4 px-8 py-4 text-4xl tabular-nums"
     :class="classes"
-    :aria-label="label"
   >
-    {{ time }}
+    <span aria-hidden="true">{{ time }}</span>
+    <span class="sr-only">{{ label }}</span>
   </div>
 </template>
