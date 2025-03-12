@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import BaseTimer from '@/components/BaseTimer.vue';
 import { useCycle } from '@/stores/cycle';
+import { computed } from 'vue';
 
 const cycle = useCycle();
+const currentCycle = computed(() => cycle.intervals[cycle.current]);
+const countdown = computed(() => cycle.countdowns[cycle.current]);
 </script>
 <template>
   <TransitionGroup
@@ -16,11 +19,10 @@ const cycle = useCycle();
     class="grid-overlap grid"
   >
     <BaseTimer
-      v-for="(interval, i) in cycle.intervals"
-      v-show="i === cycle.current"
-      :key="interval.id"
-      :duration="cycle.countdowns[i]"
-      :type="interval.type"
+      v-if="currentCycle"
+      :key="currentCycle.id"
+      :duration="countdown"
+      :type="currentCycle.type"
       class="will-change-transform"
     />
   </TransitionGroup>

@@ -55,18 +55,22 @@ watch(
 );
 </script>
 <template>
-  <dialog ref="dialog" class="m-auto bg-transparent" @close="close">
+  <dialog
+    ref="dialog"
+    class="m-auto translate-y-2 bg-transparent opacity-0 transition-all transition-discrete duration-500 backdrop:opacity-0 backdrop:transition-all backdrop:transition-discrete backdrop:duration-500 open:translate-0 open:opacity-100 open:backdrop:opacity-100 starting:open:translate-y-2 starting:open:opacity-0 starting:open:backdrop:opacity-0"
+    @close="close"
+  >
     <LayoutStack
-      v-show="open"
       tag="form"
+      method="dialog"
       space="1"
       class="w-full rounded-lg border border-blue-200 bg-white px-4 py-2 dark:border-sky-400 dark:bg-stone-800"
-      @submit.prevent="submit"
+      @submit="submit"
     >
-      <h2 class="self-center text-lg">
+      <h1 class="self-center text-lg">
         <BaseIcon name="wrench" class="align-middle" />
         Settings
-      </h2>
+      </h1>
       <div class="space-y-1 px-4 py-2">
         <IntervalEditBox
           v-for="interval in intervalsRef"
