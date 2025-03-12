@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useTemplateRef, watch } from 'vue';
+import { computed, ref, useId, useTemplateRef, watch } from 'vue';
 import IntervalEditBox from '@/components/IntervalEditBox.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
@@ -11,6 +11,7 @@ import { bool } from 'vue-types';
 import { clone } from '@/utils';
 
 const cycle = useCycle();
+const id = useId();
 
 const { open } = defineProps({
   open: bool().isRequired,
@@ -57,6 +58,7 @@ watch(
 <template>
   <dialog
     ref="dialog"
+    :aria-labelledby="id + `-title`"
     class="m-auto translate-y-2 bg-transparent opacity-0 transition-all transition-discrete duration-500 backdrop:opacity-0 backdrop:transition-all backdrop:transition-discrete backdrop:duration-500 open:translate-0 open:opacity-100 open:backdrop:opacity-100 starting:open:translate-y-2 starting:open:opacity-0 starting:open:backdrop:opacity-0"
     @close="close"
   >
@@ -67,7 +69,7 @@ watch(
       class="w-full rounded-lg border border-blue-200 bg-white px-4 py-2 dark:border-sky-400 dark:bg-stone-800"
       @submit="submit"
     >
-      <h1 class="self-center text-lg">
+      <h1 :id="id + `-title`" class="self-center text-lg">
         <BaseIcon name="wrench" class="align-middle" />
         Settings
       </h1>
