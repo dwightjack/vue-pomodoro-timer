@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref, useTemplateRef, watch } from 'vue';
 import IntervalEditBox from '@/components/IntervalEditBox.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
@@ -41,7 +41,7 @@ function submit() {
   close();
 }
 
-const dialog = ref<HTMLDialogElement>();
+const dialog = useTemplateRef('dialog');
 watch(
   () => open,
   (open: boolean) => {

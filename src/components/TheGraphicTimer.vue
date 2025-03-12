@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { watch, ref, onMounted, onUnmounted, computed } from 'vue';
+import {
+  watch,
+  ref,
+  onMounted,
+  onUnmounted,
+  computed,
+  useTemplateRef,
+} from 'vue';
 import { number } from 'vue-types';
 import { getIntervalTypeColor } from '@/utils';
 import { useCycle } from '@/stores/cycle';
@@ -27,7 +34,7 @@ const { size } = defineProps({
   size: number().def(50),
 });
 
-const canvasRef = ref<HTMLCanvasElement>();
+const canvasRef = useTemplateRef('canvasRef');
 const remaining = computed(
   () => cycle.currentCountdown ?? cycle.currentInterval.duration,
 );
