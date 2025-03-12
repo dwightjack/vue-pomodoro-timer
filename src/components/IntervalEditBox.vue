@@ -34,7 +34,7 @@ defineEmits<{
           <template v-for="(value, name) in IntervalType" :key="value">
             <option
               v-if="value !== IntervalType.None"
-              :value="value"
+              :value
               :selected="value === type"
             >
               {{ name }}

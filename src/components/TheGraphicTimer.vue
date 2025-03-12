@@ -23,7 +23,7 @@ function drawCircle(
   ctx.fill();
 }
 
-const props = defineProps({
+const { size } = defineProps({
   size: number().def(50),
 });
 
@@ -49,15 +49,15 @@ function renderCanvas() {
   if (!ctx) {
     return;
   }
-  const size = props.size / 2;
+  const center = size / 2;
   const color = window.getComputedStyle(canvas).getPropertyValue('color');
 
   const start = Math.PI / -2;
   const end = start + 2 * Math.PI * percent;
-  const radius = size;
+  const radius = center;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawCircle(ctx, color, size, radius);
-  drawCircle(ctx, '#fff', size, radius - size / 10, start, end);
+  drawCircle(ctx, color, center, radius);
+  drawCircle(ctx, '#fff', center, radius - center / 10, start, end);
 
   const favicons = document.querySelectorAll<HTMLLinkElement>(
     'link[rel="icon"][type="image/png"]',

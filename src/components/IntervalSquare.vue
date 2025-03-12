@@ -4,34 +4,32 @@ import { oneOf, integer, bool } from 'vue-types';
 import { formatTime, formatTimeDuration, toTitleCase } from '@/utils';
 import { IntervalType } from '@/types';
 
-const props = defineProps({
+const { type, duration } = defineProps({
   type: oneOf(Object.values(IntervalType)).isRequired,
   duration: integer().def(0),
   current: bool().def(false),
 });
 
 const abbr = computed(() =>
-  props.type.replace(/(\w).+?($|-)/g, (_: string, v: string) =>
-    v.toUpperCase(),
-  ),
+  type.replace(/(\w).+?($|-)/g, (_: string, v: string) => v.toUpperCase()),
 );
 
 const classes = computed(() => {
-  if (props.type === IntervalType.Work) {
+  if (type === IntervalType.Work) {
     return 'text-amber-300';
   }
-  if (props.type === IntervalType.ShortBreak) {
+  if (type === IntervalType.ShortBreak) {
     return 'text-green-300';
   }
-  if (props.type === IntervalType.LongBreak) {
+  if (type === IntervalType.LongBreak) {
     return 'text-green-300';
   }
   return 'text-blue-100';
 });
 
-const durationFormatted = computed(() => formatTime(props.duration));
-const durationAttr = computed(() => formatTimeDuration(props.duration));
-const typeFormatted = computed(() => toTitleCase(props.type));
+const durationFormatted = computed(() => formatTime(duration));
+const durationAttr = computed(() => formatTimeDuration(duration));
+const typeFormatted = computed(() => toTitleCase(type));
 </script>
 <template>
   <li

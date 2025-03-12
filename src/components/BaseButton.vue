@@ -9,7 +9,7 @@ defineSlots<{ default?: () => unknown }>();
 </script>
 <template>
   <button
-    :type="type"
+    :type
     class="flex items-center gap-x-2.5 rounded-md transition-colors duration-75"
     :class="{
       'bg-blue-700 text-white hover:bg-blue-800': variant === 'primary',

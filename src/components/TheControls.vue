@@ -6,12 +6,6 @@ import LayoutInline from '@/components/LayoutInline.vue';
 import { Status } from '@/types';
 import { useMain } from '@/stores/main';
 
-const main = useMain();
-
-const props = defineProps({
-  status: oneOf(Object.values(Status)).def(Status.Pause),
-});
-
 defineEmits<{
   play: [];
   pause: [];
@@ -20,7 +14,12 @@ defineEmits<{
   settings: [];
 }>();
 
-const isPlaying = computed(() => props.status === Status.Play);
+const main = useMain();
+
+const { status } = defineProps({
+  status: oneOf(Object.values(Status)).def(Status.Pause),
+});
+const isPlaying = computed(() => status === Status.Play);
 </script>
 <template>
   <LayoutInline tag="fieldset" vertical-align="center" space="2">

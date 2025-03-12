@@ -9,21 +9,19 @@ import {
 } from '@/utils';
 import { IntervalType } from '@/types';
 
-const props = defineProps({
+const { type, duration } = defineProps({
   type: oneOf(['none', ...Object.values(IntervalType)] as const).def('none'),
   duration: integer().def(0),
 });
 
-const time = computed(() => formatTime(props.duration));
+const time = computed(() => formatTime(duration));
 const label = computed(() => {
-  const mins = getMinutes(props.duration);
-  const secs = getSeconds(props.duration);
+  const mins = getMinutes(duration);
+  const secs = getSeconds(duration);
   return `${mins} minutes ${secs ? secs + ' seconds ' : ''}left`;
 });
 
-const classes = computed(() =>
-  getIntervalTypeColor(props.type as IntervalType),
-);
+const classes = computed(() => getIntervalTypeColor(type as IntervalType));
 </script>
 <template>
   <div

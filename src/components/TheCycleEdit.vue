@@ -11,9 +11,8 @@ import { bool } from 'vue-types';
 import { clone } from '@/utils';
 
 const cycle = useCycle();
-const dialog = ref<HTMLDialogElement>();
 
-const props = defineProps({
+const { open } = defineProps({
   open: bool().isRequired,
 });
 
@@ -22,11 +21,19 @@ const emit = defineEmits<{
   save: [intervals: Interval[]];
 }>();
 
-const intervalsRef = ref<Interval[]>([]);
 const cancellable = computed(() => intervalsRef.value.length > 1);
+
+const intervalsRef = ref<Interval[]>([]);
 
 function deleteInterval(deleteId?: string) {
   intervalsRef.value = intervalsRef.value.filter(({ id }) => deleteId !== id);
+}
+function addInterval() {
+  intervalsRef.value.push(cycle.createInterval());
+}
+
+function close() {
+  emit('toggled', false);
 }
 
 function submit() {
@@ -34,12 +41,9 @@ function submit() {
   close();
 }
 
-function close() {
-  emit('toggled', false);
-}
-
+const dialog = ref<HTMLDialogElement>();
 watch(
-  () => props.open,
+  () => open,
   (open: boolean) => {
     if (open === true) {
       intervalsRef.value = clone(cycle.intervals);
@@ -49,10 +53,6 @@ watch(
     dialog.value?.close();
   },
 );
-
-function addInterval() {
-  intervalsRef.value.push(cycle.createInterval());
-}
 </script>
 <template>
   <dialog ref="dialog" class="m-auto bg-transparent" @close="close">

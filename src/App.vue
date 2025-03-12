@@ -4,7 +4,6 @@ import LayoutStack from '@/components/LayoutStack.vue';
 import TheControls from '@/components/TheControls.vue';
 import TheCycle from '@/components/TheCycle.vue';
 import TheCycleEdit from '@/components/TheCycleEdit.vue';
-import TheNotificationBar from '@/components/TheNotificationBar.vue';
 import BaseToast from '@/components/BaseToast.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import TheGraphicTimer from '@/components/TheGraphicTimer.vue';
@@ -98,7 +97,7 @@ onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
 
 <template>
   <TheGraphicTimer v-if="cycle.currentInterval" />
-  <TheNotificationBar>
+  <div class="fixed inset-x-0 top-0 divide-y divide-blue-100" role="status">
     <TransitionFadeSlide>
       <BaseToast
         v-if="notifyBarVisible"
@@ -121,7 +120,7 @@ onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
         </BaseButton>
       </BaseToast>
     </TransitionFadeSlide>
-  </TheNotificationBar>
+  </div>
   <main
     class="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-4 sm:px-8"
   >

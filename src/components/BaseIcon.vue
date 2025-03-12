@@ -24,20 +24,20 @@ const icons = import.meta.glob<{ default: Component }>(
   },
 );
 
-const props = defineProps({
+const { name } = defineProps({
   name: oneOf(iconList).isRequired,
 });
 
 const icon = shallowRef<Component>();
 
 watch(
-  () => props.name,
-  async (name) => {
-    if (!name) {
+  () => name,
+  async (iconName) => {
+    if (!iconName) {
       icon.value = undefined;
     }
     try {
-      icon.value = await icons[`../assets/zondicons/${name}.svg`]();
+      icon.value = await icons[`../assets/zondicons/${iconName}.svg`]();
     } catch (e) {
       console.error(e);
       icon.value = undefined;
