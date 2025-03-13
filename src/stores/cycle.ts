@@ -4,19 +4,14 @@ import { Interval, IntervalType } from '@/types';
 import { useStorage } from '@vueuse/core';
 import { uniqId } from '@/utils';
 
-const initialIntervals = () => [
-  {
-    type: IntervalType.Work,
-    duration: 45 * 60 * 1000,
-    id: uniqId([]),
-  },
-];
-
 export const useCycle = defineStore('cycle', () => {
-  const intervals =
-    import.meta.env.MODE !== 'test'
-      ? useStorage<Interval[]>('intervals', initialIntervals())
-      : ref<Interval[]>(initialIntervals());
+  const intervals = useStorage<Interval[]>('intervals', [
+    {
+      type: IntervalType.Work,
+      duration: 45 * 60 * 1000,
+      id: uniqId([]),
+    },
+  ]);
 
   const countdowns = ref<number[]>([]);
   const current = ref(0);
