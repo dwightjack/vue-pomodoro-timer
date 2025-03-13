@@ -5,10 +5,12 @@
   "description": "A configurable pomodoro-like timer",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 8888",
     "build": "vue-tsc --noEmit && vite build",
     "lint": "eslint 'src/**/*.*'",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "dev:test": "vite dev --port 8888 --mode=test",
+    "test": ""
   },
   "packageManager": "pnpm@9.15.6",
   "engines": {
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.20.0",
+    "@playwright/test": "^1.51.0",
     "@tailwindcss/vite": "4.0.9",
     "@types/node": "22.13.7",
     "@vitejs/plugin-vue": "5.2.1",
