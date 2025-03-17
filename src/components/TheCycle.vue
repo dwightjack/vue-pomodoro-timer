@@ -8,7 +8,7 @@ const id = useId();
 </script>
 <template>
   <div>
-    <h2 :id="id + '-cycle'" aria-hidden="true">Intervals</h2>
+    <h2 :id="id + '-cycle'" aria-hidden="true" class="sr-only">Intervals</h2>
     <ul
       class="flex flex-wrap items-center justify-center gap-1"
       :aria-labelledby="id + '-cycle'"

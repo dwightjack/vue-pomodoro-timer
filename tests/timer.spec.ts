@@ -1,42 +1,28 @@
-import { test, expect } from './fixtures/app';
-import { uid } from 'uid';
+import { test, expect, mockInterval } from './fixtures/app';
 import { IntervalType } from '../src/types';
-
-const mockInterval = (type: IntervalType, duration: number) => ({
-  type,
-  duration: duration * 60 * 1000,
-  id: uid(),
-});
 
 test.describe('initial state', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
-  test('default timer', async ({ appPage }) => {
-    await expect(appPage.timer).toContainText('45:00');
+  test('default timer', async ({ queries }) => {
+    await expect(queries.timer).toContainText('45:00');
   });
-  test('default timer - accessible name', async ({ appPage }) => {
-    await expect(appPage.timer).toContainText('45 minutes left');
+  test('default timer - accessible name', async ({ queries }) => {
+    await expect(queries.timer).toContainText('45 minutes left');
   });
-  test('cycle list', async ({ appPage }) => {
-    await expect(appPage.list.getByRole('listitem')).toHaveCount(1);
-    await expect(appPage.list.getByRole('listitem')).toContainText('W');
-    await expect(appPage.list.getByRole('listitem')).toContainText('45:00');
+  test('cycle list', async ({ queries }) => {
+    const list = queries.getIntervalList();
+    await expect(list).toHaveCount(1);
+    await expect(list.first()).toContainText('W');
+    await expect(list.first()).toContainText('45:00');
   });
 
-  test('controls', async ({ appPage }) => {
-    await expect(
-      appPage.controls.getByRole('button', { name: 'Play' }),
-    ).toBeVisible();
-    await expect(
-      appPage.controls.getByRole('button', { name: 'Skip' }),
-    ).toBeVisible();
-    await expect(
-      appPage.controls.getByRole('button', { name: 'Reset' }),
-    ).toBeVisible();
-    await expect(
-      appPage.controls.getByRole('button', { name: 'Settings' }),
-    ).toBeVisible();
+  test('controls', async ({ queries }) => {
+    await expect(queries.getControl('Play')).toBeVisible();
+    await expect(queries.getControl('Skip')).toBeVisible();
+    await expect(queries.getControl('Reset')).toBeVisible();
+    await expect(queries.getControl('Settings')).toBeVisible();
   });
 });
 
@@ -49,74 +35,62 @@ test.describe('functionality', () => {
     await page.goto('/');
   });
 
-  test('list of two intervals', async ({ appPage }) => {
-    await expect(appPage.list.getByRole('listitem')).toHaveCount(2);
+  test('list of two intervals', async ({ queries }) => {
+    await expect(queries.getIntervalList()).toHaveCount(2);
   });
 
-  test('play', async ({ appPage }) => {
-    await appPage.controls.getByRole('button', { name: 'Play' }).click();
+  test('play', async ({ queries }) => {
+    await queries.getControl('Play').click();
 
-    await expect(
-      appPage.controls.getByRole('button', { name: 'Play' }),
-    ).not.toBeVisible();
-    await expect(
-      appPage.controls.getByRole('button', { name: 'Pause' }),
-    ).toBeVisible();
+    await expect(queries.getControl('Play')).not.toBeVisible();
+    await expect(queries.getControl('Pause')).toBeVisible();
   });
 
-  test('pause', async ({ appPage }) => {
-    await appPage.controls.getByRole('button', { name: 'Play' }).click();
+  test('pause', async ({ queries }) => {
+    await queries.getControl('Play').click();
 
-    await expect(
-      appPage.controls.getByRole('button', { name: 'Play' }),
-    ).not.toBeVisible();
-    await appPage.controls.getByRole('button', { name: 'Pause' }).click();
-    await expect(
-      appPage.controls.getByRole('button', { name: 'Play' }),
-    ).toBeVisible();
+    await expect(queries.getControl('Play')).not.toBeVisible();
+    await queries.getControl('Pause').click();
+    await expect(queries.getControl('Play')).toBeVisible();
   });
 
-  test('skip', async ({ appPage }) => {
-    await expect(appPage.timer).toContainText('01:00');
+  test('skip', async ({ queries, page }) => {
+    await expect(queries.timer).toContainText('01:00');
 
-    await appPage.controls.getByRole('button', { name: 'Skip' }).click();
-    await appPage.page.waitForTimeout(700);
+    await queries.getControl('Skip').click();
+    await page.waitForTimeout(700);
 
-    await expect(appPage.timer).toContainText('02:00');
+    await expect(queries.timer).toContainText('02:00');
   });
 
-  test('skip cycle', async ({ appPage }) => {
-    await expect(appPage.timer).toContainText('01:00');
+  test('skip cycle', async ({ queries, page }) => {
+    await expect(queries.timer).toContainText('01:00');
 
-    await appPage.controls.getByRole('button', { name: 'Skip' }).click();
-    await appPage.page.waitForTimeout(700);
+    await queries.getControl('Skip').click();
+    await page.waitForTimeout(700);
 
-    await expect(appPage.timer).toContainText('02:00');
+    await expect(queries.timer).toContainText('02:00');
 
-    await appPage.controls.getByRole('button', { name: 'Skip' }).click();
-    await appPage.page.waitForTimeout(700);
+    await queries.getControl('Skip').click();
+    await page.waitForTimeout(700);
 
-    await expect(appPage.timer).toContainText('01:00');
+    await expect(queries.timer).toContainText('01:00');
   });
 
-  test('skip when paused', async ({ appPage }) => {
-    await appPage.controls.getByRole('button', { name: 'Skip' }).click();
-    await appPage.page.waitForTimeout(700);
+  test('skip when paused', async ({ queries, page }) => {
+    await queries.getControl('Skip').click();
+    await page.waitForTimeout(700);
 
-    await expect(appPage.timer).toContainText('02:00');
-    await expect(
-      appPage.controls.getByRole('button', { name: 'Play' }),
-    ).toBeVisible();
+    await expect(queries.timer).toContainText('02:00');
+    await expect(queries.getControl('Play')).toBeVisible();
   });
 
-  test('skip when playing', async ({ appPage }) => {
-    await appPage.controls.getByRole('button', { name: 'Play' }).click();
-    await appPage.controls.getByRole('button', { name: 'Skip' }).click();
-    await appPage.page.waitForTimeout(700);
+  test('skip when playing', async ({ queries, page }) => {
+    await queries.getControl('Play').click();
+    await queries.getControl('Skip').click();
+    await page.waitForTimeout(700);
 
-    await expect(appPage.timer).toContainText('02:00');
-    await expect(
-      appPage.controls.getByRole('button', { name: 'Pause' }),
-    ).toBeVisible();
+    await expect(queries.timer).toContainText('02:00');
+    await expect(queries.getControl('Pause')).toBeVisible();
   });
 });
