@@ -25,7 +25,7 @@ const label = computed(() => {
   if (mins === 0) {
     return `${toSpacedString(type)}: less than 1 minute left`;
   }
-  return `${toSpacedString(type)}: ${mins + 1} minutes left`;
+  return `${toSpacedString(type)}: ${mins + (secs === 0 ? 0 : 1)} minutes left`;
 });
 
 const classes = computed(() => getIntervalTypeColor(type as IntervalType));
