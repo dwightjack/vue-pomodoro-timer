@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { string, bool, oneOfType } from 'vue-types';
+
+type TagNames = keyof HTMLElementTagNameMap;
+
 defineProps({
-  tag: string().def('div'),
+  tag: string<TagNames>().def('div'),
   centered: bool().def(false),
   space: oneOfType([String, Number]).def(4),
 });
@@ -10,13 +13,20 @@ defineSlots<{ default?: () => unknown }>();
 <template>
   <component
     :is="tag"
-    class="flex flex-col"
+    class="gap flex flex-col"
     :class="{
       'items-center': centered,
       'items-start': !centered,
-      [`gap-y-${space}`]: space,
+    }"
+    :style="{
+      '--s': space !== 4 ? space : undefined,
     }"
   >
     <slot />
   </component>
 </template>
+<style scoped>
+.gap {
+  row-gap: calc(var(--spacing) * var(--s, 4));
+}
+</style>

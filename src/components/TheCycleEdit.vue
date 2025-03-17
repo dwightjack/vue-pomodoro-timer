@@ -1,92 +1,103 @@
 <script setup lang="ts">
-import { ref, watch, unref } from 'vue';
+import { computed, ref, useId, useTemplateRef, watch } from 'vue';
 import IntervalEditBox from '@/components/IntervalEditBox.vue';
-import BaseControl from '@/components/BaseControl.vue';
+import BaseButton from '@/components/BaseButton.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
-import { createInterval } from '@/utils';
 import { useCycle } from '@/stores/cycle';
-import { useMain } from '@/stores/main';
 import type { Interval } from '@/types';
+import { bool } from 'vue-types';
+import { clone } from '@/utils';
 
 const cycle = useCycle();
-const main = useMain();
+const id = useId();
+
+const { open } = defineProps({
+  open: bool().isRequired,
+});
 
 const emit = defineEmits<{
   toggled: [open: boolean];
   save: [intervals: Interval[]];
 }>();
-const intervalsRef = ref<Interval[]>(cycle.intervals.map((i) => ({ ...i })));
+
+const cancellable = computed(() => intervalsRef.value.length > 1);
+
+const intervalsRef = ref<Interval[]>([]);
 
 function deleteInterval(deleteId?: string) {
   intervalsRef.value = intervalsRef.value.filter(({ id }) => deleteId !== id);
 }
-
-function onSubmit() {
-  emit('save', [...intervalsRef.value]);
+function addInterval() {
+  intervalsRef.value.push(cycle.createInterval());
 }
 
-function onCancel() {
-  intervalsRef.value = [...unref(cycle.intervals)];
+function close() {
   emit('toggled', false);
 }
 
-function addInterval() {
-  intervalsRef.value = [...intervalsRef.value, createInterval()];
+function submit() {
+  emit('save', clone(intervalsRef.value));
+  close();
 }
 
+const dialog = useTemplateRef('dialog');
 watch(
-  () => cycle.intervals,
-  (newIntervals) => {
-    intervalsRef.value = newIntervals.map((i) => ({ ...i }));
+  () => open,
+  (open: boolean) => {
+    if (open === true) {
+      intervalsRef.value = clone(cycle.intervals);
+      dialog.value?.showModal();
+      return;
+    }
+    dialog.value?.close();
   },
 );
 </script>
 <template>
-  <details
-    class="w-full"
-    :class="
-      main.editOpen &&
-      'border rounded-lg overflow-hidden border-blue-200 dark:border-sky-400'
-    "
-    :open="main.editOpen"
-    @toggle.stop="$emit('toggled', ($event.target as HTMLDetailsElement).open)"
+  <dialog
+    ref="dialog"
+    :aria-labelledby="id + `-title`"
+    class="m-auto translate-y-2 bg-transparent opacity-0 transition-all transition-discrete duration-500 backdrop:opacity-0 backdrop:transition-all backdrop:transition-discrete backdrop:duration-500 open:translate-0 open:opacity-100 open:backdrop:opacity-100 starting:open:translate-y-2 starting:open:opacity-0 starting:open:backdrop:opacity-0"
+    @close="close"
   >
-    <summary
-      class="py-1 list-none text-center cursor-pointer hover:bg-blue-100 dark:hover:bg-sky-800 rounded"
-    >
-      <BaseIcon name="wrench" />
-      <span class="align-middle ml-1">Settings</span>
-    </summary>
     <LayoutStack
       tag="form"
+      method="dialog"
       space="1"
-      class="px-4 py-2"
-      @submit.prevent="onSubmit"
+      class="w-full rounded-lg border border-blue-200 bg-white px-4 py-2 dark:border-sky-400 dark:bg-stone-800"
+      @submit="submit"
     >
-      <IntervalEditBox
-        v-for="interval in intervalsRef"
-        :id="interval.id"
-        :key="interval.id"
-        v-model:type="interval.type"
-        v-model:duration="interval.duration"
-        @delete="deleteInterval"
-      />
+      <h1 :id="id + `-title`" class="self-center text-lg">
+        <BaseIcon name="wrench" class="align-middle" />
+        Settings
+      </h1>
+      <div class="space-y-1 px-4 py-2">
+        <IntervalEditBox
+          v-for="interval in intervalsRef"
+          :id="interval.id"
+          :key="interval.id"
+          v-model:type="interval.type"
+          v-model:duration="interval.duration"
+          :cancellable="cancellable"
+          @delete="deleteInterval"
+        />
+      </div>
       <LayoutInline :space="3" centered class="mt-2">
-        <BaseControl @click="addInterval">
+        <BaseButton variant="ghost" @click="addInterval">
           <BaseIcon name="add-outline" />
-          <span class="align-middle">Add</span>
-        </BaseControl>
-        <BaseControl @click="onCancel">
+          Add
+        </BaseButton>
+        <BaseButton variant="ghost" @click="close">
           <BaseIcon name="close" />
-          <span class="align-middle">Cancel</span>
-        </BaseControl>
-        <BaseControl type="submit">
+          Cancel
+        </BaseButton>
+        <BaseButton variant="ghost" type="submit">
           <BaseIcon name="save-disk" />
-          <span class="align-middle">Save</span>
-        </BaseControl>
+          Save
+        </BaseButton>
       </LayoutInline>
     </LayoutStack>
-  </details>
+  </dialog>
 </template>

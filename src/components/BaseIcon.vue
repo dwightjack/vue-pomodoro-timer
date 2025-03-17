@@ -1,6 +1,21 @@
+<script lang="ts">
+export const iconList = [
+  'trash',
+  'pause',
+  'fast-forward',
+  'reload',
+  'wrench',
+  'add-outline',
+  'close',
+  'save-disk',
+  'cheveron-down',
+  'play',
+] as const;
+</script>
 <script setup lang="ts">
 import { watch, shallowRef } from 'vue';
 import type { Component } from 'vue';
+import { oneOf } from 'vue-types';
 
 const icons = import.meta.glob<{ default: Component }>(
   '../assets/zondicons/{trash,pause,fast-forward,reload,wrench,add-outline,close,save-disk,cheveron-down,play}.svg',
@@ -9,31 +24,20 @@ const icons = import.meta.glob<{ default: Component }>(
   },
 );
 
-const props = defineProps({
-  name: oneOf([
-    'trash',
-    'pause',
-    'fast-forward',
-    'reload',
-    'wrench',
-    'add-outline',
-    'close',
-    'save-disk',
-    'cheveron-down',
-    'play',
-  ] as const).isRequired,
+const { name } = defineProps({
+  name: oneOf(iconList).isRequired,
 });
 
 const icon = shallowRef<Component>();
 
 watch(
-  () => props.name,
-  async (name) => {
-    if (!name) {
+  () => name,
+  async (iconName) => {
+    if (!iconName) {
       icon.value = undefined;
     }
     try {
-      icon.value = await icons[`../assets/zondicons/${name}.svg`]();
+      icon.value = await icons[`../assets/zondicons/${iconName}.svg`]();
     } catch (e) {
       console.error(e);
       icon.value = undefined;
@@ -45,10 +49,7 @@ watch(
 <template>
   <component
     :is="icon"
-    class="inline-flex items-center fill-current w-[1em] aspect-square"
+    class="inline-flex aspect-square w-[1em] fill-current"
     aria-hidden="true"
   />
 </template>
-<script lang="ts">
-import { oneOf } from 'vue-types';
-</script>

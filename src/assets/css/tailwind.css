@@ -1,21 +1,43 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@utility input {
+  
+  & {
+    @apply appearance-none bg-transparent border border-gray-300 dark:border-stone-600  rounded-lg px-2 py-1 text-gray-700 dark:text-gray-200;
+  }
+
+  &:is(select) {
+    @apply pe-6;
+  }
+
+  &[type='number'] {
+    appearance: textfield;
+  }
+  &[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+}
+
+
+@utility grid-overlap {
+  & {
+    grid-template: 'full' auto / auto
+  }
+
+  & > * {
+    grid-area: full;
+  }
+}
+
+@layer theme {
+  @property --s {
+    syntax: '*';
+    inherits: false;
+  }
+}
 
 @layer base {
   body {
     @apply text-gray-700 dark:bg-stone-800 dark:text-gray-50;
-  }
-}
-
-@layer components {
-  .input {
-    @apply appearance-none bg-transparent border border-gray-300 dark:border-stone-600  rounded-lg pl-2 py-1 text-gray-700 dark:text-gray-200;
-  }
-  .text-gray-700[type='number'] {
-    -moz-appearance: textfield;
-  }
-  .text-gray-700[type='number']::-webkit-inner-spin-button {
-    -webkit-appearance: none;
   }
 }

@@ -1,41 +1,32 @@
 <script setup lang="ts">
-import TheContainer from '@/components/TheContainer.vue';
 import TheTimerList from '@/components/TheTimerList.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import TheControls from '@/components/TheControls.vue';
 import TheCycle from '@/components/TheCycle.vue';
 import TheCycleEdit from '@/components/TheCycleEdit.vue';
-import TheLoader from '@/components/TheLoader.vue';
-import TheNotificationBar from '@/components/TheNotificationBar.vue';
 import BaseToast from '@/components/BaseToast.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import TheGraphicTimer from '@/components/TheGraphicTimer.vue';
 import TransitionFadeSlide from '@/components/transitions/FadeSlide.vue';
 
-import { watch, onMounted } from 'vue';
+import { watch, onMounted, onBeforeUnmount } from 'vue';
 import { useRegisterSW } from 'virtual:pwa-register/vue';
-import { Status, Interval, IntervalType } from '@/types';
+import { Status, Interval } from '@/types';
 import { useMain } from '@/stores/main';
 import { useCycle } from '@/stores/cycle';
 import { useTicker } from '@/use/ticker';
-import { useStorage } from '@/use/storage';
+import { useStorage } from '@vueuse/core';
 import { useNotification } from '@/use/notification';
-import { useLoader } from '@/use/loader';
 import { useAsyncModal } from '@/use/asyncModal';
-import { setupNotifications, createInterval, ID_STORE } from './utils';
+import { setupNotifications } from './utils';
 
-const tickWorker = new Worker('/tick-worker.js');
+const tickWorker = new Worker(new URL('./workers/tick', import.meta.url), {
+  type: 'module',
+});
 
 const { needRefresh, updateServiceWorker } = useRegisterSW();
 
-const { exec, loading } = useLoader();
-const intervalsStore = useStorage<Interval[]>('intervals', [
-  createInterval(IntervalType.Work, 45),
-]);
-const permissionsStore = useStorage<{ notification?: boolean }>(
-  'permissions',
-  {},
-);
+const permissions = useStorage<{ notification?: boolean }>('permissions', {});
 const main = useMain();
 const cycle = useCycle();
 
@@ -59,31 +50,15 @@ function reset() {
 
 async function saveChanges(newIntervals: Interval[]) {
   reset();
-  main.editOpen = false;
   cycle.updateCycle(newIntervals);
-  exec(intervalsStore.save(newIntervals));
-}
-
-function onEditToggle(open: boolean) {
-  main.editOpen = open;
-}
-
-async function initialize() {
-  const storedIntervals = await exec(intervalsStore.load());
-  // we use a function to create unique IDs,
-  // but we need to exclude IDs generate in previous sessions
-  // and stored in local storage
-  ID_STORE.push(...storedIntervals.map(({ id }) => id));
-  cycle.updateCycle(storedIntervals);
 }
 
 async function checkNotifyPermission() {
-  const permissions = await permissionsStore.load();
-  if (permissions.notification !== undefined) {
+  if (permissions.value.notification !== undefined) {
     return;
   }
   const confirmed = await notifyBar.show();
-  permissionsStore.save({ ...permissions, notification: confirmed });
+  permissions.value.notification = confirmed;
 
   if (confirmed) {
     askPermission();
@@ -115,47 +90,59 @@ watch(
   },
 );
 
-onMounted(initialize);
 onMounted(checkNotifyPermission);
+onMounted(reset);
+onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
 </script>
 
 <template>
-  <div role="presentation">
-    <TheGraphicTimer v-if="cycle.currentInterval" />
-    <TheNotificationBar>
-      <TransitionFadeSlide>
-        <BaseToast
-          v-if="notifyBarVisible"
-          controls
-          @cancel="notifyBar.cancel"
-          @confirm="notifyBar.confirm"
+  <TheGraphicTimer v-if="cycle.currentInterval" />
+  <div class="fixed inset-x-0 top-0 divide-y divide-blue-100" role="status">
+    <TransitionFadeSlide>
+      <BaseToast
+        v-if="notifyBarVisible"
+        controls
+        @cancel="notifyBar.cancel"
+        @confirm="notifyBar.confirm"
+      >
+        <p>Do you want to manage notification settings for this app?</p>
+      </BaseToast>
+    </TransitionFadeSlide>
+    <TransitionFadeSlide>
+      <BaseToast v-if="needRefresh">
+        <p>Application update available.</p>
+        <BaseButton
+          variant="secondary"
+          size="sm"
+          @click="updateServiceWorker()"
         >
-          <p>Do you want to manage notification settings for this app?</p>
-        </BaseToast>
-      </TransitionFadeSlide>
-      <TransitionFadeSlide>
-        <BaseToast v-if="needRefresh" role="alert">
-          <p>Application update available.</p>
-          <BaseButton @click="updateServiceWorker()"> Update </BaseButton>
-        </BaseToast>
-      </TransitionFadeSlide>
-    </TheNotificationBar>
-    <TheContainer>
-      <h1 class="sr-only">Pomodoro Timer</h1>
-      <LayoutStack centered>
-        <TheTimerList />
-
-        <TheCycle />
-        <TheControls
-          :status="main.status"
-          @play="main.play"
-          @pause="main.pause"
-          @skip="skip"
-          @reset="reset"
-        />
-        <TheCycleEdit @save="saveChanges" @toggled="onEditToggle" />
-      </LayoutStack>
-    </TheContainer>
-    <TheLoader :visible="loading" message="Loading..." />
+          Update
+        </BaseButton>
+      </BaseToast>
+    </TransitionFadeSlide>
   </div>
+  <main
+    class="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-4 sm:px-8"
+  >
+    <h1 class="sr-only">Pomodoro Timer</h1>
+    <LayoutStack centered>
+      <TheTimerList />
+
+      <TheCycle />
+      <TheControls
+        :status="main.status"
+        @play="main.play"
+        @pause="main.pause"
+        @skip="skip"
+        @reset="reset"
+        @settings="main.editOpen = !main.editOpen"
+      />
+      <TheCycleEdit
+        :open="main.editOpen"
+        @save="saveChanges"
+        @toggled="main.toggleEdit"
+      />
+    </LayoutStack>
+    <slot />
+  </main>
 </template>

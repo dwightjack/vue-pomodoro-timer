@@ -21,5 +21,13 @@ export const useMain = defineStore('main', {
     pause() {
       this.status = Status.Pause;
     },
+
+    toggleEdit(toggle?: boolean) {
+      const next = toggle !== undefined ? toggle : !this.editOpen;
+      if (next === true) {
+        this.pause();
+      }
+      this.editOpen = next;
+    },
   },
 });

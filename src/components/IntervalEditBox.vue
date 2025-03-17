@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { string } from 'vue-types';
+import { bool, string } from 'vue-types';
 import BaseIcon from '@/components/BaseIcon.vue';
 import BaseControl from '@/components/BaseControl.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
@@ -18,6 +18,7 @@ const duration = defineModel<number>('duration', {
 
 defineProps({
   id: string().isRequired,
+  cancellable: bool().def(false),
 });
 
 defineEmits<{
@@ -25,18 +26,15 @@ defineEmits<{
 }>();
 </script>
 <template>
-  <fieldset class="min-w-0">
+  <fieldset class="w-full min-w-0">
     <legend class="sr-only">Interval Settings</legend>
-    <LayoutInline class="items-center">
-      <label class="grid grid-flow-col items-center">
-        <select
-          v-model="type"
-          class="input pr-6 col-start-1 row-start-1 min-w-0 truncate"
-        >
+    <LayoutInline vertical-align="center">
+      <label class="grid-overlap grid grow items-center">
+        <select v-model="type" class="input min-w-0 truncate">
           <template v-for="(value, name) in IntervalType" :key="value">
             <option
               v-if="value !== IntervalType.None"
-              :value="value"
+              :value
               :selected="value === type"
             >
               {{ name }}
@@ -45,11 +43,11 @@ defineEmits<{
         </select>
         <BaseIcon
           name="cheveron-down"
-          class="pointer-events-none col-start-1 row-start-1 ml-auto mr-1"
+          class="pointer-events-none ms-auto me-1"
         />
         <span class="sr-only">Type</span>
       </label>
-      <label class="flex items-center">
+      <label class="flex items-center gap-1">
         <input
           v-model.number="duration"
           class="input"
@@ -59,11 +57,14 @@ defineEmits<{
           :size="5"
         />
         <span class="sr-only">Duration</span>
-        <span class="text-sm pl-1">mins</span>
+        <span class="text-sm">mins</span>
       </label>
-      <BaseControl @click="$emit('delete', id)">
-        <BaseIcon name="trash" />
-        <span class="sr-only">Delete</span>
+      <BaseControl
+        :disabled="!cancellable"
+        icon="trash"
+        @click="$emit('delete', id)"
+      >
+        Delete
       </BaseControl>
     </LayoutInline>
   </fieldset>
