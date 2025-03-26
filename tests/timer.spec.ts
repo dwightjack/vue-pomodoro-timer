@@ -19,10 +19,12 @@ test.describe('initial state', () => {
   });
 
   test('controls', async ({ queries }) => {
-    await expect(queries.getControl('Play')).toBeVisible();
-    await expect(queries.getControl('Skip')).toBeVisible();
-    await expect(queries.getControl('Reset')).toBeVisible();
-    await expect(queries.getControl('Settings')).toBeVisible();
+    await queries.withinControls(async () => {
+      await expect(queries.getButton('Play')).toBeVisible();
+      await expect(queries.getButton('Skip')).toBeVisible();
+      await expect(queries.getButton('Reset')).toBeVisible();
+      await expect(queries.getButton('Settings')).toBeVisible();
+    });
   });
 });
 
@@ -40,57 +42,68 @@ test.describe('functionality', () => {
   });
 
   test('play', async ({ queries }) => {
-    await queries.getControl('Play').click();
+    await queries.withinControls(async () => {
+      await queries.getButton('Play').click();
 
-    await expect(queries.getControl('Play')).not.toBeVisible();
-    await expect(queries.getControl('Pause')).toBeVisible();
+      await expect(queries.getButton('Play')).not.toBeVisible();
+      await expect(queries.getButton('Pause')).toBeVisible();
+    });
   });
 
   test('pause', async ({ queries }) => {
-    await queries.getControl('Play').click();
+    await queries.withinControls(async () => {
+      await queries.getButton('Play').click();
 
-    await expect(queries.getControl('Play')).not.toBeVisible();
-    await queries.getControl('Pause').click();
-    await expect(queries.getControl('Play')).toBeVisible();
+      await expect(queries.getButton('Play')).not.toBeVisible();
+      await queries.getButton('Pause').click();
+      await expect(queries.getButton('Play')).toBeVisible();
+    });
   });
 
   test('skip', async ({ queries, page }) => {
     await expect(queries.timer).toContainText('01:00');
 
-    await queries.getControl('Skip').click();
-    await page.waitForTimeout(700);
+    await queries.withinControls(async () => {
+      await queries.getButton('Skip').click();
+      await page.waitForTimeout(700);
 
-    await expect(queries.timer).toContainText('02:00');
+      await expect(queries.timer).toContainText('02:00');
+    });
   });
 
   test('skip cycle', async ({ queries, page }) => {
     await expect(queries.timer).toContainText('01:00');
 
-    await queries.getControl('Skip').click();
-    await page.waitForTimeout(700);
+    await queries.withinControls(async () => {
+      await queries.getButton('Skip').click();
+      await page.waitForTimeout(700);
 
-    await expect(queries.timer).toContainText('02:00');
+      await expect(queries.timer).toContainText('02:00');
 
-    await queries.getControl('Skip').click();
-    await page.waitForTimeout(700);
-
+      await queries.getButton('Skip').click();
+      await page.waitForTimeout(700);
+    });
     await expect(queries.timer).toContainText('01:00');
   });
 
   test('skip when paused', async ({ queries, page }) => {
-    await queries.getControl('Skip').click();
-    await page.waitForTimeout(700);
+    await queries.withinControls(async () => {
+      await queries.getButton('Skip').click();
+      await page.waitForTimeout(700);
 
-    await expect(queries.timer).toContainText('02:00');
-    await expect(queries.getControl('Play')).toBeVisible();
+      await expect(queries.timer).toContainText('02:00');
+      await expect(queries.getButton('Play')).toBeVisible();
+    });
   });
 
   test('skip when playing', async ({ queries, page }) => {
-    await queries.getControl('Play').click();
-    await queries.getControl('Skip').click();
-    await page.waitForTimeout(700);
+    await queries.withinControls(async () => {
+      await queries.getButton('Play').click();
+      await queries.getButton('Skip').click();
+      await page.waitForTimeout(700);
 
-    await expect(queries.timer).toContainText('02:00');
-    await expect(queries.getControl('Pause')).toBeVisible();
+      await expect(queries.timer).toContainText('02:00');
+      await expect(queries.getButton('Pause')).toBeVisible();
+    });
   });
 });

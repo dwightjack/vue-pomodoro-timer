@@ -7,12 +7,12 @@ test.describe('dialog interactions', () => {
   });
 
   test('open settings dialog', async ({ page, queries }) => {
-    await queries.getControl('Settings').click();
+    await queries.getButton('Settings').click();
     await expect(page.getByRole('dialog', { name: 'Settings' })).toBeVisible();
   });
 
   test('close settings dialog with button', async ({ queries, page }) => {
-    await queries.getControl('Settings').click();
+    await queries.getButton('Settings').click();
     await expect(page.getByRole('dialog', { name: 'Settings' })).toBeVisible();
 
     await queries.getButton('Cancel').click();
@@ -22,7 +22,7 @@ test.describe('dialog interactions', () => {
   });
 
   test('close settings dialog with key', async ({ queries, page }) => {
-    await queries.getControl('Settings').click();
+    await queries.getButton('Settings').click();
 
     const dialog = page.getByRole('dialog', { name: 'Settings' });
     await expect(dialog).toBeVisible();
@@ -35,10 +35,10 @@ test.describe('dialog interactions', () => {
 test.describe('functionality', () => {
   test.beforeEach(async ({ page, queries }) => {
     await page.goto('/');
-    await queries.getControl('Settings').click();
+    await queries.getButton('Settings').click();
   });
-  test('Type field', async ({ appPage }) => {
-    await appPage.withinSettings(async (settings) => {
+  test('Type field', async ({ queries }) => {
+    await queries.withinSettings(async (settings) => {
       const select = settings.getByLabel('Type');
       await expect(select).toHaveRole('combobox');
 
@@ -46,28 +46,28 @@ test.describe('functionality', () => {
       await expect(select).toHaveSelected('Work');
     });
   });
-  test('Duration field', async ({ appPage }) => {
-    await appPage.withinSettings(async (settings) => {
+  test('Duration field', async ({ queries }) => {
+    await queries.withinSettings(async (settings) => {
       const duration = settings.getByLabel(/Duration/);
       await expect(duration).toHaveAttribute('type', 'number');
       await expect(duration).toHaveValue('45');
     });
   });
-  test('Update an interval', async ({ appPage, queries }) => {
-    await appPage.withinSettings(async (settings) => {
+  test('Update an interval', async ({ queries }) => {
+    await queries.withinSettings(async (settings) => {
       await settings.getByLabel(/Duration/).fill('1');
       await settings.getByLabel('Type').selectOption({ label: 'ShortBreak' });
 
-      await queries.getButton('Save', { context: settings }).click();
+      await queries.getButton('Save').click();
     });
 
     const newTimer = queries.getIntervalList().first();
     await expect(newTimer).toContainText('SB');
     await expect(newTimer).toContainText('01:00');
   });
-  test('Add an interval', async ({ appPage, queries }) => {
-    await appPage.withinSettings(async (settings) => {
-      await queries.getButton('Add', { context: settings }).click();
+  test('Add an interval', async ({ queries }) => {
+    await queries.withinSettings(async (settings) => {
+      await queries.getButton('Add').click();
 
       const row = settings
         .getByRole('group', { name: 'Interval Settings' })
@@ -75,7 +75,7 @@ test.describe('functionality', () => {
 
       await row.getByLabel('Type').selectOption({ label: 'ShortBreak' });
       await row.getByLabel(/Duration/).fill('20');
-      await queries.getButton('Save', { context: settings }).click();
+      await queries.getButton('Save').click();
     });
 
     const newTimer = queries.getIntervalList().last();
@@ -91,32 +91,34 @@ test.describe('functionality', () => {
     await page.reload();
     await expect(queries.getIntervalList()).toHaveCount(2);
 
-    await queries.getControl('Settings').click();
+    await queries.getButton('Settings').click();
 
-    await appPage.withinSettings(async (settings) => {
+    await queries.withinSettings(async (settings) => {
       const row = settings
         .getByRole('group', { name: 'Interval Settings' })
         .first();
 
-      await queries.getButton('Delete', { context: row }).click();
-      await queries.getButton('Save', { context: settings }).click();
+      await queries.within(row, async () => {
+        await queries.getButton('Delete').click();
+      });
+
+      await queries.getButton('Save').click();
     });
 
     await expect(queries.getIntervalList()).toHaveCount(1);
   });
 
   test('Cannot remove the interval when it is the only one', async ({
-    appPage,
     queries,
   }) => {
-    await appPage.withinSettings(async (settings) => {
+    await queries.withinSettings(async (settings) => {
       const row = settings
         .getByRole('group', { name: 'Interval Settings' })
         .first();
 
-      await expect(
-        queries.getButton('Delete', { context: row }),
-      ).toBeDisabled();
+      await queries.within(row, async () => {
+        await expect(queries.getButton('Delete')).toBeDisabled();
+      });
     });
   });
 });
@@ -125,18 +127,14 @@ test.describe('interactions', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
-  test('Saving the intervals reset the timer', async ({
-    appPage,
-    queries,
-    page,
-  }) => {
-    await queries.getControl('Play').click();
+  test('Saving the intervals reset the timer', async ({ queries, page }) => {
+    await queries.getButton('Play').click();
     await page.waitForTimeout(2000);
-    await queries.getControl('Settings').click();
-    await appPage.withinSettings(async (settings) => {
-      await queries.getButton('Save', { context: settings }).click();
+    await queries.getButton('Settings').click();
+    await queries.withinSettings(async () => {
+      await queries.getButton('Save').click();
     });
 
-    await expect(queries.getControl('Play')).toBeVisible();
+    await expect(queries.getButton('Play')).toBeVisible();
   });
 });

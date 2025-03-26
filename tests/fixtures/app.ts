@@ -15,24 +15,72 @@ export const mockInterval = (type: IntervalType, duration: number) => ({
   id: uid(),
 });
 
-class Queries {
-  protected readonly list: Locator;
-  protected readonly controls: Locator;
+interface QueriesOptions {
+  root?: boolean;
+}
+
+class BaseQueries {
+  #ctxList: Locator[] = [];
+  #root: Page;
+  constructor(public readonly page: Page) {
+    this.#root = page;
+  }
+
+  get parent() {
+    return this.#ctxList.at(-1);
+  }
+
+  get root() {
+    return this.#root;
+  }
+
+  #getCurrent(fromRoot = false) {
+    return fromRoot ? this.#root : this.#ctxList.at(-1) || this.#root;
+  }
+
+  getButton(name: string | RegExp, { root = false }: QueriesOptions = {}) {
+    return this.#getCurrent(root).getByRole('button', { name });
+  }
+
+  async within<L extends Locator>(
+    base: L,
+    fn: (base: L) => Promise<void> | void,
+  ) {
+    this.#ctxList.push(base);
+    await fn(base);
+    this.#ctxList.pop();
+  }
+
+  static defineWithin<Q extends BaseQueries, L extends Locator>(
+    srcQuery: Q,
+    base: L,
+  ) {
+    return (fn: (base: L) => Promise<void> | void) => srcQuery.within(base, fn);
+  }
+}
+
+class Queries extends BaseQueries {
+  readonly list: Locator;
 
   readonly timer: Locator;
 
-  constructor(public readonly page: Page) {
-    this.list = this.page.getByRole('list', { name: 'Intervals' });
-    this.timer = this.page.getByRole('timer');
-    this.controls = this.page.getByRole('group', { name: 'Timer controls' });
-  }
+  withinControls: ReturnType<typeof BaseQueries.defineWithin>;
+  withinSettings: ReturnType<typeof BaseQueries.defineWithin>;
 
-  getControl(name: string | RegExp, { context }: { context?: Locator } = {}) {
-    return (context ?? this.controls).getByRole('button', { name });
-  }
+  constructor(page: Page) {
+    super(page);
+    this.list = page.getByRole('list', { name: 'Intervals' });
+    this.timer = page.getByRole('timer');
 
-  getButton(name: string | RegExp, { context }: { context?: Locator } = {}) {
-    return (context ?? this.page).getByRole('button', { name });
+    this.withinControls = BaseQueries.defineWithin(
+      this,
+      page.getByRole('group', { name: 'Timer controls' }),
+    );
+
+    this.withinSettings = BaseQueries.defineWithin(
+      this,
+      page.getByRole('dialog', { name: 'Settings' }),
+    );
   }
 
   getIntervalList() {
@@ -58,10 +106,6 @@ export class AppPage {
     await this.page.addInitScript((intervals) => {
       window.localStorage.setItem('intervals', JSON.stringify(intervals));
     }, intervals);
-  }
-
-  async withinSettings(fn: (dialog: Locator) => Promise<void> | void) {
-    await fn(this.page.getByRole('dialog', { name: 'Settings' }));
   }
 }
 
