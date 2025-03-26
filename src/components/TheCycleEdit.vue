@@ -60,6 +60,7 @@ watch(
     ref="dialog"
     :aria-labelledby="id + `-title`"
     class="m-auto translate-y-2 bg-transparent opacity-0 transition-all transition-discrete duration-500 backdrop:opacity-0 backdrop:transition-all backdrop:transition-discrete backdrop:duration-500 open:translate-0 open:opacity-100 open:backdrop:opacity-100 starting:open:translate-y-2 starting:open:opacity-0 starting:open:backdrop:opacity-0"
+    closedby="any"
     @close="close"
   >
     <LayoutStack
