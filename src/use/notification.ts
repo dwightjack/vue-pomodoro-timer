@@ -30,9 +30,11 @@ export function useNotification() {
     notification.value = undefined;
   }
 
-  navigator.serviceWorker.getRegistration().then((registration) => {
-    worker.value = registration;
-  });
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistration().then((registration) => {
+      worker.value = registration;
+    });
+  }
 
   return {
     notify,
