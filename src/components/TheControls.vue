@@ -30,10 +30,7 @@ const isPlaying = computed(() => status === Status.Play);
     >
       {{ isPlaying ? 'Pause' : 'Play' }}
     </BaseControl>
-    <span
-      class="-mx-1 h-6 border-l border-blue-400 dark:border-sky-400"
-      role="separator"
-    />
+
     <BaseControl icon="fast-forward" @click="$emit('skip')"> Skip </BaseControl>
     <BaseControl icon="reload" @click="$emit('reset')"> Reset </BaseControl>
     <BaseControl

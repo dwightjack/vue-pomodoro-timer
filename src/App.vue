@@ -11,7 +11,7 @@ import TransitionFadeSlide from '@/components/transitions/FadeSlide.vue';
 
 import { watch, onMounted, onBeforeUnmount } from 'vue';
 import { useRegisterSW } from 'virtual:pwa-register/vue';
-import { Status, Interval } from '@/types';
+import { Status, Interval, IntervalType } from '@/types';
 import { useMain } from '@/stores/main';
 import { useCycle } from '@/stores/cycle';
 import { useTicker } from '@/use/ticker';
@@ -79,19 +79,46 @@ watch(
   },
 );
 
+function changeBg(type: IntervalType) {
+  document
+    .startViewTransition(() => {
+      document.body.dataset.interval = type;
+    })
+    .ready.then(() => {
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `polygon(100% 0, 100% 0, 100% 0)`,
+            `polygon(100% 0, -57.735% 0, 100% 273.205%)`,
+          ],
+        },
+        {
+          duration: 600,
+          easing: 'cubic-bezier(0.85, 0.09, 0.15, 0.91)',
+          delay: 150,
+          fill: 'both',
+          // Specify which pseudo-element to animate
+          pseudoElement: '::view-transition-new(root)',
+        },
+      );
+    });
+}
+
 watch(
   () => cycle.current,
   (_, prev) => {
+    const { type, duration } = cycle.getCurrent();
+    changeBg(type);
     if (prev === -1 || !main.isPlaying) {
       return;
     }
-    const { type, duration } = cycle.getCurrent();
     notifyInterval(type, duration);
   },
 );
 
 onMounted(checkNotifyPermission);
 onMounted(reset);
+onMounted(() => changeBg(cycle.getCurrent().type));
 onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
 </script>
 
