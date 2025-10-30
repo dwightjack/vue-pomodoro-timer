@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue';
 import { oneOf, integer, number } from 'vue-types';
-import { getMinutes, pluralize, toTitleCase } from '@/utils';
+import { pluralize, toTitleCase } from '@/utils';
 import { IntervalType } from '@/types';
 
 const { type, remaining } = defineProps({
