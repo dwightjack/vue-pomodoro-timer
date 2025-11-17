@@ -21,7 +21,11 @@
     "noFallthroughCasesInSwitch": true,
 
     "esModuleInterop": true,
-    "types": ["vite/client", "vite-plugin-pwa/client"],
+    "types": [
+      "vite/client",
+      "vite-plugin-pwa/client",
+      "unplugin-icons/types/vue"
+    ],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

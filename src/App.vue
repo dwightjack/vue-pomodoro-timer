@@ -124,7 +124,10 @@ onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
 
 <template>
   <TheGraphicTimer v-if="cycle.currentInterval" />
-  <div class="fixed inset-x-0 top-0 divide-y divide-blue-100" role="status">
+  <div
+    class="view-transition-[status] fixed inset-x-0 top-0 divide-y divide-blue-100"
+    role="status"
+  >
     <TransitionFadeSlide>
       <BaseToast
         v-if="notifyBarVisible"
@@ -149,7 +152,7 @@ onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
     </TransitionFadeSlide>
   </div>
   <main
-    class="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-4 sm:px-8"
+    class="view-transition-[main] container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-4 sm:px-8"
   >
     <h1 class="sr-only">Pomodoro Timer</h1>
     <LayoutStack centered>

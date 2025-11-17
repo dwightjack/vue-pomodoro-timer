@@ -5,6 +5,11 @@ import BaseControl from '@/components/BaseControl.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
 import { Status } from '@/types';
 import { useMain } from '@/stores/main';
+import IconPlay from '~icons/zondicons/play';
+import IconPause from '~icons/zondicons/pause';
+import IconReload from '~icons/zondicons/reload';
+import IconWrench from '~icons/zondicons/wrench';
+import IconFastForward from '~icons/zondicons/fast-forward';
 
 defineEmits<{
   play: [];
@@ -25,16 +30,20 @@ const isPlaying = computed(() => status === Status.Play);
   <LayoutInline tag="fieldset" vertical-align="center" space="2">
     <legend class="sr-only">Timer controls</legend>
     <BaseControl
-      :icon="isPlaying ? 'pause' : 'play'"
+      :icon="isPlaying ? IconPause : IconPlay"
       @click="isPlaying ? $emit('pause') : $emit('play')"
     >
       {{ isPlaying ? 'Pause' : 'Play' }}
     </BaseControl>
 
-    <BaseControl icon="fast-forward" @click="$emit('skip')"> Skip </BaseControl>
-    <BaseControl icon="reload" @click="$emit('reset')"> Reset </BaseControl>
+    <BaseControl :icon="IconFastForward" @click="$emit('skip')">
+      Skip
+    </BaseControl>
+    <BaseControl :icon="IconReload" @click="$emit('reset')">
+      Reset
+    </BaseControl>
     <BaseControl
-      icon="wrench"
+      :icon="IconWrench"
       :pressed="main.editOpen"
       @click="main.toggleEdit()"
     >

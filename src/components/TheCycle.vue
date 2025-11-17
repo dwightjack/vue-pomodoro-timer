@@ -22,13 +22,7 @@ const max = computed(() => cycle.intervals.reduce((v, i) => i.duration + v, 0));
         :type="interval.type"
         :duration="interval.duration"
         :remaining="cycle.countdowns[i]"
-        :position="
-          i === cycle.current
-            ? 'current'
-            : i > cycle.current
-              ? 'next'
-              : 'previous'
-        "
+        :current="i === cycle.current"
       />
     </div>
   </div>

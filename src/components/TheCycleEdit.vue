@@ -2,13 +2,16 @@
 import { computed, ref, useId, useTemplateRef, watch } from 'vue';
 import IntervalEditBox from '@/components/IntervalEditBox.vue';
 import BaseButton from '@/components/BaseButton.vue';
-import BaseIcon from '@/components/BaseIcon.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
 import { useCycle } from '@/stores/cycle';
 import type { Interval } from '@/types';
 import { bool } from 'vue-types';
 import { clone } from '@/utils';
+import IconWrench from '~icons/zondicons/wrench';
+import IconClose from '~icons/zondicons/close';
+import IconAddOutline from '~icons/zondicons/add-outline';
+import IconSaveDisk from '~icons/zondicons/save-disk';
 
 const cycle = useCycle();
 const id = useId();
@@ -71,7 +74,7 @@ watch(
       @submit="submit"
     >
       <h1 :id="id + `-title`" class="self-center text-lg">
-        <BaseIcon name="wrench" class="align-middle" />
+        <IconWrench class="align-middle" />
         Settings
       </h1>
       <div class="space-y-1 px-4 py-2">
@@ -87,15 +90,15 @@ watch(
       </div>
       <LayoutInline :space="3" centered class="mt-2">
         <BaseButton variant="ghost" @click="addInterval">
-          <BaseIcon name="add-outline" />
+          <IconAddOutline name="add-outline" />
           Add
         </BaseButton>
         <BaseButton variant="ghost" @click="close">
-          <BaseIcon name="close" />
+          <IconClose />
           Cancel
         </BaseButton>
         <BaseButton variant="ghost" type="submit">
-          <BaseIcon name="save-disk" />
+          <IconSaveDisk />
           Save
         </BaseButton>
       </LayoutInline>

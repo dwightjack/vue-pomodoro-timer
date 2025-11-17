@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue';
-import { oneOf, integer, number } from 'vue-types';
+import { oneOf, integer, number, bool } from 'vue-types';
 import { pluralize, toTitleCase } from '@/utils';
 import { IntervalType } from '@/types';
 
 const { type, remaining } = defineProps({
   type: oneOf(Object.values(IntervalType)).isRequired,
   duration: integer().def(0),
-  position: oneOf(['previous', 'current', 'next'] as const).isRequired,
+  current: bool().def(false),
   remaining: integer().def(0),
   size: number().def(0),
 });
@@ -27,19 +27,16 @@ const valueText = computed(() => {
   <div
     :id="id + 'meter'"
     role="meter"
-    :aria-current="position === 'current' || undefined"
-    class="h-4 border-e-4 border-current bg-linear-to-r from-current to-current bg-right bg-no-repeat transition-[background-size] duration-300 ease-out"
+    :aria-current="current || undefined"
+    class="h-4 border-e-4 border-current bg-linear-to-r from-current to-current bg-size-[100%] bg-right bg-no-repeat transition-[background-size] duration-300 ease-out has-[~[aria-current]]:bg-size-[0_100%]"
     :style="{
       width: `${size}%`,
-      'background-size':
-        position === 'current' ? `${(100 * remaining) / duration}% 100%` : '',
+      'background-size': current ? `${(100 * remaining) / duration}% 100%` : '',
     }"
     :class="{
-      'text-green-400': type === IntervalType.ShortBreak,
-      'text-green-500': type === IntervalType.LongBreak,
-      'text-amber-500': type === IntervalType.Work,
-      'bg-size-[0_100%]': position === 'previous',
-      'bg-size-[100%]': position === 'next',
+      'text-teal-400': type === IntervalType.ShortBreak,
+      'text-green-400': type === IntervalType.LongBreak,
+      'text-amber-400': type === IntervalType.Work,
     }"
     aria-valuemin="0"
     :aria-valuemax="duration / 1000"

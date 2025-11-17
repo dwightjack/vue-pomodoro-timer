@@ -1,10 +1,21 @@
 <script setup lang="ts">
-import { bool, oneOf } from 'vue-types';
-import { iconList } from './BaseIcon.vue';
-import BaseIcon from './BaseIcon.vue';
+import { bool, object, oneOf } from 'vue-types';
+import type {
+  ButtonHTMLAttributes,
+  FunctionalComponent,
+  SVGAttributes,
+} from 'vue';
+
+type IconType = FunctionalComponent<SVGAttributes>;
+
 defineProps({
-  type: oneOf(['button', 'reset', 'submit', undefined] as const).def('button'),
-  icon: oneOf(iconList).isRequired,
+  type: oneOf<ButtonHTMLAttributes['type']>([
+    'button',
+    'reset',
+    'submit',
+    undefined,
+  ]).def('button'),
+  icon: object<IconType>(),
   pressed: bool(),
 });
 defineSlots<{ default?: () => unknown }>();
@@ -13,9 +24,9 @@ defineSlots<{ default?: () => unknown }>();
   <button
     :type
     :aria-pressed="pressed"
-    class="inline-flex gap-x-1 rounded-sm border-none p-3 align-middle leading-none text-current transition-colors duration-150 hover:enabled:bg-blue-100 disabled:text-gray-500 aria-pressed:bg-blue-200 dark:text-sky-400 dark:hover:enabled:bg-sky-700"
+    class="inline-flex gap-x-1 rounded-sm border-2 border-transparent p-3 align-middle leading-none text-current transition-colors duration-150 hover:enabled:bg-white/25 disabled:text-gray-500 aria-pressed:bg-blue-200"
   >
-    <BaseIcon :name="icon" />
+    <component :is="icon" />
     <span class="sr-only"><slot /></span>
   </button>
 </template>
