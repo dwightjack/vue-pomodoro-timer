@@ -39,6 +39,14 @@
 }
 
 @layer base {
+  :root {
+    view-transition-name: none;
+  }
+
+  ::view-transition {
+    pointer-events: none;
+  }
+
   ::view-transition-image-pair(root) {
     isolation: auto;
   }
