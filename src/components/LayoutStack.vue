@@ -13,7 +13,7 @@ defineSlots<{ default?: () => unknown }>();
 <template>
   <component
     :is="tag"
-    class="gap flex flex-col"
+    class="flex flex-col gap-y-[calc(var(--spacing)*var(--s,4))]"
     :class="{
       'items-center': centered,
       'items-start': !centered,
@@ -25,8 +25,3 @@ defineSlots<{ default?: () => unknown }>();
     <slot />
   </component>
 </template>
-<style scoped>
-.gap {
-  row-gap: calc(var(--spacing) * var(--s, 4));
-}
-</style>
