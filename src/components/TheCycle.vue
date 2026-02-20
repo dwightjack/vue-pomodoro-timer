@@ -1,25 +1,27 @@
 <script setup lang="ts">
-import IntervalSquare from '@/components/IntervalSquare.vue';
 import { useCycle } from '@/stores/cycle';
-import { useId } from 'vue';
+import { computed, useId } from 'vue';
+import IntervalStep from './IntervalStep.vue';
 
 const cycle = useCycle();
 const id = useId();
+const max = computed(() => cycle.intervals.reduce((v, i) => i.duration + v, 0));
 </script>
 <template>
-  <div>
+  <div
+    role="group"
+    class="flex w-full items-center justify-center overflow-clip rounded-3xl border-[6px] bg-white"
+    :aria-labelledby="id + '-cycle'"
+  >
     <h2 :id="id + '-cycle'" aria-hidden="true" class="sr-only">Intervals</h2>
-    <ul
-      class="flex flex-wrap items-center justify-center gap-1"
-      :aria-labelledby="id + '-cycle'"
-    >
-      <IntervalSquare
-        v-for="(interval, i) in cycle.intervals"
-        :key="interval.id"
-        :type="interval.type"
-        :duration="interval.duration"
-        :current="cycle.current === i"
-      />
-    </ul>
+    <IntervalStep
+      v-for="(interval, i) in cycle.intervals"
+      :key="interval.id"
+      :size="(100 * interval.duration) / max"
+      :type="interval.type"
+      :duration="interval.duration"
+      :remaining="cycle.countdowns[i]"
+      :current="i === cycle.current"
+    />
   </div>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { bool, string } from 'vue-types';
-import BaseIcon from '@/components/BaseIcon.vue';
+import IconCheveronDown from '~icons/zondicons/cheveron-down';
+import IconTrash from '~icons/zondicons/trash';
 import BaseControl from '@/components/BaseControl.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
 import { minutesToMs, getMinutes } from '@/utils';
@@ -30,7 +31,7 @@ defineEmits<{
     <legend class="sr-only">Interval Settings</legend>
     <LayoutInline vertical-align="center">
       <label class="grid-overlap grid grow items-center">
-        <select v-model="type" class="input min-w-0 truncate">
+        <select v-model="type" class="input min-w-0 truncate" name="type">
           <template v-for="(value, name) in IntervalType" :key="value">
             <option
               v-if="value !== IntervalType.None"
@@ -41,15 +42,13 @@ defineEmits<{
             </option></template
           >
         </select>
-        <BaseIcon
-          name="cheveron-down"
-          class="pointer-events-none ms-auto me-1"
-        />
+        <IconCheveronDown class="pointer-events-none ms-auto me-1" />
         <span class="sr-only">Type</span>
       </label>
       <label class="flex items-center gap-1">
         <input
           v-model.number="duration"
+          name="duration"
           class="input"
           type="number"
           min="1"
@@ -61,7 +60,7 @@ defineEmits<{
       </label>
       <BaseControl
         :disabled="!cancellable"
-        icon="trash"
+        :icon="IconTrash"
         @click="$emit('delete', id)"
       >
         Delete

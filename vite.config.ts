@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue';
 import svgLoader from 'vite-svg-loader';
 import { VitePWA } from 'vite-plugin-pwa';
 import tailwindcss from '@tailwindcss/vite';
+import Icons from 'unplugin-icons/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,6 +17,15 @@ export default defineConfig({
     vue(),
     tailwindcss(),
     svgLoader(),
+    Icons({
+      compiler: 'vue3',
+      defaultClass: 'inline-flex aspect-square w-[1em] fill-current',
+      iconCustomizer(_collection, _icon, props) {
+        props['aria-hidden'] = 'true';
+        props.width = '1em';
+        props.height = '1em';
+      },
+    }),
     VitePWA({
       injectRegister: null,
       manifest: {
