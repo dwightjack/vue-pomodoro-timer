@@ -2,13 +2,16 @@
 import { computed, ref, useId, useTemplateRef, watch } from 'vue';
 import IntervalEditBox from '@/components/IntervalEditBox.vue';
 import BaseButton from '@/components/BaseButton.vue';
-import BaseIcon from '@/components/BaseIcon.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
 import { useCycle } from '@/stores/cycle';
 import type { Interval } from '@/types';
 import { bool } from 'vue-types';
 import { clone } from '@/utils';
+import IconWrench from '~icons/zondicons/wrench';
+import IconClose from '~icons/zondicons/close';
+import IconAddOutline from '~icons/zondicons/add-outline';
+import IconSaveDisk from '~icons/zondicons/save-disk';
 
 const cycle = useCycle();
 const id = useId();
@@ -59,22 +62,23 @@ watch(
   <dialog
     ref="dialog"
     :aria-labelledby="id + `-title`"
-    class="m-auto translate-y-2 bg-transparent opacity-0 transition-all transition-discrete duration-500 backdrop:opacity-0 backdrop:transition-all backdrop:transition-discrete backdrop:duration-500 open:translate-0 open:opacity-100 open:backdrop:opacity-100 dark:backdrop:bg-stone-800/70 starting:open:translate-y-2 starting:open:opacity-0 starting:open:backdrop:opacity-0"
+    class="view-transition-[settings] m-auto h-full max-h-none w-full max-w-none translate-y-2 bg-transparent p-5 text-gray-700 opacity-0 transition-all transition-discrete duration-500 backdrop:opacity-0 backdrop:backdrop-blur-xs backdrop:transition-all backdrop:transition-discrete backdrop:duration-500 open:flex open:translate-0 open:opacity-100 open:backdrop:opacity-100 md:h-fit md:max-h-[80vh] md:w-fit starting:open:translate-y-2 starting:open:opacity-0 starting:open:backdrop:opacity-0"
     closedby="any"
     @close="close"
   >
     <LayoutStack
       tag="form"
       method="dialog"
+      centered
       space="1"
-      class="w-full rounded-lg border border-blue-200 bg-white px-4 py-2 dark:border-sky-400 dark:bg-stone-800"
+      class="flex w-full flex-col rounded-lg border-4 border-white bg-white/80 px-4 py-2"
       @submit="submit"
     >
       <h1 :id="id + `-title`" class="self-center text-lg">
-        <BaseIcon name="wrench" class="align-middle" />
+        <IconWrench class="align-middle" />
         Settings
       </h1>
-      <div class="space-y-1 px-4 py-2">
+      <div class="w-full space-y-3 overflow-y-auto px-4 py-2">
         <IntervalEditBox
           v-for="interval in intervalsRef"
           :id="interval.id"
@@ -85,17 +89,18 @@ watch(
           @delete="deleteInterval"
         />
       </div>
-      <LayoutInline :space="3" centered class="mt-2">
-        <BaseButton variant="ghost" @click="addInterval">
-          <BaseIcon name="add-outline" />
+
+      <LayoutInline :space="3" class="mt-auto">
+        <BaseButton @click="addInterval">
+          <IconAddOutline name="add-outline" />
           Add
         </BaseButton>
-        <BaseButton variant="ghost" @click="close">
-          <BaseIcon name="close" />
+        <BaseButton @click="close">
+          <IconClose />
           Cancel
         </BaseButton>
-        <BaseButton variant="ghost" type="submit">
-          <BaseIcon name="save-disk" />
+        <BaseButton type="submit">
+          <IconSaveDisk />
           Save
         </BaseButton>
       </LayoutInline>

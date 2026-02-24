@@ -46,7 +46,7 @@ const originalFavicon = new Map();
 
 function renderCanvas() {
   const { duration } = cycle.currentInterval;
-  const percent = (duration - remaining.value) / duration;
+  const elapsedRatio = (duration - remaining.value) / duration;
   if (!canvasRef.value) {
     return;
   }
@@ -57,14 +57,18 @@ function renderCanvas() {
     return;
   }
   const center = size / 2;
+  const radius = center;
   const color = window.getComputedStyle(canvas).getPropertyValue('color');
 
-  const start = Math.PI / -2;
-  const end = start + 2 * Math.PI * percent;
-  const radius = center;
+  // -90deg starting from the x axis
+  const rotation = Math.PI / -2;
+
+  // start angle + 360deg * elapsed ratio
+  const start = rotation + 2 * Math.PI * elapsedRatio;
+  // start angle + 360deg
+  const end = rotation + 2 * Math.PI;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawCircle(ctx, color, center, radius);
-  drawCircle(ctx, '#fff', center, radius - center / 10, start, end);
+  drawCircle(ctx, color, center, radius, start, end);
 
   const favicons = document.querySelectorAll<HTMLLinkElement>(
     'link[rel="icon"][type="image/png"]',

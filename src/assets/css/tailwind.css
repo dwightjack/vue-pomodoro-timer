@@ -1,9 +1,8 @@
 @import 'tailwindcss';
 
 @utility input {
-  
   & {
-    @apply appearance-none bg-transparent border border-gray-300 dark:border-stone-600  rounded-lg px-2 py-1 text-gray-700 dark:text-gray-200;
+    @apply appearance-none rounded-lg border border-gray-300 bg-white px-2 py-1 text-gray-700;
   }
 
   &:is(select) {
@@ -18,15 +17,18 @@
   }
 }
 
-
 @utility grid-overlap {
   & {
-    grid-template: 'full' auto / auto
+    grid-template: 'full' auto / auto;
   }
 
   & > * {
     grid-area: full;
   }
+}
+
+@utility view-transition-* {
+  view-transition-name: --value([*], 'none');
 }
 
 @layer theme {
@@ -37,7 +39,18 @@
 }
 
 @layer base {
-  body {
-    @apply text-gray-700 dark:bg-stone-800 dark:text-gray-50;
+  ::view-transition {
+    pointer-events: none;
+  }
+
+  ::view-transition-image-pair(root) {
+    isolation: auto;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+    display: block;
   }
 }

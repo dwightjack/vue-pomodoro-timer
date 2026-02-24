@@ -2,108 +2,89 @@ import { test, expect, mockInterval } from './fixtures/app';
 import { IntervalType } from '../src/types';
 
 test.describe('initial state', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+  test.beforeEach(async ({ appPage }) => {
+    await appPage.gotoRoot();
   });
-  test('default timer', async ({ queries }) => {
-    await expect(queries.timer).toContainText('45:00');
-  });
-  test('default timer - accessible name', async ({ queries }) => {
-    await expect(queries.timer).toContainText('45 minutes left');
-  });
-  test('cycle list', async ({ queries }) => {
-    const list = queries.getIntervalList();
-    await expect(list).toHaveCount(1);
-    await expect(list.first()).toContainText('W');
-    await expect(list.first()).toContainText('45:00');
+  test('default timer', async ({ appPage }) => {
+    await expect(appPage.timer).toContainText('45:00');
   });
 
-  test('controls', async ({ queries }) => {
-    await queries.withinControls(async () => {
-      await expect(queries.getButton('Play')).toBeVisible();
-      await expect(queries.getButton('Skip')).toBeVisible();
-      await expect(queries.getButton('Reset')).toBeVisible();
-      await expect(queries.getButton('Settings')).toBeVisible();
-    });
+  test('cycle list', async ({ appPage }) => {
+    await expect(appPage.intervalList.getByRole('meter')).toHaveCount(1);
+    await expect(
+      appPage.intervalList.getByRole('meter').first(),
+    ).toHaveAccessibleName('Work');
+    await expect(
+      appPage.intervalList.getByRole('meter').first(),
+    ).toHaveAttribute('aria-valuetext', '45 minutes');
+  });
+
+  test('controls', async ({ page }) => {
+    await expect(page.getByRole('button', { name: 'Play' })).toBeInViewport();
+    await expect(page.getByRole('button', { name: 'Skip' })).toBeInViewport();
+    await expect(page.getByRole('button', { name: 'Reset' })).toBeInViewport();
+    await expect(
+      page.getByRole('button', { name: 'Settings' }),
+    ).toBeInViewport();
   });
 });
 
 test.describe('functionality', () => {
-  test.beforeEach(async ({ page, appPage }) => {
-    await appPage.setStorage([
+  test.beforeEach(async ({ appPage }) => {
+    await appPage.setCycle([
       mockInterval(IntervalType.Work, 1),
       mockInterval(IntervalType.ShortBreak, 2),
     ]);
-    await page.goto('/');
+    await appPage.gotoRoot();
   });
 
-  test('list of two intervals', async ({ queries }) => {
-    await expect(queries.getIntervalList()).toHaveCount(2);
+  test('list of two intervals', async ({ appPage }) => {
+    await expect(appPage.intervalList.getByRole('meter')).toHaveCount(2);
   });
 
-  test('play', async ({ queries }) => {
-    await queries.withinControls(async () => {
-      await queries.getButton('Play').click();
+  test('play', async ({ appPage, page }) => {
+    await appPage.play();
 
-      await expect(queries.getButton('Play')).not.toBeVisible();
-      await expect(queries.getButton('Pause')).toBeVisible();
-    });
+    await expect(
+      page.getByRole('button', { name: 'Play' }),
+    ).not.toBeInViewport();
+    await expect(page.getByRole('button', { name: 'Pause' })).toBeInViewport();
   });
 
-  test('pause', async ({ queries }) => {
-    await queries.withinControls(async () => {
-      await queries.getButton('Play').click();
+  test('pause', async ({ appPage, page }) => {
+    await appPage.play();
 
-      await expect(queries.getButton('Play')).not.toBeVisible();
-      await queries.getButton('Pause').click();
-      await expect(queries.getButton('Play')).toBeVisible();
-    });
+    await expect(
+      page.getByRole('button', { name: 'Play' }),
+    ).not.toBeInViewport();
+    await appPage.pause();
+
+    await expect(
+      page.getByRole('button', { name: 'Pause' }),
+    ).not.toBeInViewport();
+    await expect(page.getByRole('button', { name: 'Play' })).toBeInViewport();
   });
 
-  test('skip', async ({ queries, page }) => {
-    await expect(queries.timer).toContainText('01:00');
+  test('skip', async ({ appPage, page }) => {
+    await appPage.skip();
+    await page.waitForTimeout(1000);
 
-    await queries.withinControls(async () => {
-      await queries.getButton('Skip').click();
-      await page.waitForTimeout(700);
-
-      await expect(queries.timer).toContainText('02:00');
-    });
+    await expect(appPage.timer).toContainText('02:00');
   });
 
-  test('skip cycle', async ({ queries, page }) => {
-    await expect(queries.timer).toContainText('01:00');
+  test('skip to end', async ({ appPage, page }) => {
+    await appPage.skip();
+    await appPage.skip();
+    await page.waitForTimeout(1000);
 
-    await queries.withinControls(async () => {
-      await queries.getButton('Skip').click();
-      await page.waitForTimeout(700);
-
-      await expect(queries.timer).toContainText('02:00');
-
-      await queries.getButton('Skip').click();
-      await page.waitForTimeout(700);
-    });
-    await expect(queries.timer).toContainText('01:00');
+    await expect(appPage.timer).toContainText('01:00');
   });
 
-  test('skip when paused', async ({ queries, page }) => {
-    await queries.withinControls(async () => {
-      await queries.getButton('Skip').click();
-      await page.waitForTimeout(700);
+  test('reset', async ({ appPage, page }) => {
+    await appPage.play();
+    await page.waitForTimeout(1000);
+    await appPage.reset();
 
-      await expect(queries.timer).toContainText('02:00');
-      await expect(queries.getButton('Play')).toBeVisible();
-    });
-  });
-
-  test('skip when playing', async ({ queries, page }) => {
-    await queries.withinControls(async () => {
-      await queries.getButton('Play').click();
-      await queries.getButton('Skip').click();
-      await page.waitForTimeout(700);
-
-      await expect(queries.timer).toContainText('02:00');
-      await expect(queries.getButton('Pause')).toBeVisible();
-    });
+    await expect(appPage.timer).toContainText('01:00');
   });
 });

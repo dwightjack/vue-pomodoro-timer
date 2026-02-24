@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import { oneOf, integer } from 'vue-types';
 import { computed } from 'vue';
-import {
-  formatTime,
-  getIntervalTypeColor,
-  getMinutes,
-  getSeconds,
-  toSpacedString,
-} from '@/utils';
+import { formatTime, getMinutes, getSeconds, toSpacedString } from '@/utils';
 import { IntervalType } from '@/types';
 
 const { type, duration } = defineProps({
@@ -27,16 +21,13 @@ const label = computed(() => {
   }
   return `${toSpacedString(type)}: ${mins + (secs === 0 ? 0 : 1)} minutes left`;
 });
-
-const classes = computed(() => getIntervalTypeColor(type as IntervalType));
 </script>
 <template>
   <div
     role="timer"
     aria-live="polite"
     aria-atomic="true"
-    class="rounded-lg border-4 px-8 py-4 text-4xl tabular-nums"
-    :class="classes"
+    class="rounded-lg border-4 px-8 py-4 text-4xl leading-14 tabular-nums"
   >
     <span aria-hidden="true">{{ time }}</span>
     <span class="sr-only">{{ label }}</span>

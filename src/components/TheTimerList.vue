@@ -16,7 +16,7 @@ const countdown = computed(() => cycle.countdowns[cycle.current]);
     enter-from-class="translate-y-2 opacity-0"
     leave-to-class="-translate-y-2 opacity-0"
     tag="div"
-    class="grid-overlap grid"
+    class="grid-overlap grid transition-opacity"
   >
     <BaseTimer
       v-if="currentCycle"

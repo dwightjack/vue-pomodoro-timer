@@ -11,7 +11,7 @@ import TransitionFadeSlide from '@/components/transitions/FadeSlide.vue';
 
 import { watch, onMounted, onBeforeUnmount } from 'vue';
 import { useRegisterSW } from 'virtual:pwa-register/vue';
-import { Status, Interval } from '@/types';
+import { Status, Interval, IntervalType } from '@/types';
 import { useMain } from '@/stores/main';
 import { useCycle } from '@/stores/cycle';
 import { useTicker } from '@/use/ticker';
@@ -79,25 +79,74 @@ watch(
   },
 );
 
-watch(
-  () => cycle.current,
-  (_, prev) => {
-    if (prev === -1 || !main.isPlaying) {
-      return;
-    }
-    const { type, duration } = cycle.getCurrent();
-    notifyInterval(type, duration);
-  },
-);
+const transitions = [
+  [`circle(0 at 80% 20%)`, `circle(200vmax at 80% 20%)`],
+  [
+    `polygon(100% 0, 100% 0, 100% 0)`,
+    `polygon(100% 0, -57.735% 0, 100% 273.205%)`,
+  ],
+  [
+    `polygon(0 0, 100% 0, 100% 0, 0 0)`,
+    `polygon(0 0, 100% 0, 100% 100%, 0 100%)`,
+  ],
+  [
+    `shape(
+    from 0 50%, hline to 100%, vline to 50%, hline to 0, vline to 50%,
+    move to 0 50%, hline to 100%, vline to 50%, hline to 0, vline to 50%
+  )`,
+    `shape(
+    from 0 0, hline to 100%, vline to 50%, hline to 0, vline to 0,
+    move to 0 50%, hline to 100%, vline to 100%, hline to 0, vline to 50%
+  )`,
+  ],
+];
+
+function changeBg(type: IntervalType) {
+  if (!document.startViewTransition) {
+    document.body.dataset.interval = type;
+    return;
+  }
+  document
+    .startViewTransition(() => {
+      document.body.dataset.interval = type;
+    })
+    .ready.then(() => {
+      document.documentElement.animate(
+        {
+          clipPath: transitions[Math.floor(Math.random() * transitions.length)],
+        },
+        {
+          duration: 600,
+          easing: 'cubic-bezier(0.85, 0.09, 0.15, 0.91)',
+          delay: 150,
+          fill: 'both',
+          // Specify which pseudo-element to animate
+          pseudoElement: '::view-transition-new(root)',
+        },
+      );
+    });
+}
+
+watch([() => cycle.currentInterval], ([interval]) => {
+  changeBg(interval.type);
+  if (!main.isPlaying) {
+    return;
+  }
+  notifyInterval(interval.type, interval.duration);
+});
 
 onMounted(checkNotifyPermission);
 onMounted(reset);
+onMounted(() => changeBg(cycle.getCurrent().type));
 onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
 </script>
 
 <template>
   <TheGraphicTimer v-if="cycle.currentInterval" />
-  <div class="fixed inset-x-0 top-0 divide-y divide-blue-100" role="status">
+  <div
+    class="view-transition-[status] fixed inset-x-0 top-0 z-10 divide-y divide-blue-100"
+    role="status"
+  >
     <TransitionFadeSlide>
       <BaseToast
         v-if="notifyBarVisible"
@@ -122,10 +171,10 @@ onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
     </TransitionFadeSlide>
   </div>
   <main
-    class="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-4 sm:px-8"
+    class="view-transition-[main] container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-4 sm:px-8"
   >
     <h1 class="sr-only">Pomodoro Timer</h1>
-    <LayoutStack centered>
+    <LayoutStack centered class="delay-500 duration-500 starting:opacity-0">
       <TheTimerList />
 
       <TheCycle />

@@ -14,7 +14,7 @@ defineSlots<{ default?: () => unknown }>();
 <template>
   <component
     :is="tag"
-    class="gap flex min-w-0"
+    class="flex min-w-0 gap-x-[calc(var(--spacing)*var(--s,4))]"
     :class="{
       'justify-center': centered,
       'items-center': verticalAlign === 'center',
@@ -29,8 +29,3 @@ defineSlots<{ default?: () => unknown }>();
     <slot />
   </component>
 </template>
-<style scoped>
-.gap {
-  column-gap: calc(var(--spacing) * var(--s, 4));
-}
-</style>
