@@ -13,7 +13,7 @@ export enum IntervalType {
 export const IntervalTypeLabels = {
   [IntervalType.Work]: 'Work',
   [IntervalType.ShortBreak]: 'Short Break',
-  [IntervalType.LongBreak]: 'Bong Break',
+  [IntervalType.LongBreak]: 'Long Break',
   [IntervalType.None]: 'None',
 } as const;
 

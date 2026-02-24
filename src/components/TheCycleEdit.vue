@@ -62,7 +62,7 @@ watch(
   <dialog
     ref="dialog"
     :aria-labelledby="id + `-title`"
-    class="view-transition-[settings] m-auto h-full max-h-none w-full max-w-none translate-y-2 bg-transparent p-5 text-gray-700 opacity-0 transition-all transition-discrete duration-500 backdrop:opacity-0 backdrop:backdrop-blur-xs backdrop:transition-all backdrop:transition-discrete backdrop:duration-500 open:flex open:translate-0 open:opacity-100 open:backdrop:opacity-100 md:h-fit md:max-h-[80vh] md:w-fit starting:open:translate-y-2 starting:open:opacity-0 starting:open:backdrop:opacity-0"
+    class="view-transition-[settings] m-auto h-fit max-h-[80vh] w-fit max-w-none translate-y-2 overflow-clip bg-transparent p-5 text-gray-700 opacity-0 transition-all transition-discrete duration-500 backdrop:opacity-0 backdrop:backdrop-blur-xs backdrop:transition-all backdrop:transition-discrete backdrop:duration-500 open:flex open:translate-0 open:opacity-100 open:backdrop:opacity-100 starting:open:translate-y-2 starting:open:opacity-0 starting:open:backdrop:opacity-0"
     closedby="any"
     @close="close"
   >
@@ -70,7 +70,7 @@ watch(
       tag="form"
       method="dialog"
       centered
-      space="1"
+      space="2"
       class="flex w-full flex-col rounded-lg border-4 border-white bg-white/80 px-4 py-2"
       @submit="submit"
     >
