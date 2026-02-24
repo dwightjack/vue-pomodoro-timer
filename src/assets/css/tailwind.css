@@ -2,7 +2,7 @@
 
 @utility input {
   & {
-    @apply appearance-none rounded-lg border border-gray-300 bg-transparent px-2 py-1 text-gray-700 dark:border-stone-600 dark:text-gray-200;
+    @apply appearance-none rounded-lg border border-gray-300 bg-white px-2 py-1 text-gray-700;
   }
 
   &:is(select) {
@@ -39,10 +39,6 @@
 }
 
 @layer base {
-  :root {
-    view-transition-name: none;
-  }
-
   ::view-transition {
     pointer-events: none;
   }

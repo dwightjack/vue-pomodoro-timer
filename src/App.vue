@@ -127,17 +127,13 @@ function changeBg(type: IntervalType) {
     });
 }
 
-watch(
-  () => cycle.current,
-  (_, prev) => {
-    const { type, duration } = cycle.getCurrent();
-    changeBg(type);
-    if (prev === -1 || !main.isPlaying) {
-      return;
-    }
-    notifyInterval(type, duration);
-  },
-);
+watch([() => cycle.currentInterval], ([interval]) => {
+  changeBg(interval.type);
+  if (!main.isPlaying) {
+    return;
+  }
+  notifyInterval(interval.type, interval.duration);
+});
 
 onMounted(checkNotifyPermission);
 onMounted(reset);
@@ -178,7 +174,7 @@ onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
     class="view-transition-[main] container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-4 sm:px-8"
   >
     <h1 class="sr-only">Pomodoro Timer</h1>
-    <LayoutStack centered>
+    <LayoutStack centered class="delay-500 duration-500 starting:opacity-0">
       <TheTimerList />
 
       <TheCycle />

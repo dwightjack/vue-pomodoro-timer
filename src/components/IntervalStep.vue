@@ -23,12 +23,12 @@ const valueText = computed(() => {
 });
 </script>
 <template>
-  <label class="sr-only" :for="id + 'meter'">{{ typeFormatted }}</label>
+  <span :id="id + 'meter'" class="sr-only">{{ typeFormatted }}</span>
   <div
-    :id="id + 'meter'"
+    :aria-labelledby="id + 'meter'"
     role="meter"
     :aria-current="current || undefined"
-    class="h-4 border-e-4 border-current bg-linear-to-r from-current to-current bg-size-[100%] bg-right bg-no-repeat transition-[background-size] duration-300 ease-out has-[~[aria-current]]:bg-size-[0_100%]"
+    class="h-4 border-e-4 border-current bg-linear-to-r from-current to-current bg-size-[100%] bg-right bg-no-repeat bg-origin-border transition-[background-size] duration-300 ease-out has-[~[aria-current]]:bg-size-[0_100%]"
     :style="{
       width: `${size}%`,
       'background-size': current ? `${(100 * remaining) / duration}% 100%` : '',
