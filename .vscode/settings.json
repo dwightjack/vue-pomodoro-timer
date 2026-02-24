@@ -1,8 +1,11 @@
 {
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[js]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": false
   },
   "[ts]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": false
   },
   "css.validate": false,
@@ -11,6 +14,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": false
   },
   "editor.codeActionsOnSave": {

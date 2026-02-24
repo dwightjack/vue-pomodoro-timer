@@ -5,7 +5,7 @@ import IconTrash from '~icons/zondicons/trash';
 import BaseControl from '@/components/BaseControl.vue';
 import LayoutInline from '@/components/LayoutInline.vue';
 import { minutesToMs, getMinutes } from '@/utils';
-import { IntervalType } from '@/types';
+import { IntervalType, IntervalTypeLabels } from '@/types';
 
 const type = defineModel<IntervalType>('type', {
   default: IntervalType.None,
@@ -39,13 +39,13 @@ defineEmits<{
     <LayoutInline vertical-align="center">
       <label class="grid-overlap grid grow items-center text-gray-700">
         <select v-model="type" class="input min-w-0 truncate" name="type">
-          <template v-for="(value, name) in IntervalType" :key="value">
+          <template v-for="value in IntervalType" :key="value">
             <option
               v-if="value !== IntervalType.None"
               :value
               :selected="value === type"
             >
-              {{ name }}
+              {{ IntervalTypeLabels[value] }}
             </option></template
           >
         </select>
