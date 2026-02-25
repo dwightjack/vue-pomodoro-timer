@@ -1,28 +1,56 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pomodoro Timer</title>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/img/icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/img/icons/favicon-16x16.png"
+    />
+    <meta
+      name="theme-color"
+      content="#ffffff"
+      media="(prefers-color-scheme: light)"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <title>Pomodoro Timer</title>
-  <link rel=icon type=image/png sizes=32x32 href=/img/icons/favicon-32x32.png>
-  <link rel=icon type=image/png sizes=16x16 href=/img/icons/favicon-16x16.png>
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#292524" media="(prefers-color-scheme: dark)" />
-  <meta name="apple-mobile-web-app-capable" content="no" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Pomodoro Timer" />
-  <link rel=apple-touch-icon href=/img/icons/apple-touch-icon-152x152.png>
-  <link rel=mask-icon href=/img/icons/safari-pinned-tab.svg color=#ffffff>
-  <meta name=msapplication-TileImage content=/img/icons/msapplication-icon-144x144.png>
-  <meta name="msapplication-TileColor" content="#000000" />
-  <meta name="color-scheme" content="dark light" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</head>
+    <meta
+      name="theme-color"
+      content="#292524"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta name="apple-mobile-web-app-capable" content="no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Pomodoro Timer" />
+    <link
+      rel="apple-touch-icon"
+      href="/img/icons/apple-touch-icon-152x152.png"
+    />
+    <link
+      rel="mask-icon"
+      href="/img/icons/safari-pinned-tab.svg"
+      color="#ffffff"
+    />
+    <meta
+      name="msapplication-TileImage"
+      content="/img/icons/msapplication-icon-144x144.png"
+    />
+    <meta name="msapplication-TileColor" content="#000000" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
 
-<body
-  class="text-white bg-linear-45 data-[interval=work]:from-amber-800 data-[interval=work]:to-amber-700 data-[interval=short-break]:from-teal-800 data-[interval=short-break]:to-teal-700  data-[interval=long-break]:from-green-700 data-[interval=long-break]:to-green-600 from-gray-700 to-gray-600">
-  <div id="app"></div>
-  <script type="module" src="/src/main.ts"></script>
-</body>
-
+  <body
+    class="bg-linear-45 from-gray-700 to-gray-600 text-white data-[interval=long-break]:from-green-700 data-[interval=long-break]:to-green-600 data-[interval=short-break]:from-teal-800 data-[interval=short-break]:to-teal-700 data-[interval=work]:from-amber-800 data-[interval=work]:to-amber-700"
+  >
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>

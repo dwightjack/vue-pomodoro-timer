@@ -1,11 +1,10 @@
 pre-commit:
-  parallel: true
   commands:
     lint:
-      glob: '*.{js,ts,vue}'
+      glob: "*.{js,ts,vue}"
       run: pnpm eslint {staged_files}
 
     format:
-      glob: '*.{css,html,json,md,yaml,yml}'
-      run: pnpm prettier --write {staged_files}
+      glob: "*.{css,html,json,md,yaml,yml}"
+      run: pnpm oxfmt --check --no-error-on-unmatched-pattern {staged_files}
       stage_fixed: true

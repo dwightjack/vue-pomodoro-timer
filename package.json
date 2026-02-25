@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite --port 8888",
     "build": "vue-tsc --noEmit && vite build",
-    "lint": "eslint 'src/**/*.*'",
+    "lint": "eslint 'src/**/*.*' && oxfmt --check --no-error-on-unmatched-pattern",
     "serve": "vite preview",
     "dev:test": "vite dev --port 8888 --mode=test",
     "test": "playwright test"
@@ -33,11 +33,9 @@
     "@vitejs/plugin-vue": "6.0.4",
     "@vue/compiler-sfc": "3.5.28",
     "eslint": "10.0.0",
-    "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-vue": "10.8.0",
-    "prettier": "3.8.1",
-    "prettier-plugin-tailwindcss": "0.7.2",
+    "lefthook": "2.1.1",
+    "oxfmt": "^0.35.0",
     "tailwindcss": "4.2.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.56.0",
@@ -47,14 +45,5 @@
     "vite-svg-loader": "5.1.0",
     "vue-eslint-parser": "10.4.0",
     "vue-tsc": "3.2.4"
-  },
-  "prettier": {
-    "plugins": [
-      "prettier-plugin-tailwindcss"
-    ],
-    "trailingComma": "all",
-    "arrowParens": "always",
-    "semi": true,
-    "singleQuote": true
   }
 }

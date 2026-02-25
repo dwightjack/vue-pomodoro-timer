@@ -1,6 +1,6 @@
 # Pomodoro Timer
 
-> A simple, configurable pomodoro timer 
+> A simple, configurable pomodoro timer
 
 ## Stack
 

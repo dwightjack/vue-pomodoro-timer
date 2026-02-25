@@ -2,7 +2,6 @@ import js from '@eslint/js';
 import vue from 'eslint-plugin-vue';
 import ts from 'typescript-eslint';
 import vueParser from 'vue-eslint-parser';
-import prettier from 'eslint-plugin-prettier/recommended';
 
 export default ts.config(
   js.configs.recommended,
@@ -28,6 +27,12 @@ export default ts.config(
           order: ['script[setup]', 'template', 'style'],
         },
       ],
+      'vue/singleline-html-element-content-newline': 'off',
+      'vue/max-attributes-per-line': 'off',
+      'vue/html-closing-bracket-newline': 'off',
+      'vue/html-indent': 'off',
+      'vue/multiline-html-element-content-newline': 'off',
+      'vue/html-self-closing': 'off',
     },
   },
   {
@@ -44,6 +49,5 @@ export default ts.config(
       'no-undef': 'off',
     },
   },
-  prettier,
   { ignores: ['**/src/assets/**'] },
 );
