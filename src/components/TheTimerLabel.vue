@@ -1,4 +1,4 @@
-<script setup="ts">
+<script setup lang="ts">
 import { useCycle } from '@/stores/cycle';
 import { IntervalType } from '@/types';
 const cycle = useCycle();
