@@ -7,6 +7,7 @@ import TheCycleEdit from '@/components/TheCycleEdit.vue';
 import BaseToast from '@/components/BaseToast.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import TheGraphicTimer from '@/components/TheGraphicTimer.vue';
+import TheTimerLabel from '@/components/TheTimerLabel.vue';
 import TransitionFadeSlide from '@/components/transitions/FadeSlide.vue';
 
 import { watch, onMounted, onBeforeUnmount } from 'vue';
@@ -174,6 +175,7 @@ onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
     class="view-transition-[main] container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-4 sm:px-8"
   >
     <h1 class="sr-only">Pomodoro Timer</h1>
+    <TheTimerLabel />
     <LayoutStack centered class="delay-500 duration-500 starting:opacity-0">
       <TheTimerList />
 
@@ -192,6 +194,5 @@ onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
         @toggled="main.toggleEdit"
       />
     </LayoutStack>
-    <slot />
   </main>
 </template>
