@@ -9,16 +9,14 @@ export default defineConfig({
     },
     maskable: {
       sizes: [512],
-      padding: 0,
       resizeOptions: {
         background: '#CC6600',
       },
     },
     apple: {
       sizes: [180],
-      padding: 0,
       resizeOptions: {
-        background: { r: 0, g: 0, b: 0, alpha: 0 },
+        background: '#CC6600',
       },
     },
   },
