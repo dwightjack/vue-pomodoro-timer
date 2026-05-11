@@ -1,0 +1,24 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="36" fill="#CC6600"/>
+
+  <circle 
+    cx="64" 
+    cy="64" 
+    r="44" 
+    stroke="#b04400" 
+    stroke-width="14" 
+  />
+  <circle 
+    cx="64" 
+    cy="64" 
+    r="44" 
+    stroke="#FFE0B2" 
+    stroke-width="12" 
+    stroke-linecap="round"
+    stroke-dasharray="207.34 69.12" 
+    transform="rotate(-90 64 64)" />
+
+
+
+  <path d="M84 62.268C85.3333 63.0378 85.3333 64.9622 84 65.732L54 83.0526C52.6667 83.8224 51 82.8601 51 81.3205L51 46.6795C51 45.1399 52.6667 44.1776 54 44.9474L84 62.268Z" fill="white"/>
+</svg>
