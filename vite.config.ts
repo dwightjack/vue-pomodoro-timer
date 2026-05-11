@@ -31,10 +31,9 @@ export default defineConfig({
       manifest: {
         name: 'Pomodoro Timer',
         short_name: 'Pomodoro Timer',
-        theme_color: '#ffffff',
         start_url: '.',
         display: 'standalone',
-        background_color: '#ffffff',
+        background_color: '#cc6600',
         icons: [
           {
             src: 'pwa-64x64.png',
