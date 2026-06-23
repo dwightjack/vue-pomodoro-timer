@@ -5,7 +5,7 @@ const cycle = useCycle();
 </script>
 <template>
   <h2
-    class="view-transition-[label] fixed inset-s-0 inset-e-7 inset-be-4 flex flex-row-reverse text-5xl leading-[1.1] font-light opacity-80 md:text-7xl lg:inset-e-10 lg:inset-be-6 lg:text-8xl"
+    class="view-transition-[label] fixed inset-e-7 inset-be-4 flex size-fit flex-row-reverse text-5xl leading-[1.1] font-light opacity-80 md:text-7xl lg:inset-e-10 lg:inset-be-6 lg:text-8xl"
   >
     <span class="sr-only">Current Interval </span>
 

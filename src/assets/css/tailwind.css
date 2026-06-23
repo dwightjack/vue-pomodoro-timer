@@ -136,19 +136,18 @@
 
   ::view-transition-group(label) {
     animation: none;
+    inset: auto;
     transform: none;
-    inset-block-start: auto;
-    inset-inline-start: auto;
     @apply inset-e-7 inset-be-4;
   }
 
   ::view-transition-old(label),
   ::view-transition-new(label) {
-    opacity: 1;
-    inset: auto 0 0 auto;
     animation-duration: 600ms;
     animation-timing-function: cubic-bezier(0.66, 0, 0.34, 1);
     animation-fill-mode: both;
+    object-fit: none;
+    inline-size: fit-content;
   }
 
   ::view-transition-new(label) {
@@ -158,5 +157,8 @@
 
   ::view-transition-old(label) {
     animation-name: anim-out;
+    inset-block-start: auto;
+    inset-block-end: 0;
+    inset-inline-end: 0;
   }
 }
