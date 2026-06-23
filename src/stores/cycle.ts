@@ -20,7 +20,7 @@ export const useCycle = defineStore('cycle', () => {
   const currentCountdown = computed(() => countdowns.value[current.value]);
   const ids = computed(() => intervals.value.map(({ id }) => id));
 
-  function toInterval(index: number) {
+  async function toInterval(index: number) {
     let next = index;
     if (!intervals.value) {
       return;
@@ -28,7 +28,9 @@ export const useCycle = defineStore('cycle', () => {
     if (next >= intervals.value.length) {
       next = 0;
     }
-    current.value = next;
+    await document.startViewTransition(() => {
+      current.value = next;
+    }).ready;
   }
 
   function toCountdowns() {

@@ -80,52 +80,14 @@ watch(
   },
 );
 
-const transitions = [
-  [`circle(0 at 80% 20%)`, `circle(200vmax at 80% 20%)`],
-  [
-    `polygon(100% 0, 100% 0, 100% 0)`,
-    `polygon(100% 0, -57.735% 0, 100% 273.205%)`,
-  ],
-  [
-    `polygon(0 0, 100% 0, 100% 0, 0 0)`,
-    `polygon(0 0, 100% 0, 100% 100%, 0 100%)`,
-  ],
-  [
-    `shape(
-    from 0 50%, hline to 100%, vline to 50%, hline to 0, vline to 50%,
-    move to 0 50%, hline to 100%, vline to 50%, hline to 0, vline to 50%
-  )`,
-    `shape(
-    from 0 0, hline to 100%, vline to 50%, hline to 0, vline to 0,
-    move to 0 50%, hline to 100%, vline to 100%, hline to 0, vline to 50%
-  )`,
-  ],
-];
+const transitions = ['bg-one', 'bg-two', 'bg-three', 'bg-four'];
 
 function changeBg(type: IntervalType) {
-  if (!document.startViewTransition) {
-    document.body.dataset.interval = type;
-    return;
-  }
-  document
-    .startViewTransition(() => {
-      document.body.dataset.interval = type;
-    })
-    .ready.then(() => {
-      document.documentElement.animate(
-        {
-          clipPath: transitions[Math.floor(Math.random() * transitions.length)],
-        },
-        {
-          duration: 600,
-          easing: 'cubic-bezier(0.85, 0.09, 0.15, 0.91)',
-          delay: 150,
-          fill: 'both',
-          // Specify which pseudo-element to animate
-          pseudoElement: '::view-transition-new(root)',
-        },
-      );
-    });
+  document.body.dataset.interval = type;
+  document.documentElement.style.setProperty(
+    '--bg-transition',
+    transitions[Math.floor(Math.random() * transitions.length)],
+  );
 }
 
 watch([() => cycle.currentInterval], ([interval]) => {

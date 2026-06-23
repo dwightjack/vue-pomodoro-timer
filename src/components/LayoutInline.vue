@@ -14,7 +14,7 @@ defineSlots<{ default?: () => unknown }>();
 <template>
   <component
     :is="tag"
-    class="flex min-w-0 gap-x-[calc(var(--spacing)*var(--s,4))]"
+    class="flex min-w-0 gap-x-[--spacing(var(--s,4))]"
     :class="{
       'justify-center': centered,
       'items-center': verticalAlign === 'center',
