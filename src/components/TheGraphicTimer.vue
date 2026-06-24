@@ -6,6 +6,7 @@ import {
   onUnmounted,
   computed,
   useTemplateRef,
+  nextTick,
 } from 'vue';
 import { number } from 'vue-types';
 import { getIntervalTypeColor } from '@/utils';
@@ -24,14 +25,24 @@ function drawCircle(
   end = 2 * Math.PI,
 ) {
   ctx.fillStyle = color;
+  ctx.globalAlpha = 0.3;
+  ctx.beginPath();
+  ctx.arc(center, center, radius, 0, 2 * Math.PI);
+  ctx.fill();
+
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = color;
   ctx.beginPath();
   ctx.moveTo(center, center);
   ctx.arc(center, center, radius, start, end);
   ctx.fill();
+
+  ctx.fillStyle = 'white';
+  ctx.fill(new Path2D(faviconPath));
 }
 
 const { size } = defineProps({
-  size: number().def(50),
+  size: number().def(128),
 });
 
 const canvasRef = useTemplateRef('canvasRef');
@@ -42,7 +53,10 @@ const minutes = ref<number>(currentMinute(remaining.value));
 const colorType = computed(() =>
   getIntervalTypeColor(cycle.currentInterval.type),
 );
-const originalFavicon = new Map();
+const favicon = ref<HTMLLinkElement>();
+const faviconPath =
+  'M84 62.268C85.3333 63.0378 85.3333 64.9622 84 65.732L54 83.0526C52.6667 83.8224 51 82.8601 51 81.3205L51 46.6795C51 45.1399 52.6667 44.1776 54 44.9474L84 62.268Z';
+const originalFavicon = ref<HTMLLinkElement>();
 
 function renderCanvas() {
   const { duration } = cycle.currentInterval;
@@ -68,20 +82,14 @@ function renderCanvas() {
   // start angle + 360deg
   const end = rotation + 2 * Math.PI;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   drawCircle(ctx, color, center, radius, start, end);
 
-  const favicons = document.querySelectorAll<HTMLLinkElement>(
-    'link[rel="icon"][type="image/png"]',
-  );
-  if (favicons.length > 0) {
-    const dataUrl = canvas.toDataURL('image/png');
-    favicons.forEach((favicon) => {
-      if (!originalFavicon.has(favicon)) {
-        originalFavicon.set(favicon, favicon.href);
-      }
-      favicon.href = dataUrl;
-    });
-  }
+  canvas.toBlob((blob) => {
+    if (blob && favicon.value) {
+      favicon.value.href = URL.createObjectURL(blob);
+    }
+  });
 }
 
 watch(
@@ -96,23 +104,30 @@ watch(
 watch([minutes, colorType], renderCanvas, {
   flush: 'post',
 });
-onMounted(() => {
-  setTimeout(renderCanvas, 0);
+onMounted(async () => {
+  await nextTick();
+  const icon = document.querySelector<HTMLLinkElement>(
+    'link[rel="icon"][type="image/svg+xml"]',
+  );
+  if (icon) {
+    originalFavicon.value = icon.cloneNode() as HTMLLinkElement;
+    icon.type = 'image/png';
+    favicon.value = icon;
+  }
+  renderCanvas();
 });
 onUnmounted(() => {
-  if (originalFavicon.size === 0) {
+  if (!originalFavicon.value) {
     return;
   }
-  originalFavicon.forEach((href, favicon) => {
-    favicon.href = href;
-  });
-  originalFavicon.clear();
+  favicon.value?.replaceWith(originalFavicon.value);
+  favicon.value = undefined;
+  originalFavicon.value = undefined;
 });
 </script>
 <template>
   <canvas
     ref="canvasRef"
-    class="sr-only"
     :class="colorType"
     :width="size"
     :height="size"

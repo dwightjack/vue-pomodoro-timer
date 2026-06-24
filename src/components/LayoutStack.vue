@@ -13,7 +13,7 @@ defineSlots<{ default?: () => unknown }>();
 <template>
   <component
     :is="tag"
-    class="flex flex-col gap-y-[calc(var(--spacing)*var(--s,4))]"
+    class="flex flex-col gap-y-[--spacing(var(--s,4))]"
     :class="{
       'items-center': centered,
       'items-start': !centered,

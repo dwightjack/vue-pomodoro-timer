@@ -62,7 +62,7 @@ watch(
   <dialog
     ref="dialog"
     :aria-labelledby="id + `-title`"
-    class="view-transition-[settings] m-auto h-fit max-h-[80vh] w-fit max-w-none translate-y-2 overflow-clip bg-transparent p-5 text-gray-700 opacity-0 transition-all transition-discrete duration-500 backdrop:opacity-0 backdrop:backdrop-blur-xs backdrop:transition-all backdrop:transition-discrete backdrop:duration-500 open:flex open:translate-0 open:opacity-100 open:backdrop:opacity-100 starting:open:translate-y-2 starting:open:opacity-0 starting:open:backdrop:opacity-0"
+    class="view-transition-[settings] m-auto size-fit translate-y-2 overflow-clip bg-transparent p-5 text-gray-700 opacity-0 transition-[opacity,translate,display,overlay] transition-discrete duration-500 max-block-[80bvb] max-inline-none backdrop:opacity-0 backdrop:backdrop-blur-xs backdrop:transition-[opacity,translate] backdrop:transition-discrete backdrop:duration-500 open:flex open:translate-0 open:opacity-100 open:backdrop:opacity-100 starting:open:translate-y-2 starting:open:opacity-0 starting:open:backdrop:opacity-0"
     closedby="any"
     @close="close"
   >
