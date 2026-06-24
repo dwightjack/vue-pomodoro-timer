@@ -128,6 +128,7 @@ onUnmounted(() => {
 <template>
   <canvas
     ref="canvasRef"
+    class="sr-only"
     :class="colorType"
     :width="size"
     :height="size"
