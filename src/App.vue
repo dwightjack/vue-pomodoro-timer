@@ -80,12 +80,17 @@ watch(
   },
 );
 
-const transitions = ['bg-one', 'bg-two', 'bg-three', 'bg-four'];
+const transitions = [
+  'bg-circle',
+  'bg-from-topright',
+  'bg-from-top',
+  'bg-from-center',
+];
 
 function changeBg(type: IntervalType) {
   document.body.dataset.interval = type;
   document.documentElement.style.setProperty(
-    '--bg-transition',
+    '--bg-animation',
     transitions[Math.floor(Math.random() * transitions.length)],
   );
 }
