@@ -5,7 +5,8 @@ export default defineConfig({
   preset: {
     transparent: {
       sizes: [64, 192, 512],
-      favicons: [[32, 'favicon.ico']],
+      // https://issues.chromium.org/issues/40270345
+      // favicons: [[32, 'favicon.ico']],
     },
     maskable: {
       sizes: [512],
