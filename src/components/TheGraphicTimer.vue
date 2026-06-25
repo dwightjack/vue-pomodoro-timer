@@ -16,7 +16,7 @@ const cycle = useCycle();
 
 const currentMinute = (v: number) => Math.ceil(v / 1000 / 30);
 
-function drawCircle(
+function drawTimer(
   ctx: CanvasRenderingContext2D,
   color: string,
   center: number,
@@ -81,9 +81,10 @@ function renderCanvas() {
   const start = rotation + 2 * Math.PI * elapsedRatio;
   // start angle + 360deg
   const end = rotation + 2 * Math.PI;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  drawCircle(ctx, color, center, radius, start, end);
+  drawTimer(ctx, color, center, radius, start, end);
 
   canvas.toBlob((blob) => {
     if (blob && favicon.value) {
