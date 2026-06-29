@@ -31,82 +31,82 @@
   view-transition-name: --value([*], 'none');
 }
 
+@keyframes bg-circle {
+  0% {
+    clip-path: circle(0 at 80% 20%);
+  }
+  100% {
+    clip-path: circle(200vmax at 80% 20%);
+  }
+}
+
+@keyframes bg-from-topright {
+  0% {
+    clip-path: polygon(100% 0, 100% 0, 100% 0);
+  }
+  100% {
+    clip-path: polygon(100% 0, -57.735% 0, 100% 273.205%);
+  }
+}
+
+@keyframes bg-from-top {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+@keyframes bg-from-center {
+  0% {
+    clip-path: shape(
+      from 0 50%,
+      hline to 100%,
+      vline to 50%,
+      hline to 0,
+      vline to 50%,
+      move to 0 50%,
+      hline to 100%,
+      vline to 50%,
+      hline to 0,
+      vline to 50%
+    );
+  }
+  100% {
+    clip-path: shape(
+      from 0 0,
+      hline to 100%,
+      vline to 50%,
+      hline to 0,
+      vline to 0,
+      move to 0 50%,
+      hline to 100%,
+      vline to 100%,
+      hline to 0,
+      vline to 50%
+    );
+  }
+}
+
+@keyframes anim-in {
+  from {
+    transform: translateX(calc(var(--spacing) * 2));
+    opacity: 0;
+  }
+}
+
+@keyframes anim-out {
+  to {
+    transform: translateX(calc(var(--spacing) * -2));
+    opacity: 0;
+  }
+}
+
 @layer theme {
   @property --s {
     syntax: '*';
     inherits: false;
-  }
-
-  @keyframes bg-circle {
-    0% {
-      clip-path: circle(0 at 80% 20%);
-    }
-    100% {
-      clip-path: circle(200vmax at 80% 20%);
-    }
-  }
-
-  @keyframes bg-from-topright {
-    0% {
-      clip-path: polygon(100% 0, 100% 0, 100% 0);
-    }
-    100% {
-      clip-path: polygon(100% 0, -57.735% 0, 100% 273.205%);
-    }
-  }
-
-  @keyframes bg-from-top {
-    0% {
-      clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-    }
-    100% {
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    }
-  }
-
-  @keyframes bg-from-center {
-    0% {
-      clip-path: shape(
-        from 0 50%,
-        hline to 100%,
-        vline to 50%,
-        hline to 0,
-        vline to 50%,
-        move to 0 50%,
-        hline to 100%,
-        vline to 50%,
-        hline to 0,
-        vline to 50%
-      );
-    }
-    100% {
-      clip-path: shape(
-        from 0 0,
-        hline to 100%,
-        vline to 50%,
-        hline to 0,
-        vline to 0,
-        move to 0 50%,
-        hline to 100%,
-        vline to 100%,
-        hline to 0,
-        vline to 50%
-      );
-    }
-  }
-
-  @keyframes anim-in {
-    from {
-      transform: translateX(calc(var(--spacing) * 2));
-      opacity: 0;
-    }
-  }
-
-  @keyframes anim-out {
-    to {
-      transform: translateX(calc(var(--spacing) * -2));
-      opacity: 0;
-    }
   }
 }
 
