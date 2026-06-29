@@ -1,121 +1,53 @@
 <script setup lang="ts">
-import {
-  watch,
-  ref,
-  onMounted,
-  onUnmounted,
-  computed,
-  useTemplateRef,
-} from 'vue';
-import { number } from 'vue-types';
+import { watch, onUnmounted, computed, useTemplateRef } from 'vue';
 import { getIntervalTypeColor } from '@/utils';
 import { useCycle } from '@/stores/cycle';
+import { useMain } from '@/stores/main';
+import { FAVICON_SIZE, useCanvasTimer } from '@/use/useCanvasTimer';
 
 const cycle = useCycle();
+const app = useMain();
 
-const currentMinute = (v: number) => Math.ceil(v / 1000 / 30);
-
-function drawCircle(
-  ctx: CanvasRenderingContext2D,
-  color: string,
-  center: number,
-  radius: number,
-  start = 0,
-  end = 2 * Math.PI,
-) {
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.moveTo(center, center);
-  ctx.arc(center, center, radius, start, end);
-  ctx.fill();
-}
-
-const { size } = defineProps({
-  size: number().def(50),
-});
-
-const canvasRef = useTemplateRef('canvasRef');
 const remaining = computed(
   () => cycle.currentCountdown ?? cycle.currentInterval.duration,
 );
-const minutes = ref<number>(currentMinute(remaining.value));
+const timeSlices = computed(() => Math.ceil(remaining.value / 1000 / 30));
+const elapsedRatio = computed(() => {
+  const { duration } = cycle.currentInterval;
+  return (duration - remaining.value) / duration;
+});
+
+const { renderCanvas, restore, mountCanvas } = useCanvasTimer();
+const canvasRef = useTemplateRef('canvasRef');
+
 const colorType = computed(() =>
   getIntervalTypeColor(cycle.currentInterval.type),
 );
-const originalFavicon = new Map();
 
-function renderCanvas() {
-  const { duration } = cycle.currentInterval;
-  const elapsedRatio = (duration - remaining.value) / duration;
-  if (!canvasRef.value) {
-    return;
-  }
-  const canvas = canvasRef.value;
-  const ctx = canvas.getContext('2d');
-
-  if (!ctx) {
-    return;
-  }
-  const center = size / 2;
-  const radius = center;
-  const color = window.getComputedStyle(canvas).getPropertyValue('color');
-
-  // -90deg starting from the x axis
-  const rotation = Math.PI / -2;
-
-  // start angle + 360deg * elapsed ratio
-  const start = rotation + 2 * Math.PI * elapsedRatio;
-  // start angle + 360deg
-  const end = rotation + 2 * Math.PI;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawCircle(ctx, color, center, radius, start, end);
-
-  const favicons = document.querySelectorAll<HTMLLinkElement>(
-    'link[rel="icon"][type="image/png"]',
-  );
-  if (favicons.length > 0) {
-    const dataUrl = canvas.toDataURL('image/png');
-    favicons.forEach((favicon) => {
-      if (!originalFavicon.has(favicon)) {
-        originalFavicon.set(favicon, favicon.href);
-      }
-      favicon.href = dataUrl;
-    });
-  }
-}
+watch([timeSlices, colorType], () => renderCanvas(elapsedRatio.value), {
+  flush: 'post',
+});
 
 watch(
-  () => currentMinute(remaining.value),
-  (v) => {
-    if (minutes.value !== v) {
-      minutes.value = v;
+  () => app.isPlaying,
+  (isPlaying) => {
+    if (isPlaying) {
+      mountCanvas(canvasRef);
+      renderCanvas(elapsedRatio.value);
+    } else {
+      restore();
     }
   },
 );
-
-watch([minutes, colorType], renderCanvas, {
-  flush: 'post',
-});
-onMounted(() => {
-  setTimeout(renderCanvas, 0);
-});
-onUnmounted(() => {
-  if (originalFavicon.size === 0) {
-    return;
-  }
-  originalFavicon.forEach((href, favicon) => {
-    favicon.href = href;
-  });
-  originalFavicon.clear();
-});
+onUnmounted(restore);
 </script>
 <template>
   <canvas
     ref="canvasRef"
     class="sr-only"
     :class="colorType"
-    :width="size"
-    :height="size"
+    :width="FAVICON_SIZE"
+    :height="FAVICON_SIZE"
     aria-hidden="true"
   />
 </template>

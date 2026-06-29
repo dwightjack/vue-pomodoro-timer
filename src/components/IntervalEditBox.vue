@@ -28,7 +28,7 @@ defineEmits<{
 </script>
 <template>
   <fieldset
-    class="min-w-0 rounded-lg p-2 text-white transition-colors"
+    class="rounded-lg p-2 text-white transition-colors min-inline-0"
     :class="{
       'bg-amber-700': type === IntervalType.Work,
       'bg-teal-700': type === IntervalType.ShortBreak,
@@ -38,7 +38,7 @@ defineEmits<{
     <legend class="sr-only">Interval Settings</legend>
     <LayoutInline vertical-align="center">
       <label class="grid-overlap grid grow items-center text-gray-700">
-        <select v-model="type" class="input min-w-0 truncate" name="type">
+        <select v-model="type" class="input truncate min-inline-0" name="type">
           <template v-for="value in IntervalType" :key="value">
             <option
               v-if="value !== IntervalType.None"
