@@ -51,41 +51,19 @@
 
 @keyframes bg-from-top {
   0% {
-    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    clip-path: inset(0 0 100% 0);
   }
   100% {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    clip-path: inset(0 0 0 0);
   }
 }
 
 @keyframes bg-from-center {
   0% {
-    clip-path: shape(
-      from 0 50%,
-      hline to 100%,
-      vline to 50%,
-      hline to 0,
-      vline to 50%,
-      move to 0 50%,
-      hline to 100%,
-      vline to 50%,
-      hline to 0,
-      vline to 50%
-    );
+    clip-path: inset(50% 0 50% 0);
   }
   100% {
-    clip-path: shape(
-      from 0 0,
-      hline to 100%,
-      vline to 50%,
-      hline to 0,
-      vline to 0,
-      move to 0 50%,
-      hline to 100%,
-      vline to 100%,
-      hline to 0,
-      vline to 50%
-    );
+    clip-path: inset(0 0 0 0);
   }
 }
 
