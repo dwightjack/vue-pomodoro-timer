@@ -44,7 +44,7 @@ export default defineConfig({
         short_name: 'Pomodoro Timer',
         start_url: '.',
         theme_color: colors.gray[600],
-        display: 'standalone',
+        display: 'fullscreen',
         background_color: '#cc6600',
       },
       workbox: {
