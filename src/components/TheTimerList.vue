@@ -1,11 +1,35 @@
 <script setup lang="ts">
 import BaseTimer from '@/components/BaseTimer.vue';
 import { useCycle } from '@/stores/cycle';
+import { getMinutes, getSeconds } from '@/utils';
 import { computed } from 'vue';
 
 const cycle = useCycle();
 const currentCycle = computed(() => cycle.intervals[cycle.current]);
 const countdown = computed(() => cycle.countdowns[cycle.current]);
+
+const label = computed(() => {
+  const mins = getMinutes(countdown.value);
+  const secs = getSeconds(countdown.value);
+  let remMins = mins + (secs === 0 ? 0 : 1);
+  if (mins === 0 && secs === 0) {
+    return `time out`;
+  }
+  if (mins === 0) {
+    return `less than 1 minute left`;
+  }
+  if (mins > 10) {
+    // for intervals greater than 10 minutes,
+    // announce the remaining time every 5 minutes
+    // the announced time is rounded up to the nearest multiple of 5 or the total interval length if shorter.
+    remMins = Math.min(
+      Math.ceil(remMins / 5) * 5,
+      getMinutes(currentCycle.value.duration),
+    );
+    return `${remMins} minutes left`;
+  }
+  return `${remMins} minutes left`;
+});
 </script>
 <template>
   <TransitionGroup
@@ -21,9 +45,11 @@ const countdown = computed(() => cycle.countdowns[cycle.current]);
     <BaseTimer
       v-if="currentCycle"
       :key="currentCycle.id"
-      :duration="countdown"
-      :type="currentCycle.type"
+      :remaining="countdown"
       class="will-change-transform"
     />
   </TransitionGroup>
+  <div role="status" class="sr-only">
+    {{ label }}
+  </div>
 </template>
