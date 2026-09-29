@@ -21,5 +21,6 @@ const cycle = useCycle();
     >
       Short<br />Break
     </template>
+    <span class="sr-only">. {{ cycle.currentCountdownLabel }}</span>
   </h2>
 </template>
