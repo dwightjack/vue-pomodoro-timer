@@ -66,7 +66,6 @@ export function setupNotifications(notify: (...args: any[]) => any) {
     if (IntervalType.Work === type) {
       notify('Time to work!', {
         body: `\nLet's get some work done for the next ${minutes}!`,
-        requireInteraction: true,
       });
       return;
     }
@@ -75,7 +74,9 @@ export function setupNotifications(notify: (...args: any[]) => any) {
       `Time for a ${
         type === IntervalType.ShortBreak ? 'short' : 'long'
       } break!`,
-      { body: `\nLet's rest for about ${minutes}!`, requireInteraction: false },
+      {
+        body: `\nLet's rest for about ${minutes}!`,
+      },
     );
   };
 }

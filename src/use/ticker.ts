@@ -1,10 +1,9 @@
 type TickerCallback = () => void;
 
-export function useTicker(
-  worker: Worker,
-  callback: TickerCallback,
-  duration = 1000,
-) {
+export function useTicker(callback: TickerCallback, duration = 1000) {
+  const tickWorker = new Worker(new URL('../workers/tick', import.meta.url), {
+    type: 'module',
+  });
   function handler({ data }: MessageEvent) {
     if (data === 'tick') {
       callback();
@@ -12,14 +11,14 @@ export function useTicker(
   }
 
   function stopTicker() {
-    worker.removeEventListener('message', handler);
-    worker.postMessage({ type: 'stop' });
+    tickWorker.removeEventListener('message', handler);
+    tickWorker.postMessage({ type: 'stop' });
   }
 
   function startTicker() {
     stopTicker();
-    worker.postMessage({ type: 'start', duration });
-    worker.addEventListener('message', handler);
+    tickWorker.postMessage({ type: 'start', duration });
+    tickWorker.addEventListener('message', handler);
   }
 
   return {

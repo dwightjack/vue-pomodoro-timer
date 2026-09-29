@@ -10,31 +10,45 @@ import TheGraphicTimer from '@/components/TheGraphicTimer.vue';
 import TheTimerLabel from '@/components/TheTimerLabel.vue';
 import TransitionFadeSlide from '@/components/transitions/FadeSlide.vue';
 
-import { watch, onMounted, onBeforeUnmount } from 'vue';
+import {
+  watch,
+  onMounted,
+  onBeforeUnmount,
+  watchEffect,
+  onWatcherCleanup,
+} from 'vue';
 import { useRegisterSW } from 'virtual:pwa-register/vue';
 import { Status, Interval, IntervalType } from '@/types';
 import { useMain } from '@/stores/main';
 import { useCycle } from '@/stores/cycle';
 import { useTicker } from '@/use/ticker';
-import { useStorage } from '@vueuse/core';
 import { useNotification } from '@/use/notification';
 import { useAsyncModal } from '@/use/asyncModal';
-import { setupNotifications } from './utils';
-
-const tickWorker = new Worker(new URL('./workers/tick', import.meta.url), {
-  type: 'module',
-});
+import { setupNotifications, toTitleCase } from './utils';
 
 const { needRefresh, updateServiceWorker } = useRegisterSW();
 
-const permissions = useStorage<{ notification?: boolean }>('permissions', {});
 const main = useMain();
 const cycle = useCycle();
 
-const { startTicker, stopTicker } = useTicker(tickWorker, cycle.countDown);
+const { startTicker, stopTicker } = useTicker(cycle.countDown);
+onBeforeUnmount(stopTicker);
+watch(
+  () => main.status,
+  (status) => {
+    onWatcherCleanup(stopTicker);
+    if (status === Status.Play) {
+      startTicker();
+      return;
+    }
+    stopTicker();
+  },
+);
 
-const { notify, askPermission } = useNotification();
+const { notify, checkNotifyPermission } = useNotification();
 const [notifyBarVisible, notifyBar] = useAsyncModal();
+const notifyInterval = setupNotifications(notify);
+onMounted(() => checkNotifyPermission(notifyBar.show));
 
 function skip() {
   stopTicker();
@@ -48,37 +62,12 @@ function reset() {
   main.pause();
   cycle.resetCycle();
 }
+onMounted(reset);
 
 async function saveChanges(newIntervals: Interval[]) {
   reset();
   cycle.updateCycle(newIntervals);
 }
-
-async function checkNotifyPermission() {
-  if (permissions.value.notification !== undefined) {
-    return;
-  }
-  const confirmed = await notifyBar.show();
-  permissions.value.notification = confirmed;
-
-  if (confirmed) {
-    askPermission();
-  }
-}
-
-const notifyInterval = setupNotifications(notify);
-
-watch(
-  () => main.status,
-  (value, _, onInvalidate) => {
-    onInvalidate(stopTicker);
-    if (value === Status.Play) {
-      startTicker();
-      return;
-    }
-    stopTicker();
-  },
-);
 
 const transitions = [
   'bg-circle',
@@ -95,18 +84,21 @@ function changeBg(type: IntervalType) {
   );
 }
 
-watch([() => cycle.currentInterval], ([interval]) => {
-  changeBg(interval.type);
-  if (!main.isPlaying) {
-    return;
-  }
-  notifyInterval(interval.type, interval.duration);
-});
+watch(
+  () => cycle.currentInterval,
+  (interval) => {
+    changeBg(interval.type);
+    if (!main.isPlaying) {
+      return;
+    }
+    notifyInterval(interval.type, interval.duration);
+  },
+  { immediate: true },
+);
 
-onMounted(checkNotifyPermission);
-onMounted(reset);
-onMounted(() => changeBg(cycle.getCurrent().type));
-onBeforeUnmount(() => tickWorker.postMessage({ type: 'stop' }));
+watchEffect(() => {
+  document.title = `${toTitleCase(cycle.currentInterval.type)} interval, ${main.isPlaying ? 'Playing' : 'Paused'} - Pomodoro Timer`;
+});
 </script>
 
 <template>
