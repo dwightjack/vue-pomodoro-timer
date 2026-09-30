@@ -21,8 +21,7 @@ const countdown = computed(() => cycle.countdowns[cycle.current]);
     <BaseTimer
       v-if="currentCycle"
       :key="currentCycle.id"
-      :duration="countdown"
-      :type="currentCycle.type"
+      :remaining="countdown"
       class="will-change-transform"
     />
   </TransitionGroup>

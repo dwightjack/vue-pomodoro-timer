@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
 import { Interval, IntervalType } from '@/types';
 import { useStorage } from '@vueuse/core';
-import { uniqId } from '@/utils';
+import { getMinutes, getSeconds, uniqId } from '@/utils';
 
 export const useCycle = defineStore('cycle', () => {
   const intervals = useStorage<Interval[]>('intervals', [
@@ -19,6 +19,29 @@ export const useCycle = defineStore('cycle', () => {
   const currentInterval = computed(() => intervals.value[current.value]);
   const currentCountdown = computed(() => countdowns.value[current.value]);
   const ids = computed(() => intervals.value.map(({ id }) => id));
+
+  const currentCountdownLabel = computed(() => {
+    const mins = getMinutes(currentCountdown.value);
+    const secs = getSeconds(currentCountdown.value);
+    let remMins = mins + (secs === 0 ? 0 : 1);
+    if (mins === 0 && secs === 0) {
+      return `time out`;
+    }
+    if (mins === 0) {
+      return `less than 1 minute left`;
+    }
+    if (mins > 10) {
+      // for intervals greater than 10 minutes,
+      // announce the remaining time every 5 minutes
+      // the announced time is rounded up to the nearest multiple of 5 or the total interval length if shorter.
+      remMins = Math.min(
+        Math.ceil(remMins / 5) * 5,
+        getMinutes(currentInterval.value.duration),
+      );
+      return `${remMins} minutes left`;
+    }
+    return `${remMins} minutes left`;
+  });
 
   async function toInterval(index: number) {
     let next = index;
@@ -50,6 +73,7 @@ export const useCycle = defineStore('cycle', () => {
     current,
     currentInterval,
     currentCountdown,
+    currentCountdownLabel,
     intervals,
     ids,
     createInterval() {

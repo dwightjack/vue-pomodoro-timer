@@ -1,8 +1,10 @@
+import { useStorage } from '@vueuse/core';
 import { ref } from 'vue';
 
 export function useNotification() {
   const worker = ref<ServiceWorkerRegistration>();
   const notification = ref<Notification>();
+  const permissions = useStorage<{ notification?: boolean }>('permissions', {});
 
   async function askPermission() {
     if (Notification.permission === 'default') {
@@ -10,6 +12,20 @@ export function useNotification() {
       return Notification.requestPermission();
     }
     return Notification.permission;
+  }
+
+  async function checkNotifyPermission(
+    confirm: () => Promise<boolean> | boolean,
+  ) {
+    if (permissions.value.notification !== undefined) {
+      return;
+    }
+    const confirmed = await confirm();
+    permissions.value.notification = confirmed;
+
+    if (confirmed) {
+      askPermission();
+    }
   }
 
   async function notify(message: string, options: NotificationOptions = {}) {
@@ -39,6 +55,6 @@ export function useNotification() {
   return {
     notify,
     notification,
-    askPermission,
+    checkNotifyPermission,
   };
 }
