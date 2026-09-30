@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useCycle } from '@/stores/cycle';
+import { useMain } from '@/stores/main';
 import { IntervalType } from '@/types';
 const cycle = useCycle();
+const main = useMain();
 </script>
 <template>
   <h2
@@ -21,6 +23,9 @@ const cycle = useCycle();
     >
       Short<br />Break
     </template>
-    <span class="sr-only">. {{ cycle.currentCountdownLabel }}</span>
+    <span class="sr-only"
+      >. {{ !main.isPlaying ? 'Paused.' : '' }}
+      {{ cycle.currentCountdownLabel }}</span
+    >
   </h2>
 </template>
