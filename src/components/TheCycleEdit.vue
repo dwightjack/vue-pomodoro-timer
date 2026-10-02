@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useId, useTemplateRef, watch } from 'vue';
+import { computed, ref, useTemplateRef, watch } from 'vue';
 import IntervalEditBox from '@/components/IntervalEditBox.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import LayoutStack from '@/components/LayoutStack.vue';
@@ -14,7 +14,6 @@ import IconAddOutline from '~icons/zondicons/add-outline';
 import IconSaveDisk from '~icons/zondicons/save-disk';
 
 const cycle = useCycle();
-const id = useId();
 
 const { open } = defineProps({
   open: bool().isRequired,
@@ -52,6 +51,7 @@ watch(
     if (open === true) {
       intervalsRef.value = clone(cycle.intervals);
       dialog.value?.showModal();
+      dialog.value?.querySelector('h1')?.focus();
       return;
     }
     dialog.value?.close();
@@ -61,7 +61,7 @@ watch(
 <template>
   <dialog
     ref="dialog"
-    :aria-labelledby="id + `-title`"
+    aria-labelledby="cycle-edit-modal"
     class="view-transition-[settings] m-auto size-fit translate-y-2 overflow-clip bg-transparent p-5 text-gray-700 opacity-0 transition-[opacity,translate,display,overlay] transition-discrete duration-500 max-block-[80bvb] max-inline-none backdrop:opacity-0 backdrop:backdrop-blur-xs backdrop:transition-[opacity,translate] backdrop:transition-discrete backdrop:duration-500 open:flex open:translate-0 open:opacity-100 open:backdrop:opacity-100 starting:open:translate-y-2 starting:open:opacity-0 starting:open:backdrop:opacity-0"
     closedby="any"
     @close="close"
@@ -74,7 +74,7 @@ watch(
       class="flex w-full flex-col rounded-lg border-4 border-white bg-white/80 px-4 py-2"
       @submit="submit"
     >
-      <h1 :id="id + `-title`" class="self-center text-lg">
+      <h1 id="cycle-edit-modal" tabindex="-1" class="self-center text-lg">
         <IconWrench class="align-middle" />
         Settings
       </h1>
