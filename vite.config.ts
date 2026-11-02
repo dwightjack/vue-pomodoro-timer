@@ -20,7 +20,7 @@ const htmlPlugin = (): Plugin => {
 export default defineConfig({
   resolve: {
     alias: {
-      '@': join(__dirname, 'src'),
+      '@': join(import.meta.dirname, 'src'),
     },
   },
   plugins: [
