@@ -12,9 +12,9 @@
     "dev:test": "vite dev --port 8888 --mode=test",
     "test": "playwright test"
   },
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@12.16.1",
   "engines": {
-    "node": ">=24.13.1",
+    "node": ">=26.13.0",
     "pnpm": "^10.29.3"
   },
   "dependencies": {
