@@ -38,7 +38,7 @@
     "lefthook": "2.2.2",
     "oxfmt": "^0.75.0",
     "tailwindcss": "4.3.3",
-    "typescript": "5.9.3",
+    "typescript": "7.0.2",
     "typescript-eslint": "8.72.1",
     "unplugin-icons": "24.0.0",
     "vite": "8.3.5",
